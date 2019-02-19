@@ -116,11 +116,11 @@ return [
             'submenu' => [
                 [
                     'text' => 'Listar',
-                    'route' => 'dashboard.processes.businessman.index',
+                    'route' => 'dashboard.process.businessman.index',
                 ],
                 [
                     'text' => 'Criar',
-                    'route' => 'dashboard.processes.businessman.create',
+                    'route' => 'dashboard.process.businessman.create',
                 ],
             ],
         ],
@@ -131,11 +131,11 @@ return [
             'submenu' => [
                 [
                     'text' => 'Listar',
-                    'route' => 'dashboard.processes.society.index',
+                    'route' => 'dashboard.process.society.index',
                 ],
                 [
                     'text' => 'Criar',
-                    'route' => 'dashboard.processes.society.create',
+                    'route' => 'dashboard.process.society.create',
                 ],
             ],
         ],
@@ -146,11 +146,11 @@ return [
             'submenu' => [
                 [
                     'text' => 'Listar',
-                    'route' => 'dashboard.processes.ireli.index',
+                    'route' => 'dashboard.process.ireli.index',
                 ],
                 [
                     'text' => 'Criar',
-                    'route' => 'dashboard.processes.ireli.create',
+                    'route' => 'dashboard.process.ireli.create',
                 ],
             ],
         ],
@@ -160,11 +160,11 @@ return [
             'submenu' => [
                 [
                     'text' => 'Listar',
-                    'route'  => 'dashboard.processes.others.index',
+                    'route'  => 'dashboard.process.others.index',
                 ],
                 [
                     'text' => 'Criar',
-                    'route'  => 'dashboard.processes.others.create',
+                    'route'  => 'dashboard.process.others.create',
                 ],
             ],
         ],

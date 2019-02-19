@@ -39,4 +39,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function processes()
+    {
+        return $this->hasMany(Process::class);
+    }
 }
