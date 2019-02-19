@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Gcr;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -10,13 +10,16 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const ADMIN_USER = 'admin';
+    const ADMIN_CUSTOMER = 'customer';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'type'
     ];
 
     /**
