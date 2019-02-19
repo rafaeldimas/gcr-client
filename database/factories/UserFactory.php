@@ -20,7 +20,7 @@ $factory->define(Gcr\User::class, function (Faker $faker) {
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
-        'password' => crypt('secret'), // secret
+        'password' => bcrypt('secret'), // secret
         'remember_token' => Str::random(10),
         'type' => Arr::random(['admin', 'customer']),
     ];
