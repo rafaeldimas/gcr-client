@@ -22,6 +22,6 @@ $factory->define(Gcr\User::class, function (Faker $faker) {
         'email_verified_at' => now(),
         'password' => bcrypt('secret'), // secret
         'remember_token' => Str::random(10),
-        'type' => Arr::random(['admin', 'customer']),
+        'type' => $faker->randomElement(['admin', 'customer']),
     ];
 });

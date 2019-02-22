@@ -8,7 +8,8 @@ $template = implode('', array_map(function ($item) {
 }, range(0, 10)));
 
 $factory->define(Gcr\Process::class, function (Faker $faker) use ($template) {
+    $protocolPrefix = $faker->randomElement(['businessman', 'society', 'ireli', 'others']);
     return [
-        'protocol' => Arr::random(['businessman', 'society', 'ireli', 'others']).'-'.$faker->bothify($template),
+        'protocol' => $protocolPrefix .'-'.$faker->bothify($template),
     ];
 });

@@ -4,7 +4,7 @@ use Gcr\Process;
 use Gcr\User;
 use Illuminate\Database\Seeder;
 
-class UsersTableSeeder extends Seeder
+class ProcessTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 10)->create();
+        User::all()->each(function ($user) {
+            factory(Process::class, 5)->create([ 'user_id' => $user->id ]);
+        });
     }
 }
