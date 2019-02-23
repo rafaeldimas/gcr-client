@@ -10,8 +10,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    const ADMIN_USER = 'admin';
-    const ADMIN_CUSTOMER = 'customer';
+    const USER_ADMIN = 'admin';
+    const USER_CUSTOMER = 'customer';
 
     /**
      * The attributes that are mass assignable.
@@ -43,5 +43,10 @@ class User extends Authenticatable
     public function processes()
     {
         return $this->hasMany(Process::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->type === self::USER_ADMIN;
     }
 }

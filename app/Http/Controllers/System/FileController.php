@@ -4,9 +4,9 @@ namespace Gcr\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 use Gcr\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File as SupportFile;
+use Illuminate\Support\Facades\File;
 
-class File extends Controller
+class FileController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -18,7 +18,7 @@ class File extends Controller
     public function __invoke(Request $request, $fileName)
     {
         $pathName = storage_path("app/documents/{$fileName}");
-        if (!SupportFile::exists($pathName)) {
+        if (!File::exists($pathName)) {
             abort(404);
         }
         return response()->file($pathName);

@@ -15,26 +15,23 @@ class AddressTableSeeder extends Seeder
      */
     public function run()
     {
-        Owner::all()->each(function ($owner) {
-            /** @var Address $address */
+        Owner::all()->each(function (Owner $owner) {
             $address = factory(Address::class)->create();
-            /** @var Owner $owner */
+
             $owner->address()->associate($address);
             $owner->save();
         });
 
-        Company::all()->each(function ($company) {
-            /** @var Address $address */
+        Company::all()->each(function (Company $company) {
             $address = factory(Address::class)->create();
-            /** @var Company $company */
+
             $company->address()->associate($address);
             $company->save();
         });
 
-        Subsidiary::all()->each(function ($subsidiary) {
-            /** @var Address $address */
+        Subsidiary::all()->each(function (Subsidiary $subsidiary) {
             $address = factory(Address::class)->create();
-            /** @var Subsidiary $subsidiary */
+
             $subsidiary->address()->associate($address);
             $subsidiary->save();
         });

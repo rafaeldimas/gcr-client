@@ -18,4 +18,4 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 
-Route::get('/documents/{fileName}', 'System\File')->name('documents')->middleware('auth');
+Route::get('/documents/{fileName}', 'System\FileController')->name('documents')->middleware('auth');

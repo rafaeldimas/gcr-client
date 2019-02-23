@@ -112,7 +112,6 @@ return [
         [
             'text' => 'Empresário Individual',
             'icon' => 'user',
-            'can' => 'manage-blog',
             'submenu' => [
                 [
                     'text' => 'Listar',
@@ -127,7 +126,6 @@ return [
         [
             'text' => 'Sociedade Limitada',
             'icon' => 'users',
-            'can' => 'manage-blog',
             'submenu' => [
                 [
                     'text' => 'Listar',
@@ -142,7 +140,6 @@ return [
         [
             'text' => 'Ireli',
             'icon' => 'user-circle',
-            'can' => 'manage-blog',
             'submenu' => [
                 [
                     'text' => 'Listar',
@@ -156,15 +153,14 @@ return [
         ],
         [
             'text' => 'Outros',
-            'can'  => 'manage-blog',
             'submenu' => [
                 [
                     'text' => 'Listar',
-                    'route'  => 'dashboard.process.others.index',
+                    'route'  => 'dashboard.process.other.index',
                 ],
                 [
                     'text' => 'Criar',
-                    'route'  => 'dashboard.process.others.create',
+                    'route'  => 'dashboard.process.other.create',
                 ],
             ],
         ],
@@ -173,7 +169,6 @@ return [
             'text' => 'Perfil',
             'icon' => 'user',
             'route' => 'dashboard.user.current',
-            'can' => 'manage-blog',
         ],
         [
             'text' => 'Criar Conta',
