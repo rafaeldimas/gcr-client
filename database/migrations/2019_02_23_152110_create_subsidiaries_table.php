@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProcessesTable extends Migration
+class CreateSubsidiariesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,20 @@ class CreateProcessesTable extends Migration
      */
     public function up()
     {
-        Schema::create('processes', function (Blueprint $table) {
+        Schema::create('subsidiaries', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->string('protocol');
-            $table->boolean('status');
+            $table->unsignedInteger('company_id')->nullable();
+            $table->unsignedInteger('address_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')
+            $table->foreign('company_id')
                 ->references('id')
-                ->on('users')
+                ->on('companies')
+                ->onDelete('cascade');
+
+            $table->foreign('address_id')
+                ->references('id')
+                ->on('addresses')
                 ->onDelete('cascade');
         });
     }
@@ -34,6 +38,6 @@ class CreateProcessesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('processes');
+        Schema::dropIfExists('subsidiaries');
     }
 }

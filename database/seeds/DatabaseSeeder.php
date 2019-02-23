@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
              UsersTableSeeder::class,
              ProcessTableSeeder::class,
              OwnerTableSeeder::class,
+             CompanyTableSeeder::class,
+             SubsidiaryTableSeeder::class,
              AddressTableSeeder::class,
          ]);
     }

@@ -17,4 +17,9 @@ class Process extends Model
     {
         return $this->hasOne(Owner::class);
     }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class);
+    }
 }
