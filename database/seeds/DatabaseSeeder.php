@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
              CompanyTableSeeder::class,
              SubsidiaryTableSeeder::class,
              AddressTableSeeder::class,
+             DocumentTableSeeder::class,
          ]);
     }
 }

@@ -22,4 +22,9 @@ class Process extends Model
     {
         return $this->hasOne(Company::class);
     }
+
+    public function document()
+    {
+        return $this->hasMany(Document::class);
+    }
 }
