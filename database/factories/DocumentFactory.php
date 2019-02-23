@@ -15,7 +15,7 @@ $factory->define(Gcr\Document::class, function (Faker $faker) use ($typeNumber, 
     if ($typeNumber === 2) $typeNumber = 0;
 
     return [
-        'type' => $types[$typeNumber],
+        'type' => $types[$typeNumber++],
         'file' => $faker->image($filepath,640,480, null, false),
     ];
 });
