@@ -7,7 +7,7 @@ static $typeNumber = 0;
 $types = ['rg', 'cpf', 'iptu'];
 
 $factory->define(Gcr\Document::class, function (Faker $faker) use ($typeNumber, $types) {
-    $filepath = storage_path('app/public/images/documents');
+    $filepath = storage_path('app/documents');
     if (!File::exists($filepath)) {
         File::makeDirectory($filepath, 0775, true);
     }
