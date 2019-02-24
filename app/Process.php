@@ -8,6 +8,15 @@ class Process extends Model
 {
     protected $fillable = [ 'protocol' ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->protocol = $model->type.'-'.date('YmdHis');
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -26,5 +35,15 @@ class Process extends Model
     public function document()
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function setTypeAttribute($value)
+    {
+        $this->attributes['type'] = strtoupper($value);
+    }
+
+    public function getStatusAttribute($value)
+    {
+        return $value ? 'Finalizado' : 'Pendente';
     }
 }

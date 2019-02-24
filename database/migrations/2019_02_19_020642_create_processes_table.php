@@ -17,6 +17,7 @@ class CreateProcessesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->string('protocol');
+            $table->string('type');
             $table->boolean('status');
             $table->timestamps();
 

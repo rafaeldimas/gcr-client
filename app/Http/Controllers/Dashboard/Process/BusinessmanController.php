@@ -2,11 +2,22 @@
 
 namespace Gcr\Http\Controllers\Dashboard\Process;
 
+use Gcr\Process;
 use Illuminate\Http\Request;
 use Gcr\Http\Controllers\Controller;
 
 class BusinessmanController extends Controller
 {
+    /**
+     * @var Process
+     */
+    private $process;
+
+    public function __construct(Process $process)
+    {
+        $this->process = $process->where('type', 'businessman');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +25,8 @@ class BusinessmanController extends Controller
      */
     public function index()
     {
-        //
+        $processes = $this->process->with('user')->paginate(10);
+        return view('dashboard.process.businessman.index')->with(compact('processes'));
     }
 
     /**
