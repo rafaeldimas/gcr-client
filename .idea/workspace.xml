@@ -232,11 +232,6 @@
               <item name="gcr-client" type="b2602c69:ProjectViewProjectNode" />
               <item name="gcr-client" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="gcr-client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="gcr-client" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -324,12 +319,12 @@
       <workItem from="1550876950943" duration="6794000" />
       <workItem from="1550932530609" duration="22034000" />
       <workItem from="1551013940266" duration="7409000" />
-      <workItem from="1551137586995" duration="2051000" />
+      <workItem from="1551137586995" duration="2306000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96386000" />
+    <option name="totallyTimeSpent" value="96641000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -342,10 +337,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="25" width="1317" height="743" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="npm" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.33044848" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.33044848" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
