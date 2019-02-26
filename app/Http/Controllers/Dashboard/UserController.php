@@ -2,25 +2,48 @@
 
 namespace Gcr\Http\Controllers\Dashboard;
 
+use Gcr\User;
 use Illuminate\Http\Request;
 use Gcr\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
     /**
+     * @var User
+     */
+    private $user;
+
+    public function __construct(Process $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        //
+        $title = 'Usúarios';
+        $gridData = [
+            'models' => $this->user->with('process')->paginate(10),
+            'linkEdit' => 'dashboard.user.edit',
+            'fields' => [
+                'name',
+                'email',
+                'type',
+                'processes_count',
+            ]
+        ];
+        return view('dashboard.user.grid')->with(compact('title', 'gridData'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -30,8 +53,8 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -42,7 +65,7 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -53,7 +76,7 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -63,9 +86,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -76,7 +99,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

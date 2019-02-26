@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->type === self::USER_ADMIN;
     }
+
+    public function getProcessesCountAttribute()
+    {
+        return $this->processes->count();
+    }
 }

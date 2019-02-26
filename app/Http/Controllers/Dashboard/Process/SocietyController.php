@@ -2,11 +2,23 @@
 
 namespace Gcr\Http\Controllers\Dashboard\Process;
 
+use Gcr\Process;
 use Illuminate\Http\Request;
 use Gcr\Http\Controllers\Controller;
 
 class SocietyController extends Controller
 {
+
+    /**
+     * @var Process
+     */
+    private $process;
+
+    public function __construct(Process $process)
+    {
+        $this->process = $process->where('type', 'society');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,17 @@ class SocietyController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Sociedade Limitada';
+        $gridData = [
+            'models' => $this->process->with('user')->paginate(10),
+            'linkEdit' => 'dashboard.process.society.edit',
+            'fields' => [
+                'protocol',
+                'user' => ['name'],
+                'status',
+            ]
+        ];
+        return view('dashboard.process.grid')->with(compact('title', 'gridData'));
     }
 
     /**

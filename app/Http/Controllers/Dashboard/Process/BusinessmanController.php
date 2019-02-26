@@ -3,8 +3,9 @@
 namespace Gcr\Http\Controllers\Dashboard\Process;
 
 use Gcr\Process;
-use Illuminate\Http\Request;
 use Gcr\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class BusinessmanController extends Controller
 {
@@ -21,18 +22,27 @@ class BusinessmanController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        $processes = $this->process->with('user')->paginate(10);
-        return view('dashboard.process.businessman.index')->with(compact('processes'));
+        $title = 'Sociedade Limitada';
+        $gridData = [
+            'models' => $this->process->with('user')->paginate(10),
+            'linkEdit' => 'dashboard.process.businessman.edit',
+            'fields' => [
+                'protocol',
+                'user' => ['name'],
+                'status',
+            ]
+        ];
+        return view('dashboard.process.grid')->with(compact('title', 'gridData'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -42,8 +52,8 @@ class BusinessmanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -54,7 +64,7 @@ class BusinessmanController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -65,7 +75,7 @@ class BusinessmanController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -75,9 +85,9 @@ class BusinessmanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -88,7 +98,7 @@ class BusinessmanController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

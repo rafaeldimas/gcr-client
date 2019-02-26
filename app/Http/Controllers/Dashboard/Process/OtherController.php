@@ -2,25 +2,47 @@
 
 namespace Gcr\Http\Controllers\Dashboard\Process;
 
+use Gcr\Process;
 use Illuminate\Http\Request;
 use Gcr\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class OtherController extends Controller
 {
     /**
+     * @var Process
+     */
+    private $process;
+
+    public function __construct(Process $process)
+    {
+        $this->process = $process->where('type', 'other');
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        //
+        $title = 'Outros';
+        $gridData = [
+            'models' => $this->process->with('user')->paginate(10),
+            'linkEdit' => 'dashboard.process.other.edit',
+            'fields' => [
+                'protocol',
+                'user' => ['name'],
+                'status',
+            ]
+        ];
+        return view('dashboard.process.grid')->with(compact('title', 'gridData'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -30,8 +52,8 @@ class OtherController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -42,7 +64,7 @@ class OtherController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -53,7 +75,7 @@ class OtherController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -63,9 +85,9 @@ class OtherController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -76,7 +98,7 @@ class OtherController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
