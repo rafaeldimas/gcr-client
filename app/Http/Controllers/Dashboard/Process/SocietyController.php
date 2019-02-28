@@ -28,7 +28,7 @@ class SocietyController extends Controller
     {
         $title = 'Sociedade Limitada';
         $gridData = [
-            'models' => $this->process->with('user')->paginate(10),
+            'models' => $this->process->currentUser()->with('user')->paginate(10),
             'linkEdit' => 'dashboard.process.society.edit',
             'fields' => [
                 'protocol',

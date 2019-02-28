@@ -14,9 +14,14 @@ class UserController extends Controller
      */
     private $user;
 
-    public function __construct(Process $user)
+    public function __construct(User $user)
     {
         $this->user = $user;
+    }
+
+    public function current()
+    {
+        //
     }
 
     /**
@@ -28,7 +33,7 @@ class UserController extends Controller
     {
         $title = 'Usúarios';
         $gridData = [
-            'models' => $this->user->with('process')->paginate(10),
+            'models' => $this->user->withCount('processes')->paginate(10),
             'linkEdit' => 'dashboard.user.edit',
             'fields' => [
                 'name',

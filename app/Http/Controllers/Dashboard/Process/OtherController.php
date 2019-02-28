@@ -28,7 +28,7 @@ class OtherController extends Controller
     {
         $title = 'Outros';
         $gridData = [
-            'models' => $this->process->with('user')->paginate(10),
+            'models' => $this->process->currentUser()->with('user')->paginate(10),
             'linkEdit' => 'dashboard.process.other.edit',
             'fields' => [
                 'protocol',

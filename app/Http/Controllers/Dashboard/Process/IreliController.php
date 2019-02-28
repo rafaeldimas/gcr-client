@@ -28,7 +28,7 @@ class IreliController extends Controller
     {
         $title = 'Ireli';
         $gridData = [
-            'models' => $this->process->with('user')->paginate(10),
+            'models' => $this->process->currentUser()->with('user')->paginate(10),
             'linkEdit' => 'dashboard.process.ireli.edit',
             'fields' => [
                 'protocol',

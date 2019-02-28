@@ -26,9 +26,9 @@ class BusinessmanController extends Controller
      */
     public function index()
     {
-        $title = 'Sociedade Limitada';
+        $title = 'Empresario individual';
         $gridData = [
-            'models' => $this->process->with('user')->paginate(10),
+            'models' => $this->process->currentUser()->with('user')->paginate(10),
             'linkEdit' => 'dashboard.process.businessman.edit',
             'fields' => [
                 'protocol',
