@@ -10,6 +10,6 @@ Route::get('user/current', 'UserController@current')->name('user.current');
 Route::prefix('process')->name('process.')->namespace('Process')->group(function () {
     Route::resource('businessman', 'BusinessmanController');
     Route::resource('society', 'SocietyController');
-    Route::resource('ireli', 'IreliController');
+    Route::resource('eireli', 'EireliController');
     Route::resource('other', 'OtherController');
 });

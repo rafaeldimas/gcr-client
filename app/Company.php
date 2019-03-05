@@ -18,6 +18,6 @@ class Company extends Model
 
     public function subsidiary()
     {
-        return $this->hasOne(Subsidiary::class);
+        return $this->hasMany(Subsidiary::class);
     }
 }

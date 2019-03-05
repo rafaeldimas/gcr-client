@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Gcr\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
-class IreliController extends Controller
+class EireliController extends Controller
 {
     /**
      * @var Process
@@ -16,7 +16,7 @@ class IreliController extends Controller
 
     public function __construct(Process $process)
     {
-        $this->process = $process->where('type', 'ireli');
+        $this->process = $process->where('type', 'eireli');
     }
 
     /**
@@ -29,7 +29,7 @@ class IreliController extends Controller
         $title = 'Ireli';
         $gridData = [
             'models' => $this->process->currentUser()->with('user')->paginate(10),
-            'linkEdit' => 'dashboard.process.ireli.edit',
+            'linkEdit' => 'dashboard.process.eireli.edit',
             'fields' => [
                 'protocol',
                 'user' => ['name'],

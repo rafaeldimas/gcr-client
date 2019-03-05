@@ -22,17 +22,9 @@ class Process extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scopeCurrentUser($query)
-    {
-        if (auth()->user()->type !== User::USER_ADMIN) {
-            $query->where('user_id', auth()->user()->id);
-        }
-        return $query;
-    }
-
     public function owner()
     {
-        return $this->hasOne(Owner::class);
+        return $this->hasMany(Owner::class);
     }
 
     public function company()
@@ -43,6 +35,14 @@ class Process extends Model
     public function document()
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function scopeCurrentUser($query)
+    {
+        if (auth()->user()->type !== User::USER_ADMIN) {
+            $query->where('user_id', auth()->user()->id);
+        }
+        return $query;
     }
 
     public function setTypeAttribute($value)
