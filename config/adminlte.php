@@ -138,16 +138,16 @@ return [
             ],
         ],
         [
-            'text' => 'Ireli',
+            'text' => 'Eireli',
             'icon' => 'user-circle',
             'submenu' => [
                 [
                     'text' => 'Listar',
-                    'route' => 'dashboard.process.ireli.index',
+                    'route' => 'dashboard.process.eireli.index',
                 ],
                 [
                     'text' => 'Criar',
-                    'route' => 'dashboard.process.ireli.create',
+                    'route' => 'dashboard.process.eireli.create',
                 ],
             ],
         ],
