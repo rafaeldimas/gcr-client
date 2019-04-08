@@ -39,7 +39,7 @@ class Company extends Model
 
     public function setShareCapitalAttribute($value)
     {
-        $this->attributes['share_capital'] = $value ? str_replace(['.', ','], ['', '.'], $value) : null;
+        $this->attributes['share_capital'] = ($value && is_string($value)) ? str_replace(['.', ','], ['', '.'], $value) : null;
     }
 
     public function getShareCapitalAttribute($value)
