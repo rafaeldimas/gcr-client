@@ -13,7 +13,11 @@ class Process extends Model
         parent::boot();
 
         static::creating(function (Process $model) {
-            $model->user()->associate(auth()->user());
+            if (!$model->user_id) {
+                if (auth()->user()) {
+                    $model->user()->associate(auth()->user());
+                }
+            }
             $model->protocol = $model->type_company.'-'.$model->type.'-'.date('YmdHis');
         });
     }
