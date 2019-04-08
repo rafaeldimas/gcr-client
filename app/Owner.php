@@ -21,7 +21,10 @@ class Owner extends Model
 
     public function setRgExpeditionAttribute($value)
     {
-        $this->attributes['rg_expedition'] = $value ? Carbon::createFromFormat('d/m/Y', $value)->toDateString() : null;
+        if ($value && Carbon::hasFormat($value, 'd/m/Y')) {
+            $value = Carbon::createFromFormat('d/m/Y', $value)->toDateString();
+        }
+        $this->attributes['rg_expedition'] = $value;
     }
 
     public function getRgExpeditionAttribute($value)

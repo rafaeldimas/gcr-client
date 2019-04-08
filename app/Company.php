@@ -26,7 +26,10 @@ class Company extends Model
 
     public function setSignedAttribute($value)
     {
-        $this->attributes['signed'] = $value ? Carbon::createFromFormat('d/m/Y', $value)->toDateString() : null;
+        if ($value && Carbon::hasFormat($value, 'd/m/Y')) {
+            $value = Carbon::createFromFormat('d/m/Y', $value)->toDateString();
+        }
+        $this->attributes['signed'] = $value;
     }
 
     public function getSignedAttribute($value)
