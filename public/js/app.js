@@ -1994,6 +1994,151 @@ process.umask = function() { return 0; };
  * building robust, powerful web applications using Vue and Laravel.
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/**
+ * @todo Refectory to one responsibilities
+ */
+
+
+window.jQuery(function ($) {
+  var $forms = $('[data-form-process]');
+
+  if ($forms.length) {
+    $forms.each(function (index, form) {
+      var submitForm = function submitForm() {
+        var $form = $(form);
+        var formData = new FormData(form);
+        window.axios.post($form.attr('action'), formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (response) {
+          console.log(response);
+        }).catch(function (error) {
+          console.log(error);
+        });
+      };
+
+      $(form).steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: "slideLeft",
+        autoFocus: true,
+        onStepChanging: function onStepChanging(event, currentIndex, newIndex) {
+          if (currentIndex > newIndex) {
+            return true;
+          }
+
+          if (currentIndex < newIndex) {
+            $(form).find(".body:eq(" + newIndex + ") label.error").remove();
+            $(form).find(".body:eq(" + newIndex + ") .error").removeClass("error");
+          }
+
+          $(form).validate().settings.ignore = ":disabled,:hidden";
+          return $(form).valid();
+        },
+        onStepChanged: function onStepChanged(event, currentIndex, newIndex) {
+          if (currentIndex > newIndex) {
+            submitForm();
+          }
+        },
+        onFinished: function onFinished() {
+          submitForm();
+        }
+      }).validate({
+        rules: {
+          'owner[cpf]': {
+            cpfBR: true
+          },
+          'owner[address][postcode]': {
+            postalcodeBR: true
+          },
+          'company[address][postcode]': {
+            postalcodeBR: true
+          },
+          'owner[rg_expedition]': {
+            dateITA: true
+          },
+          'company[signed]': {
+            dateITA: true
+          }
+        }
+      });
+    });
+  }
+
+  var $maskeds = $('[data-masked]');
+  $maskeds.each(function (index, masked) {
+    $masked = $(masked);
+    $masked.mask($masked.data('masked'), {
+      reverse: $masked.data('masked-reverse') !== undefined
+    });
+  });
+  $('.postcode').blur(function () {
+    var $address = $(this).closest('.address');
+    var $street = $address.find(".street");
+    var $number = $address.find(".number");
+    var $district = $address.find(".district");
+    var $city = $address.find(".city");
+    var $state = $address.find(".state");
+    var $country = $address.find(".country");
+
+    function limpa_formulário_cep() {
+      $street.val("");
+      $number.val("");
+      $district.val("");
+      $city.val("");
+      $state.val("");
+      $country.val("");
+    } //Nova variável "cep" somente com dígitos.
+
+
+    var cep = $(this).val().replace(/\D/g, ''); //Verifica se campo cep possui valor informado.
+
+    if (cep != "") {
+      //Expressão regular para validar o CEP.
+      var validacep = /^[0-9]{8}$/; //Valida o formato do CEP.
+
+      if (validacep.test(cep)) {
+        //Preenche os campos com "..." enquanto consulta webservice.
+        $street.val("...");
+        $number.val("...");
+        $district.val("...");
+        $city.val("...");
+        $state.val("...");
+        $country.val("..."); //Consulta o webservice viacep.com.br/
+
+        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+          if (!("erro" in dados)) {
+            //Atualiza os campos com os valores da consulta.
+            $street.attr('disabled', false).val(dados.logradouro);
+            $district.attr('disabled', false).val(dados.bairro);
+            $city.attr('disabled', false).val(dados.localidade);
+            $state.attr('disabled', false).val(dados.uf);
+            $country.attr('disabled', false).val('Brasil');
+            $number.attr({
+              'disabled': false,
+              'placeholder': ''
+            }).val('').focus();
+          } //end if.
+          else {
+              //CEP pesquisado não foi encontrado.
+              limpa_formulário_cep();
+              alert("CEP não encontrado.");
+            }
+        });
+      } //end if.
+      else {
+          //cep é inválido.
+          limpa_formulário_cep();
+          alert("Formato de CEP inválido.");
+        }
+    } //end if.
+    else {
+        //cep sem valor, limpa formulário.
+        limpa_formulário_cep();
+      }
+  });
+});
 
 /***/ }),
 

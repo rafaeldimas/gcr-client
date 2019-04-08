@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Process extends Model
 {
-    protected $fillable = [ 'protocol' ];
+    protected $fillable = [ 'status', 'protocol', 'type_company', 'type', 'description' ];
 
     public static function boot()
     {
         parent::boot();
 
-        static::creating(function ($model) {
-            $model->protocol = $model->type.'-'.date('YmdHis');
+        static::creating(function (Process $model) {
+            $model->user()->associate(auth()->user());
+            $model->protocol = $model->type_company.'-'.$model->type.'-'.date('YmdHis');
         });
     }
 
@@ -24,7 +25,7 @@ class Process extends Model
 
     public function owner()
     {
-        return $this->hasMany(Owner::class);
+        return $this->hasOne(Owner::class);
     }
 
     public function company()
@@ -48,6 +49,11 @@ class Process extends Model
     public function setTypeAttribute($value)
     {
         $this->attributes['type'] = strtoupper($value);
+    }
+
+    public function setTypeCompanyAttribute($value)
+    {
+        $this->attributes['type_company'] = strtoupper($value);
     }
 
     public function getStatusAttribute($value)

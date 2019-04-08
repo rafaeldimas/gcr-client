@@ -26,6 +26,6 @@
         @endforeach
     @endslot
     @slot('boxFooter')
-        {{ $models->links() }}
+        {{ $models->appends(['type_company' => request('type_company')])->links() }}
     @endslot
 @endcomponent

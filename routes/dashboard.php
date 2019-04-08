@@ -7,9 +7,4 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::resource('user', 'UserController');
 Route::get('user/current', 'UserController@current')->name('user.current');
 
-Route::prefix('process')->name('process.')->namespace('Process')->group(function () {
-    Route::resource('businessman', 'BusinessmanController');
-    Route::resource('society', 'SocietyController');
-    Route::resource('eireli', 'EireliController');
-    Route::resource('other', 'OtherController');
-});
+Route::resource('process', 'ProcessController');

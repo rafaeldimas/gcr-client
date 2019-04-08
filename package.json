@@ -18,8 +18,5 @@
         "sass-loader": "^7.1.0",
         "vue-template-compiler": "^2.6.10"
     },
-    "dependencies": {
-        "jquery-steps": "^1.1.0",
-        "jquery-validation": "^1.19.0"
-    }
+    "dependencies": {}
 }

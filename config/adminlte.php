@@ -1,5 +1,7 @@
 <?php
 
+use Gcr\Filter\Menu\HrefFilter;
+
 return [
 
     /*
@@ -112,57 +114,38 @@ return [
         [
             'text' => 'Empresário Individual',
             'icon' => 'user',
-            'submenu' => [
-                [
-                    'text' => 'Listar',
-                    'route' => 'dashboard.process.businessman.index',
-                ],
-                [
-                    'text' => 'Criar',
-                    'route' => 'dashboard.process.businessman.create',
-                ],
+            'route' => [
+                'name' => 'dashboard.process.index',
+                'params' => [ 'type_company' => 'businessman' ]
             ],
         ],
         [
             'text' => 'Sociedade Limitada',
             'icon' => 'users',
-            'submenu' => [
-                [
-                    'text' => 'Listar',
-                    'route' => 'dashboard.process.society.index',
-                ],
-                [
-                    'text' => 'Criar',
-                    'route' => 'dashboard.process.society.create',
-                ],
+            'route' => [
+                'name' => 'dashboard.process.index',
+                'params' => [ 'type_company' => 'society' ]
             ],
         ],
         [
             'text' => 'Eireli',
             'icon' => 'user-circle',
-            'submenu' => [
-                [
-                    'text' => 'Listar',
-                    'route' => 'dashboard.process.eireli.index',
-                ],
-                [
-                    'text' => 'Criar',
-                    'route' => 'dashboard.process.eireli.create',
-                ],
+            'route' => [
+                'name' => 'dashboard.process.index',
+                'params' => [ 'type_company' => 'eireli' ]
             ],
         ],
         [
             'text' => 'Outros',
-            'submenu' => [
-                [
-                    'text' => 'Listar',
-                    'route'  => 'dashboard.process.other.index',
-                ],
-                [
-                    'text' => 'Criar',
-                    'route'  => 'dashboard.process.other.create',
-                ],
+            'route'  => [
+                'name' => 'dashboard.process.index',
+                'params' => [ 'type_company' => 'other' ]
             ],
+        ],
+        [
+            'text' => 'Novo Processo',
+            'icon' => 'file-text',
+            'route'  => 'dashboard.process.create',
         ],
         'CONTA',
         [
@@ -195,7 +178,7 @@ return [
     */
 
     'filters' => [
-        JeroenNoten\LaravelAdminLte\Menu\Filters\HrefFilter::class,
+        HrefFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\ActiveFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\SubmenuFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
