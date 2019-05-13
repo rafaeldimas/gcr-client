@@ -23,7 +23,7 @@ class CreateProcessesTable extends Migration
             $table->integer('type_company')->nullable();
             $table->text('description')->nullable();
             $table->boolean('editing');
-            $table->json('fields_editing')->nullable();
+            $table->text('fields_editing')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
