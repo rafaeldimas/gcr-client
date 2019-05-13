@@ -14,7 +14,10 @@ class OwnerTableSeeder extends Seeder
     public function run()
     {
         Process::all()->each(function ($process) {
-            factory(Owner::class, 2)->create(['process_id' => $process->id]);
+            $ownerNumber = $process->isBusinessman()
+                ? 1
+                : mt_rand($process->isSociety() ? 2 : 1, 5);
+            factory(Owner::class, $ownerNumber)->create(['process_id' => $process->id]);
         });
     }
 }

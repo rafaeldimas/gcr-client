@@ -3,6 +3,9 @@
         {{ $title }}
     @endslot
     @slot('body')
+        <div class="alert alert-danger hidden">
+            <ul></ul>
+        </div>
         <form data-form-process action="{{ route('dashboard.process.update', [$process]) }}" enctype='multipart/form-data'>
             @method('PUT')
             @foreach($steps as $type => $step)

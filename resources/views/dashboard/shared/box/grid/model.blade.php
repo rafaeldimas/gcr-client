@@ -7,7 +7,11 @@
     @endslot
     @slot('gridBody')
         @foreach($models as $model)
-            <tr>
+            @if ($model instanceof Gcr\Process)
+                <tr style="background-color: {{$model->status->color}};">
+            @else
+                <tr>
+            @endif
                 @foreach($fields as $relation => $field)
                     @if(is_array($field))
                         @foreach($field as $childField)

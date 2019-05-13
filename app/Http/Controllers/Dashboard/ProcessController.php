@@ -4,9 +4,12 @@ namespace Gcr\Http\Controllers\Dashboard;
 
 use Gcr\Address;
 use Gcr\Company;
+use Gcr\Cnae;
 use Gcr\Http\Controllers\Controller;
 use Gcr\Owner;
 use Gcr\Process;
+use Gcr\Status;
+use Gcr\Viability;
 use Illuminate\Http\Request;
 
 class ProcessController extends Controller
@@ -21,15 +24,10 @@ class ProcessController extends Controller
         $this->process = $process;
     }
 
-    private function getTitleByType($type)
+    private function getTitleByTypeCompany($typeCompany)
     {
-        $types = [
-            'businessman' => 'Empresário individual',
-            'society' => 'Sociedade Limitada',
-            'eireli' => 'Eireli',
-            'other' => 'Outros',
-        ];
-        return array_get($types, $type, 'Processo');
+        $typesCompany = Process::attributeOptions('type_company');
+        return array_get($typesCompany, $typeCompany, 'Processo');
     }
 
     public function index(Request $request)
@@ -41,19 +39,19 @@ class ProcessController extends Controller
             ->with('user')
             ->paginate(10);
 
-        $title = $this->getTitleByType($typeCompany);
+        $title = $this->getTitleByTypeCompany($typeCompany);
         $gridData = [
             'models' => $models,
             'linkEdit' => 'dashboard.process.edit',
             'fields' => [
                 'protocol',
                 'user' => ['name'],
-                'status',
+                'editing',
+                'status' => ['label'],
             ]
         ];
         return view('dashboard.process.grid')->with(compact('title', 'gridData'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -74,15 +72,23 @@ class ProcessController extends Controller
      */
     public function store(Request $request)
     {
+        $updating = Process::OPERATION_UPDATING;
         $data = $request->validate([
-            'type' => 'required',
+            'operation' => 'required',
             'type_company' => 'required',
+            'fields_editing' => "nullable|array|required_if:operation,$updating",
+            'description' => 'nullable',
+        ], [
+            'operation.required' => 'O campo "Operação" é obrigatório.',
+            'type_company.required' => 'O campo "Tipo de empresa" é obrigatório.',
+            'fields_editing.required_if' => 'O campo "Campos que serão alterados" é obrigatório quando "Operação" for "Alteração".',
+            'description' => 'nullable',
         ]);
-        $newProcess = $this->process->newInstance();
-        $newProcess->fill(array_merge([
-            'status' => false,
-            'description' => '',
-        ], $data))->save();
+
+        $newProcess = $this->process->newInstance()->fill(array_merge([
+            'editing' => true,
+        ], $data))->status()->associate(Status::getStatusStarting());
+        $newProcess->save();
 
         return redirect()->route('dashboard.process.edit', [$newProcess]);
     }
@@ -106,11 +112,12 @@ class ProcessController extends Controller
      */
     public function edit(Process $process)
     {
-        $title = $this->getTitleByType($process->type_company) . ' - ' . $process->protocol;
+        $title = $this->getTitleByTypeCompany($process->type_company) . ' - ' . $process->protocol;
 
         $steps = [
-            'owner' => [ 'label' => 'Empresário' ],
+            'owners' => [ 'label' => 'Empresário' ],
             'company' => [ 'label' => 'Empresa' ],
+            'viabilities' => [ 'label' => 'Questionário de Viabilidade' ],
             'document' => [ 'label' => 'Documentos' ]
         ];
         return view('dashboard.process.edit')->with(compact('title', 'steps', 'process'));
@@ -125,57 +132,88 @@ class ProcessController extends Controller
      */
     public function update(Request $request, Process $process)
     {
-        if ($ownerData = $this->getRequestOwner()) {
-            $this->saveOwnerData($ownerData, $process);
+        $owners = [];
+        if ($ownersData = $this->getRequestOwners()) {
+            $owners = $this->saveOwnersData($ownersData, $process);
         }
 
+        $company = false;
         if ($companyData = $this->getRequestCompany()) {
-            $this->saveCompanyData($companyData, $process);
+            $company = $this->saveCompanyData($companyData, $process);
         }
+
+        $viability = false;
+        if ($viabilityData = $this->getRequestViability()) {
+            $viability = $this->saveViabilityData($viabilityData, $process);
+        }
+
+        $documents = [];
+        if ($documentsData = $this->getRequestDocuments()) {
+            $documents = $this->saveDocumentsData($documentsData, $process);
+        }
+
+        $url = false;
+        if ($request->has('finished')) {
+            $process->fill([ 'editing' => false])->status()->associate(Status::getStatusCompleted());
+            $process->save();
+            $url = route('dashboard.process.index', [ 'type_company' => $process->type_company ]);
+        }
+
+        return compact('owners', 'company', 'viability', 'documents', 'url');
     }
 
-    private function getRequestOwner()
+    private function getRequestOwners()
     {
         return request()->validate([
-            'owner.id' => 'nullable',
-            'owner.name' => 'nullable',
-            'owner.marital_status' => 'nullable',
-            'owner.rg' => 'nullable',
-            'owner.rg_expedition' => 'nullable',
-            'owner.cpf' => 'nullable',
-            'owner.address' => 'nullable|array',
+            'owners' => 'nullable|array',
+            'owners.*.id' => 'nullable',
+            'owners.*.name' => 'nullable',
+            'owners.*.marital_status' => 'nullable',
+            'owners.*.wedding_regime' => 'nullable',
+            'owners.*.rg' => 'nullable',
+            'owners.*.rg_expedition' => 'nullable',
+            'owners.*.date_of_birth' => 'nullable',
+            'owners.*.cpf' => 'nullable',
+            'owners.*.address' => 'nullable|array',
         ]);
     }
 
-    private function saveOwnerData($ownerData, Process $process)
+    private function saveOwnersData($ownersData, Process $process)
     {
-        $ownerData = array_get($ownerData, 'owner');
+        $ownersData = array_get($ownersData, 'owners', []);
 
-        $ownerId = array_get($ownerData, 'id');
-        $ownerDataExceptAddress = array_except($ownerData, ['id', 'address']);
+        $owners = [];
+        foreach ($ownersData as $key => $ownerData) {
+            $ownerId = array_get($ownerData, 'id');
+            $ownerDataExceptAddress = array_except($ownerData, ['id', 'address']);
 
-        $ownerAddressId = array_get($ownerData, 'address.id');
-        $ownerAddressData = array_except(array_get($ownerData, 'address'), 'id');
+            $ownerAddressId = array_get($ownerData, 'address.id');
+            $ownerAddressData = array_except(array_get($ownerData, 'address', []), 'id');
 
-        /** @var Owner $owner */
-        $owner = $process->owner()->updateOrCreate(
-            [ 'id' =>  $ownerId ],
-            $ownerDataExceptAddress
-        );
+            /** @var Owner $owner */
+            $owner = $process->owners()->updateOrCreate(
+                [ 'id' =>  $ownerId ],
+                $ownerDataExceptAddress
+            );
 
-        /** @var Address $address */
-        $address = $owner->address()->updateOrCreate(
-            [ 'id' => $ownerAddressId ],
-            $ownerAddressData
-        );
+            /** @var Address $address */
+            $address = $owner->address()->updateOrCreate(
+                [ 'id' => $ownerAddressId ],
+                $ownerAddressData
+            );
 
-        $owner->address()->associate($address);
-        $owner->save();
+            $owner->address()->associate($address);
+            $owner->save();
+
+            $owners[$key] = $owner;
+        }
+        return $owners;
     }
 
     private function getRequestCompany()
     {
         return request()->validate([
+            'company' => 'nullable|array',
             'company.id' => 'nullable',
             'company.name' => 'nullable',
             'company.share_capital' => 'nullable',
@@ -183,6 +221,7 @@ class ProcessController extends Controller
             'company.size' => 'nullable',
             'company.signed' => 'nullable',
             'company.address' => 'nullable|array',
+            'company.cnaes' => 'nullable|array',
         ]);
     }
 
@@ -194,7 +233,9 @@ class ProcessController extends Controller
         $companyDataExceptAddress = array_except($companyData, ['id', 'address']);
 
         $companyAddressId = array_get($companyData, 'address.id');
-        $companyAddressData = array_except(array_get($companyData, 'address'), 'id');
+        $companyAddressData = array_except(array_get($companyData, 'address', []), 'id');
+
+        $companyCnaesData = array_get($companyData, 'cnaes', []);
 
         /** @var Company $company */
         $company = $process->company()->updateOrCreate(
@@ -210,7 +251,101 @@ class ProcessController extends Controller
 
         $company->address()->associate($address);
         $company->save();
+
+        foreach ($companyCnaesData as $key => $companyCnaeData) {
+            $companyCnaesId = array_get($companyCnaeData, 'id');
+
+            $company->cnaes()->updateOrCreate(
+                [ 'id' => $companyCnaesId ],
+                $companyCnaeData
+            );
+        }
+
+        return $company->loadMissing('cnaes');
     }
+
+    private function getRequestViability()
+    {
+        return request()->validate([
+            'viability' => 'nullable|array',
+            'viability.id' => 'nullable',
+            'viability.property_type' => 'nullable',
+            'viability.registration_number' => 'nullable',
+            'viability.property_area' => 'nullable',
+            'viability.establishment_area' => 'nullable',
+            'viability.same_as_business_address' => 'nullable',
+            'viability.thirst' => 'nullable',
+            'viability.administrative_office' => 'nullable',
+            'viability.closed_deposit' => 'nullable',
+            'viability.warehouse' => 'nullable',
+            'viability.repair_workshop' => 'nullable',
+            'viability.garage' => 'nullable',
+            'viability.fuel_supply_unit' => 'nullable',
+            'viability.exposure_point' => 'nullable',
+            'viability.training_center' => 'nullable',
+            'viability.data_processing_center' => 'nullable',
+        ]);
+    }
+
+    private function saveViabilityData($viabilityData, Process $process)
+    {
+        $viabilityData = array_get($viabilityData, 'viability');
+
+        $viabilityId = array_get($viabilityData, 'id');
+        $viabilityData = array_except($viabilityData, ['id']);
+
+        $viability = $process->viability()->updateOrCreate(
+            [ 'id' =>  $viabilityId ],
+            $viabilityData
+        );
+
+        $process->viability()->associate($viability);
+        $process->save();
+
+        return $viability;
+    }
+
+    private function getRequestDocuments()
+    {
+        return request()->validate([
+            'documents' => 'nullable|array',
+            'documents.*.id' => 'nullable',
+            'documents.*.file.*' => 'nullable|mimes:jpg,png',
+        ]);
+    }
+
+    private function saveDocumentsData($documentsData, Process $process)
+    {
+        $documentsData = array_get($documentsData, 'documents');
+
+        $documents = [];
+        foreach ($documentsData as $type => $documentData) {
+            $documentId = array_get($documentData, 'id');
+            $documentFile = array_get($documentData, 'file');
+
+            $documentFileArr = is_array($documentFile) ? $documentFile : [ $documentFile ];
+
+            foreach ($documentFileArr as $file) {
+                if (!$file) {
+                    continue;
+                }
+
+                $pathName = $file->store('documents');
+                $filename = is_string($pathName) ? str_replace('documents/', '', $pathName) : $pathName;
+
+                $documents[$type] = $process->documents()->updateOrCreate(
+                    [ 'id' =>  $documentId ],
+                    [
+                        'type' => $type,
+                        'file' => $filename
+                    ]
+                );
+            }
+        }
+
+        return $documents;
+    }
+
 
     /**
      * Remove the specified resource from storage.

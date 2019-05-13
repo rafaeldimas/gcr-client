@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocumentsTable extends Migration
+class CreateCnaesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('cnaes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('process_id');
-            $table->integer('type');
-            $table->string('file');
+            $table->unsignedInteger('company_id');
+            $table->string('number')->nullable();
             $table->timestamps();
 
-            $table->foreign('process_id')
+            $table->foreign('company_id')
                 ->references('id')
-                ->on('processes')
+                ->on('companies')
                 ->onDelete('cascade');
+
         });
     }
 
@@ -34,6 +34,6 @@ class CreateDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('cnaes');
     }
 }

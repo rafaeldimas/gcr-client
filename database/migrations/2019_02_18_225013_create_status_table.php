@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeTypeForTypeCompanyToProcessesTable extends Migration
+class CreateStatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class ChangeTypeForTypeCompanyToProcessesTable extends Migration
      */
     public function up()
     {
-        Schema::table('processes', function (Blueprint $table) {
-            $table->renameColumn('type', 'type_company');
+        Schema::create('statuses', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('label');
+            $table->string('color');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class ChangeTypeForTypeCompanyToProcessesTable extends Migration
      */
     public function down()
     {
-        Schema::table('processes', function (Blueprint $table) {
-            $table->renameColumn('type_company', 'type');
-        });
+        Schema::dropIfExists('statuses');
     }
 }

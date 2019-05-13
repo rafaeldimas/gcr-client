@@ -1,6 +1,7 @@
 <?php
 
 use Gcr\Process;
+use Gcr\Status;
 use Gcr\User;
 use Illuminate\Database\Seeder;
 

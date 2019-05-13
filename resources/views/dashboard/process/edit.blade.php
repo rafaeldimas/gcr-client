@@ -6,6 +6,7 @@
     <h1>{{ $title }}</h1>
 @stop
 
+
 @section('content')
     @component('dashboard.shared.box.multi-step-form', compact('title', 'steps', 'process'))
     @endcomponent

@@ -1,6 +1,7 @@
 <?php
 
 use Gcr\Filter\Menu\HrefFilter;
+use Gcr\Process;
 
 return [
 
@@ -116,7 +117,7 @@ return [
             'icon' => 'user',
             'route' => [
                 'name' => 'dashboard.process.index',
-                'params' => [ 'type_company' => 'businessman' ]
+                'params' => [ 'type_company' => Process::TYPE_COMPANY_BUSINESSMAN ]
             ],
         ],
         [
@@ -124,7 +125,7 @@ return [
             'icon' => 'users',
             'route' => [
                 'name' => 'dashboard.process.index',
-                'params' => [ 'type_company' => 'society' ]
+                'params' => [ 'type_company' => Process::TYPE_COMPANY_SOCIETY ]
             ],
         ],
         [
@@ -132,14 +133,14 @@ return [
             'icon' => 'user-circle',
             'route' => [
                 'name' => 'dashboard.process.index',
-                'params' => [ 'type_company' => 'eireli' ]
+                'params' => [ 'type_company' => Process::TYPE_COMPANY_EIRELI ]
             ],
         ],
         [
             'text' => 'Outros',
             'route'  => [
                 'name' => 'dashboard.process.index',
-                'params' => [ 'type_company' => 'other' ]
+                'params' => [ 'type_company' => Process::TYPE_COMPANY_OTHER ]
             ],
         ],
         [

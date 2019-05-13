@@ -20,7 +20,7 @@ class CreateCompaniesTable extends Migration
             $table->string('name')->nullable();
             $table->decimal('share_capital')->nullable();
             $table->string('activity_description')->nullable();
-            $table->string('size')->nullable();
+            $table->integer('size')->nullable();
             $table->date('signed')->nullable();
             $table->timestamps();
 

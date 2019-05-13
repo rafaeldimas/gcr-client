@@ -2,16 +2,23 @@
 
 namespace Gcr;
 
+use Gcr\Traits\AttributesSelectDynamically;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, AttributesSelectDynamically;
 
-    const USER_ADMIN = 'admin';
-    const USER_CUSTOMER = 'customer';
+    const TYPE_ADMIN = 1;
+    const TYPE_CUSTOMER = 2;
+
+    protected static $labels = [
+        'type' => [
+            'Administrador',
+            'Cliente',
+        ]
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -47,7 +54,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->type === self::USER_ADMIN;
+        return $this->type === self::TYPE_ADMIN;
     }
 
     public function getProcessesCountAttribute()

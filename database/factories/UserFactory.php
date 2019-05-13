@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Arr;
+use Gcr\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -15,13 +15,13 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Gcr\User::class, function (Faker $faker) {
+$factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password' => bcrypt('secret'), // secret
         'remember_token' => Str::random(10),
-        'type' => $faker->randomElement(['admin', 'customer']),
+        'type' => $faker->randomElement(User::attributeCodes('type')),
     ];
 });

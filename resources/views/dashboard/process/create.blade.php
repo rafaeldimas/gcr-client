@@ -26,9 +26,9 @@
                 @csrf
                 <div class="row">
                     <div class="form-group col-xs-12 col-md-6">
-                        <label for="type">Tipo</label>
-                        <select id="type" name="type" class="form-control">
-                            @foreach(['creating' => 'Criar', 'updating' => 'Atualizar'] as $value => $label)
+                        <label for="operation">Operação</label>
+                        <select id="operation" name="operation" class="form-control">
+                            @foreach(Gcr\Process::attributeOptions('operation') as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
@@ -37,12 +37,16 @@
                     <div class="form-group col-xs-12 col-md-6">
                         <label for="type_company">Tipo de empresa</label>
                         <select id="type_company" name="type_company" class="form-control">
-                            @foreach([
-                                'businessman' => 'Empresário individual',
-                                'society' => 'Sociedade Limitada',
-                                'eireli' => 'Eireli',
-                                'other' => 'Outros',
-                            ] as $value => $label)
+                            @foreach(Gcr\Process::attributeOptions('type_company') as $value => $label)
+                                <option value="{{ $value }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-4 hidden">
+                        <label for="fields_editing[]">Campos que serão alterados</label>
+                        <select id="fields_editing[]" name="fields_editing[]" class="form-control" multiple>
+                            @foreach(Gcr\Process::attributeOptions('fields_editing') as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>

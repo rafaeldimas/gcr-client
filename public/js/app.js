@@ -2000,21 +2000,76 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 window.jQuery(function ($) {
+  jQuery.validator.addClassRules({
+    cpf: {
+      cpfBR: true
+    },
+    cep: {
+      postalcodeBR: true
+    },
+    dataBr: {
+      dateISO: true
+    }
+  });
   var $forms = $('[data-form-process]');
 
   if ($forms.length) {
     $forms.each(function (index, form) {
-      var submitForm = function submitForm() {
+      var submitForm = function submitForm(type) {
         var $form = $(form);
         var formData = new FormData(form);
+
+        if (type === 'finished') {
+          formData.append('finished', true);
+        }
+
         window.axios.post($form.attr('action'), formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         }).then(function (response) {
-          console.log(response);
+          if (response && !response.data.error) {
+            var owners = response.data.owners;
+            var company = response.data.company;
+            var viability = response.data.viability;
+            var documents = response.data.documents;
+            var url = response.data.url;
+            $.map(owners, function (owner, key) {
+              var $owner = $("input[type=\"hidden\"][name=\"owners[".concat(key, "][id]\""));
+              var $ownerAddress = $("input[type=\"hidden\"][name=\"owners[".concat(key, "][address][id]\""));
+              $owner.val(owner.id);
+              $ownerAddress.val(owner.address_id);
+            });
+
+            if (company) {
+              var $company = $('input[type="hidden"][name="company[id]"');
+              var $companyAddress = $('input[type="hidden"][name="company[address][id]"');
+              $company.val(company.id);
+              $companyAddress.val(company.address_id);
+              $.map(company.cnaes, function (cnae, key) {
+                var $cnae = $("input[type=\"hidden\"][name=\"company[cnaes][".concat(key, "][id]\""));
+                $cnae.val(cnae.id);
+              });
+            }
+
+            if (viability) {
+              var $viability = $('input[type="hidden"][name="viability[id]"');
+              $viability.val(viability.id);
+            }
+
+            $.map(documents, function (document, type) {
+              var $document = $("input[type=\"hidden\"][name=\"documents[".concat(type, "][id]\""));
+              $document.val(document.id);
+            });
+
+            if (url) {
+              window.location.replace(url);
+            }
+          }
         }).catch(function (error) {
-          console.log(error);
+          var $alert = $('.alert.alert-danger');
+          $alert.html("\n                        <ul>\n                            <li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>\n                        </ul\n                    ");
+          $alert.removeClass('hidden');
         });
       };
 
@@ -2022,7 +2077,17 @@ window.jQuery(function ($) {
         headerTag: "h3",
         bodyTag: "section",
         transitionEffect: "slideLeft",
+        enableAllSteps: true,
         autoFocus: true,
+        labels: {
+          cancel: "Cancelar",
+          current: "Etapa Atual:",
+          pagination: "Paginação",
+          finish: "Finalizar",
+          next: "Proximo",
+          previous: "Anterior",
+          loading: "Carregando ..."
+        },
         onStepChanging: function onStepChanging(event, currentIndex, newIndex) {
           if (currentIndex > newIndex) {
             return true;
@@ -2038,42 +2103,114 @@ window.jQuery(function ($) {
         },
         onStepChanged: function onStepChanged(event, currentIndex, newIndex) {
           if (currentIndex > newIndex) {
-            submitForm();
+            submitForm('changed');
           }
         },
         onFinished: function onFinished() {
-          submitForm();
+          submitForm('finished');
         }
-      }).validate({
-        rules: {
-          'owner[cpf]': {
-            cpfBR: true
-          },
-          'owner[address][postcode]': {
-            postalcodeBR: true
-          },
-          'company[address][postcode]': {
-            postalcodeBR: true
-          },
-          'owner[rg_expedition]': {
-            dateITA: true
-          },
-          'company[signed]': {
-            dateITA: true
-          }
-        }
-      });
+      }).validate();
     });
   }
 
-  var $maskeds = $('[data-masked]');
-  $maskeds.each(function (index, masked) {
-    $masked = $(masked);
-    $masked.mask($masked.data('masked'), {
-      reverse: $masked.data('masked-reverse') !== undefined
+  var $buttonAddNewOwner = $('[data-button-add-new-owner]');
+
+  if ($buttonAddNewOwner.length) {
+    $buttonAddNewOwner.on('click', function (e) {
+      e.preventDefault();
+      var $newOwnerTemplate = $('#new-owner');
+      var $ownersContainer = $('#owners');
+      var $contents = $newOwnerTemplate.contents().clone(true, true);
+      var lastId = $ownersContainer.attr('data-last-id');
+      var newId = parseInt(lastId, 10) + 1;
+      $contents.find('#tab-owner-').attr('id', "#tab-owner-".concat(newId));
+      $contents.find('a[data-toggle="collapse"]').attr({
+        'aria-controls': "tab-content-owner-".concat(newId),
+        'href': "#tab-content-owner-".concat(newId)
+      }).text($contents.find('a[data-toggle="collapse"]').text().trim() + newId).on('click', function (e) {
+        e.preventDefault();
+        var $current = $(this);
+        var $panel = $current.closest('.panel');
+        var $content = $panel.find('.panel-collapse');
+        $current.attr('aria-expanded', !$current.attr('aria-expanded'));
+        $content.toggleClass('in');
+      });
+      $contents.find('#tab-content-owner-').find('input, select').each(function (index, element) {
+        var $current = $(element);
+        var oldStr = $current.attr('name');
+        var newStr = oldStr.replace('owners[]', "owners[".concat(newId, "]"));
+        $current.attr({
+          'id': newStr,
+          'name': newStr
+        });
+        $current.siblings('label').attr('for', newStr);
+      });
+      $contents.find('#tab-content-owner-').attr({
+        'id': "#tab-content-owner-".concat(newId),
+        'aria-labelledby': "tab-owner-".concat(newId)
+      });
+      $ownersContainer.append($contents);
+      $ownersContainer.attr('data-last-id', newId);
+      init();
+      var $lastPanel = $ownersContainer.find('.panel:last');
+      $lastPanel.find('a[data-toggle="collapse"]').click();
+      $lastPanel.find('select:first, .panel:last input:first:not([type="hidden"])').first().focus();
     });
+  }
+
+  var $buttonAddNewCnae = $('[data-button-add-new-cnae]');
+
+  if ($buttonAddNewCnae.length) {
+    $buttonAddNewCnae.on('click', function (e) {
+      e.preventDefault();
+      var $newCnaeTemplate = $('#new-cnae');
+      var $cnaesContainer = $('#cnaes');
+      var $contents = $newCnaeTemplate.contents().clone(true, true);
+      var lastId = $cnaesContainer.attr('data-last-id');
+      var newId = parseInt(lastId, 10) + 1;
+      $contents.find('input').each(function (index, element) {
+        var $current = $(element);
+        var oldStr = $current.attr('name');
+        var newStr = oldStr.replace('company[cnaes][]', "company[cnaes][".concat(newId, "]"));
+        $current.attr({
+          'id': newStr,
+          'name': newStr
+        });
+        $current.siblings('label').attr('for', newStr);
+      });
+      $cnaesContainer.append($contents);
+      $cnaesContainer.attr('data-last-id', newId);
+      init();
+    });
+  }
+
+  $(document).on('change', 'select[name*="[marital_status]"]', function (e) {
+    e.preventDefault();
+
+    if ($(this).val() == 2) {
+      $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
+      $(this).closest('.row').find('select[name*="[wedding_regime]"]').attr('disabled', false);
+      $(this).closest('.row').find('select[name*="[wedding_regime]"]').closest('.form-group').removeClass('hidden');
+    } else {
+      $(this).closest('.form-group').removeClass('col-md-3').addClass('col-md-6');
+      $(this).closest('.row').find('select[name*="[wedding_regime]"]').attr('disabled', true);
+      $(this).closest('.row').find('select[name*="[wedding_regime]"]').closest('.form-group').addClass('hidden');
+    }
   });
-  $('.postcode').blur(function () {
+  $(document).on('change', 'select[name*="[job_role]"]', function (e) {
+    e.preventDefault();
+
+    if ($(this).val() == 5) {
+      $(this).closest('.form-group').removeClass('col-md-12').addClass('col-md-6');
+      $(this).closest('.row').find('input[name*="[job_role_other]"]').attr('disabled', false);
+      $(this).closest('.row').find('input[name*="[job_role_other]"]').closest('.form-group').removeClass('hidden');
+    } else {
+      $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-12');
+      $(this).closest('.row').find('input[name*="[job_role_other]"]').attr('disabled', true);
+      $(this).closest('.row').find('input[name*="[job_role_other]"]').closest('.form-group').addClass('hidden');
+    }
+  });
+  $(document).on('blur', '.postcode', function () {
     var $address = $(this).closest('.address');
     var $street = $address.find(".street");
     var $number = $address.find(".number");
@@ -2138,6 +2275,37 @@ window.jQuery(function ($) {
         limpa_formulário_cep();
       }
   });
+
+  function init() {
+    var $maskeds = $('[data-masked]');
+    $maskeds.each(function (index, masked) {
+      $masked = $(masked);
+      $masked.mask($masked.data('masked'), {
+        reverse: $masked.data('masked-reverse') !== undefined
+      });
+    });
+    var $selects = $('select');
+    $selects.each(function (index, select) {
+      $(select).select2();
+    });
+  }
+
+  init();
+  var $operation = $('#operation');
+
+  if ($operation.length) {
+    $operation.on('change', function (e) {
+      var $current = $(this);
+      var $row = $current.closest('.row');
+
+      if ($current.val() === '2') {
+        $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
+        $row.find('.form-group:last').removeClass('hidden');
+      } else {
+        $row.find('.form-group:last').addClass('hidden');
+      }
+    });
+  }
 });
 
 /***/ }),

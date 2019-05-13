@@ -18,9 +18,13 @@ class CreateOwnersTable extends Migration
             $table->unsignedInteger('process_id');
             $table->unsignedInteger('address_id')->nullable();
             $table->string('name')->nullable();
-            $table->string('marital_status')->nullable();
+            $table->integer('job_role')->nullable();
+            $table->string('job_role_other')->nullable();
+            $table->integer('marital_status')->nullable();
+            $table->integer('wedding_regime')->nullable();
             $table->string('rg')->nullable();
             $table->date('rg_expedition')->nullable();
+            $table->date('date_of_birth')->nullable();
             $table->string('cpf')->nullable();
             $table->timestamps();
 

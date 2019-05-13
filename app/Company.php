@@ -3,11 +3,32 @@
 namespace Gcr;
 
 use Carbon\Carbon;
+use Gcr\Traits\AttributesSelectDynamically;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+    use AttributesSelectDynamically;
+
+    const SIZE_SMALL = 1;
+    const SIZE_MEDIUM = 2;
+    const SIZE_LARGE = 3;
+    const SIZE_OTHER = 4;
+
+    protected static $labels = [
+        'size' => [
+            'Pequeno Porte',
+            'Médio Porte',
+            'Grande Porte',
+            'Demais',
+        ]
+    ];
+
     protected $fillable = [ 'id', 'name', 'share_capital', 'activity_description', 'size', 'signed' ];
+
+    protected $casts = [
+        'signed' => 'date:Y-m-d',
+    ];
 
     public function process()
     {
@@ -24,17 +45,9 @@ class Company extends Model
         return $this->hasMany(Subsidiary::class);
     }
 
-    public function setSignedAttribute($value)
+    public function cnaes()
     {
-        if ($value && Carbon::hasFormat($value, 'd/m/Y')) {
-            $value = Carbon::createFromFormat('d/m/Y', $value)->toDateString();
-        }
-        $this->attributes['signed'] = $value;
-    }
-
-    public function getSignedAttribute($value)
-    {
-        return $value ? Carbon::parse($value)->format('d-m-Y') : null;
+        return $this->hasMany(Cnae::class);
     }
 
     public function setShareCapitalAttribute($value)
