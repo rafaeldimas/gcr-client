@@ -105,7 +105,7 @@ class Process extends Model
 
     public function scopeCurrentUser($query)
     {
-        if (auth()->user()->isAdmin()) {
+        if (!auth()->user()->isAdmin()) {
             $query->where('user_id', auth()->user()->id);
         }
         return $query;
