@@ -12,6 +12,7 @@ require('./bootstrap');
 
 window.jQuery(function ($) {
     jQuery.validator.addClassRules({
+        cnpj: { cnpjBR: true },
         cpf: { cpfBR: true },
         cep: { postalcodeBR: true },
         dataBr: { dateISO: true }
@@ -25,7 +26,7 @@ window.jQuery(function ($) {
                 const formData = new FormData(form);
 
                 if (type === 'finished') {
-                    formData.append('finished', true);
+                    formData.append('process[finished]', 1);
                 }
 
                 window.axios.post($form.attr('action'), formData, { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -38,38 +39,49 @@ window.jQuery(function ($) {
                         const url = response.data.url;
 
                         $.map(owners, (owner, key) => {
-                            const $owner = $(`input[type="hidden"][name="owners[${key}][id]"`);
-                            const $ownerAddress = $(`input[type="hidden"][name="owners[${key}][address][id]"`);
+                            const $owner = $(`input[type="hidden"][name="owners[${key}][id]"]`);
+                            const $ownerAddress = $(`input[type="hidden"][name="owners[${key}][address][id]"]`);
 
                             $owner.val(owner.id);
                             $ownerAddress.val(owner.address_id);
                         });
 
                         if (company) {
-                            const $company = $('input[type="hidden"][name="company[id]"');
-                            const $companyAddress = $('input[type="hidden"][name="company[address][id]"');
+                            const $company = $('input[type="hidden"][name="company[id]"]');
+                            const $companyAddress = $('input[type="hidden"][name="company[address][id]"]');
 
                             $company.val(company.id);
                             $companyAddress.val(company.address_id);
 
                             $.map(company.cnaes, (cnae, key) => {
-                                const $cnae = $(`input[type="hidden"][name="company[cnaes][${key}][id]"`);
+                                const $cnae = $(`input[type="hidden"][name="company[cnaes][${key}][id]"]`);
                                 $cnae.val(cnae.id);
                             });
                         }
 
                         if (viability) {
-                            const $viability = $('input[type="hidden"][name="viability[id]"');
+                            const $viability = $('input[type="hidden"][name="viability[id]"]');
                             $viability.val(viability.id);
                         }
 
                         $.map(documents, (document, type) => {
-                            const $document = $(`input[type="hidden"][name="documents[${type}][id]"`);
+                            const $document = $(`input[type="hidden"][name="documents[${type}][id]"]`);
                             $document.val(document.id);
                         });
 
                         if (url) {
                             window.location.replace(url);
+                        } else {
+                            if (type === 'finished') {
+                                const $alert = $('.alert.alert-danger');
+                                $alert.html(`
+                                    <ul>
+                                        <li>Todos os dados informados foram salvos, para finalizar, preencha todas as informações solicitadas.</li>
+                                    </ul>
+                                `);
+                                $alert.toggleClass('hidden alert-danger alert-success');
+                                setTimeout(() => $alert.toggleClass('hidden alert-danger alert-success'), 9000);
+                            }
                         }
                     }
                 }).catch(error => {
@@ -77,9 +89,10 @@ window.jQuery(function ($) {
                     $alert.html(`
                         <ul>
                             <li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>
-                        </ul
+                        </ul>
                     `);
-                    $alert.removeClass('hidden');
+                    $alert.toggleClass('hidden');
+                    setTimeout(() => $alert.toggleClass('hidden'), 9000);
                 });
             };
 
@@ -146,9 +159,8 @@ window.jQuery(function ($) {
                 const $panel = $current.closest('.panel');
                 const $content = $panel.find('.panel-collapse');
 
-                $current.attr('aria-expanded', !$current.attr('aria-expanded'))
+                $current.attr('aria-expanded', !$current.attr('aria-expanded'));
                 $content.toggleClass('in');
-
             });
 
             $contents.find('#tab-content-owner-').find('input, select').each((index, element) => {
@@ -213,11 +225,10 @@ window.jQuery(function ($) {
         });
     }
 
-
     $(document).on('change', 'select[name*="[marital_status]"]', function (e) {
         e.preventDefault();
 
-        if ($(this).val() == 2) {
+        if ($(this).val() === '2') {
             $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
             $(this).closest('.row').find('select[name*="[wedding_regime]"]').attr('disabled', false);
             $(this).closest('.row').find('select[name*="[wedding_regime]"]').closest('.form-group').removeClass('hidden');
@@ -231,7 +242,7 @@ window.jQuery(function ($) {
     $(document).on('change', 'select[name*="[job_role]"]', function (e) {
         e.preventDefault();
 
-        if ($(this).val() == 5) {
+        if ($.inArray(4, $(this).val()) !== -1) {
             $(this).closest('.form-group').removeClass('col-md-12').addClass('col-md-6');
             $(this).closest('.row').find('input[name*="[job_role_other]"]').attr('disabled', false);
             $(this).closest('.row').find('input[name*="[job_role_other]"]').closest('.form-group').removeClass('hidden');
@@ -239,6 +250,23 @@ window.jQuery(function ($) {
             $(this).closest('.form-group') .removeClass('col-md-6').addClass('col-md-12');
             $(this).closest('.row').find('input[name*="[job_role_other]"]').attr('disabled', true);
             $(this).closest('.row').find('input[name*="[job_role_other]"]').closest('.form-group').addClass('hidden');
+        }
+    });
+
+    $(document).on('change', '#operation', function (e) {
+        e.preventDefault();
+        const $current = $(this);
+        const $row = $current.closest('.row');
+
+        $row.find('.form-group.new_type_company, .form-group.fields_editing').addClass('hidden');
+        $row.find('.form-group').removeClass('col-md-4').addClass('col-md-6');
+
+        if ($current.val() === '2') {
+            $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
+            $row.find('.form-group.fields_editing').removeClass('hidden');
+        } else if ($current.val() === '4') {
+            $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
+            $row.find('.form-group.new_type_company').removeClass('hidden');
         }
     });
 
@@ -330,18 +358,4 @@ window.jQuery(function ($) {
         });
     }
     init();
-
-    const $operation = $('#operation');
-    if ($operation.length) {
-        $operation.on('change', function (e) {
-            const $current = $(this);
-            const $row = $current.closest('.row');
-            if ($current.val() === '2') {
-                $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
-                $row.find('.form-group:last').removeClass('hidden');
-            } else {
-                $row.find('.form-group:last').addClass('hidden');
-            }
-        });
-    }
 });

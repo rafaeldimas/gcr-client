@@ -148,6 +148,22 @@ return [
             'icon' => 'file-text',
             'route'  => 'dashboard.process.create',
         ],
+        [
+            'header' => 'STATUS',
+            'can' => 'admin'
+        ],
+        [
+            'text' => 'Status',
+            'icon' => 'tasks',
+            'route'  => 'dashboard.status.index',
+            'can' => 'admin',
+        ],
+        [
+            'text' => 'Novo Status',
+            'icon' => 'plus',
+            'route'  => 'dashboard.status.create',
+            'can' => 'admin',
+        ],
         'CONTA',
         [
             'text' => 'Perfil',
@@ -156,6 +172,7 @@ return [
         ],
         [
             'text' => 'Criar Conta',
+            'icon' => 'plus',
             'route' => 'dashboard.user.create',
             'can' => 'admin',
         ],

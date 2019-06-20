@@ -12,19 +12,26 @@ class Company extends Model
 
     const SIZE_SMALL = 1;
     const SIZE_MEDIUM = 2;
-    const SIZE_LARGE = 3;
-    const SIZE_OTHER = 4;
+    const SIZE_OTHER = 3;
 
     protected static $labels = [
         'size' => [
-            'Pequeno Porte',
-            'Médio Porte',
-            'Grande Porte',
+            'EPP',
+            'ME',
             'Demais',
         ]
     ];
 
-    protected $fillable = [ 'id', 'name', 'share_capital', 'activity_description', 'size', 'signed' ];
+    protected $fillable = [
+        'id',
+        'name',
+        'nire',
+        'cnpj',
+        'share_capital',
+        'activity_description',
+        'size',
+        'signed',
+    ];
 
     protected $casts = [
         'signed' => 'date:Y-m-d',

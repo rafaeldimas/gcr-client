@@ -2001,6 +2001,9 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.jQuery(function ($) {
   jQuery.validator.addClassRules({
+    cnpj: {
+      cnpjBR: true
+    },
     cpf: {
       cpfBR: true
     },
@@ -2020,7 +2023,7 @@ window.jQuery(function ($) {
         var formData = new FormData(form);
 
         if (type === 'finished') {
-          formData.append('finished', true);
+          formData.append('process[finished]', 1);
         }
 
         window.axios.post($form.attr('action'), formData, {
@@ -2035,41 +2038,53 @@ window.jQuery(function ($) {
             var documents = response.data.documents;
             var url = response.data.url;
             $.map(owners, function (owner, key) {
-              var $owner = $("input[type=\"hidden\"][name=\"owners[".concat(key, "][id]\""));
-              var $ownerAddress = $("input[type=\"hidden\"][name=\"owners[".concat(key, "][address][id]\""));
+              var $owner = $("input[type=\"hidden\"][name=\"owners[".concat(key, "][id]\"]"));
+              var $ownerAddress = $("input[type=\"hidden\"][name=\"owners[".concat(key, "][address][id]\"]"));
               $owner.val(owner.id);
               $ownerAddress.val(owner.address_id);
             });
 
             if (company) {
-              var $company = $('input[type="hidden"][name="company[id]"');
-              var $companyAddress = $('input[type="hidden"][name="company[address][id]"');
+              var $company = $('input[type="hidden"][name="company[id]"]');
+              var $companyAddress = $('input[type="hidden"][name="company[address][id]"]');
               $company.val(company.id);
               $companyAddress.val(company.address_id);
               $.map(company.cnaes, function (cnae, key) {
-                var $cnae = $("input[type=\"hidden\"][name=\"company[cnaes][".concat(key, "][id]\""));
+                var $cnae = $("input[type=\"hidden\"][name=\"company[cnaes][".concat(key, "][id]\"]"));
                 $cnae.val(cnae.id);
               });
             }
 
             if (viability) {
-              var $viability = $('input[type="hidden"][name="viability[id]"');
+              var $viability = $('input[type="hidden"][name="viability[id]"]');
               $viability.val(viability.id);
             }
 
             $.map(documents, function (document, type) {
-              var $document = $("input[type=\"hidden\"][name=\"documents[".concat(type, "][id]\""));
+              var $document = $("input[type=\"hidden\"][name=\"documents[".concat(type, "][id]\"]"));
               $document.val(document.id);
             });
 
             if (url) {
               window.location.replace(url);
+            } else {
+              if (type === 'finished') {
+                var $alert = $('.alert.alert-danger');
+                $alert.html("\n                                    <ul>\n                                        <li>Todos os dados informados foram salvos, para finalizar, preencha todas as informa\xE7\xF5es solicitadas.</li>\n                                    </ul>\n                                ");
+                $alert.toggleClass('hidden alert-danger alert-success');
+                setTimeout(function () {
+                  return $alert.toggleClass('hidden alert-danger alert-success');
+                }, 9000);
+              }
             }
           }
         }).catch(function (error) {
           var $alert = $('.alert.alert-danger');
-          $alert.html("\n                        <ul>\n                            <li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>\n                        </ul\n                    ");
-          $alert.removeClass('hidden');
+          $alert.html("\n                        <ul>\n                            <li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>\n                        </ul>\n                    ");
+          $alert.toggleClass('hidden');
+          setTimeout(function () {
+            return $alert.toggleClass('hidden');
+          }, 9000);
         });
       };
 
@@ -2187,7 +2202,7 @@ window.jQuery(function ($) {
   $(document).on('change', 'select[name*="[marital_status]"]', function (e) {
     e.preventDefault();
 
-    if ($(this).val() == 2) {
+    if ($(this).val() === '2') {
       $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
       $(this).closest('.row').find('select[name*="[wedding_regime]"]').attr('disabled', false);
       $(this).closest('.row').find('select[name*="[wedding_regime]"]').closest('.form-group').removeClass('hidden');
@@ -2200,7 +2215,7 @@ window.jQuery(function ($) {
   $(document).on('change', 'select[name*="[job_role]"]', function (e) {
     e.preventDefault();
 
-    if ($(this).val() == 5) {
+    if ($.inArray(4, $(this).val()) !== -1) {
       $(this).closest('.form-group').removeClass('col-md-12').addClass('col-md-6');
       $(this).closest('.row').find('input[name*="[job_role_other]"]').attr('disabled', false);
       $(this).closest('.row').find('input[name*="[job_role_other]"]').closest('.form-group').removeClass('hidden');
@@ -2208,6 +2223,21 @@ window.jQuery(function ($) {
       $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-12');
       $(this).closest('.row').find('input[name*="[job_role_other]"]').attr('disabled', true);
       $(this).closest('.row').find('input[name*="[job_role_other]"]').closest('.form-group').addClass('hidden');
+    }
+  });
+  $(document).on('change', '#operation', function (e) {
+    e.preventDefault();
+    var $current = $(this);
+    var $row = $current.closest('.row');
+    $row.find('.form-group.new_type_company, .form-group.fields_editing').addClass('hidden');
+    $row.find('.form-group').removeClass('col-md-4').addClass('col-md-6');
+
+    if ($current.val() === '2') {
+      $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
+      $row.find('.form-group.fields_editing').removeClass('hidden');
+    } else if ($current.val() === '4') {
+      $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
+      $row.find('.form-group.new_type_company').removeClass('hidden');
     }
   });
   $(document).on('blur', '.postcode', function () {
@@ -2291,21 +2321,6 @@ window.jQuery(function ($) {
   }
 
   init();
-  var $operation = $('#operation');
-
-  if ($operation.length) {
-    $operation.on('change', function (e) {
-      var $current = $(this);
-      var $row = $current.closest('.row');
-
-      if ($current.val() === '2') {
-        $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
-        $row.find('.form-group:last').removeClass('hidden');
-      } else {
-        $row.find('.form-group:last').addClass('hidden');
-      }
-    });
-  }
 });
 
 /***/ }),

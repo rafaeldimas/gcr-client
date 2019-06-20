@@ -91,11 +91,25 @@
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
 
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        @if(auth()->user()->logo)
+                            <img src="{{ auth()->user()->logoUrl() }}" class="img-circle" alt="User Image">
+                        @else
+                            <img src="" alt="">
+                        @endif
+                    </div>
+                    <div class="pull-left info">
+                        <p>{{ auth()->user()->name }}</p>
+                    </div>
+                </div>
+
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
                     @each('adminlte::partials.menu-item', $adminlte->menu(), 'item')
                 </ul>
                 <!-- /.sidebar-menu -->
+
             </section>
             <!-- /.sidebar -->
         </aside>

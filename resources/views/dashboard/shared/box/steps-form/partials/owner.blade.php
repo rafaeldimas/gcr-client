@@ -1,3 +1,4 @@
+<?php /** @var Gcr\Owner $owner */ ?>
 <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="tab-owner-{{ $key }}">
         <h4 class="panel-title">
@@ -12,18 +13,22 @@
 
                 @if (!$process->isBusinessman())
                     <div class="row">
-                        <div class="form-group col-xs-12 col-md-12">
-                            <label for="owners[{{ $key }}][job_role]">Cargo</label>
-                            <select id="owners[{{ $key }}][job_role]" name="owners[{{ $key }}][job_role]" class="form-control" data-s2 value="{{ !$owner ? '' : $owner->job_role }}">
-                                @foreach(Gcr\Owner::attributeOptions('job_role') as $value => $label)
-                                    <option value="{{ $value }}">{{ $label }}</option>
+                        <div class="form-group col-xs-12 {{ ($owner && $owner->showJobRolesOther()) ? 'col-md-6' : 'col-md-12' }}">
+                            <label for="owners[{{ $key }}][job_roles][]">Cargos</label>
+                            <select id="owners[{{ $key }}][job_roles][]" name="owners[{{ $key }}][job_roles][]" class="form-control" data-s2 multiple>
+                                @foreach(Gcr\Owner::attributeOptions('job_roles') as $value => $label)
+                                    <option
+                                        value="{{ $value }}"
+                                        {{ ($owner && $owner->containJobRole($value)) ? 'selected' : '' }}>
+                                            {{ $label }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="form-group col-xs-12 col-md-6 hidden">
-                            <label for="owners[{{ $key }}][job_role_other]">Escreva o Cargo</label>
-                            <input id="owners[{{ $key }}][job_role_other]" name="owners[{{ $key }}][job_role_other]" type="text" class="form-control" value="{{ !$owner ? '' : $owner->job_role_other}}" disabled>
+                        <div class="form-group col-xs-12 col-md-6 {{ ($owner && $owner->showJobRolesOther()) ? '' : 'hidden' }}">
+                            <label for="owners[{{ $key }}][job_roles_other]">Escreva o Cargo</label>
+                            <input id="owners[{{ $key }}][job_roles_other]" name="owners[{{ $key }}][job_roles_other]" type="text" class="form-control" value="{{ !$owner ? '' : $owner->job_roles_other}}" {{ ($owner && $owner->showJobRolesOther()) ? '' : 'disable' }}>
                         </div>
                     </div>
                 @endif
@@ -35,20 +40,28 @@
                         <input id="owners[{{ $key }}][name]" name="owners[{{ $key }}][name]" type="text" class="form-control" value="{{ !$owner ? '' : $owner->name}}">
                     </div>
 
-                    <div class="form-group col-xs-12 col-md-6">
+                    <div class="form-group col-xs-12 {{ ($owner && $owner->showWeddingWegime()) ? 'col-md-3' : 'col-md-6' }}">
                         <label for="owners[{{ $key }}][marital_status]">Estado Civil</label>
                         <select id="owners[{{ $key }}][marital_status]" name="owners[{{ $key }}][marital_status]" class="form-control" data-s2 value="{{ !$owner ? '' : $owner->marital_status }}">
                             @foreach(Gcr\Owner::attributeOptions('marital_status') as $value => $label)
-                                <option value="{{ $value }}">{{ $label }}</option>
+                                <option
+                                    value="{{ $value }}"
+                                    {{ ($owner && $owner->marital_status === $value) ? 'selected' : '' }}>
+                                        {{ $label }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
 
-                    <div class="form-group col-xs-12 col-md-3 hidden">
+                    <div class="form-group col-xs-12 col-md-3 {{ ($owner && $owner->showWeddingWegime()) ? '' : 'hidden' }}">
                         <label for="owners[{{ $key }}][wedding_regime]">Regime de Casamento</label>
-                        <select id="owners[{{ $key }}][wedding_regime]" name="owners[{{ $key }}][wedding_regime]" class="form-control" data-s2 disabled value="{{ !$owner ? '' : $owner->wedding_regime }}">
+                        <select id="owners[{{ $key }}][wedding_regime]" name="owners[{{ $key }}][wedding_regime]" class="form-control" data-s2 value="{{ !$owner ? '' : $owner->wedding_regime }}" {{ ($owner && $owner->showWeddingWegime()) ? '' : 'disable' }}>
                             @foreach(Gcr\Owner::attributeOptions('wedding_regime') as $value => $label)
-                                <option value="{{ $value }}">{{ $label }}</option>
+                                <option
+                                    value="{{ $value }}"
+                                    {{ ($owner && $owner->wedding_regime === $value) ? 'selected' : '' }}>
+                                        {{ $label }}
+                                </option>
                             @endforeach
                         </select>
                     </div>

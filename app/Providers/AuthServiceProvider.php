@@ -2,6 +2,8 @@
 
 namespace Gcr\Providers;
 
+use Gcr\Policies\ProcessPolicy;
+use Gcr\Process;
 use Gcr\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -14,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'Gcr\Model' => 'Gcr\Policies\ModelPolicy',
+        Process::class => ProcessPolicy::class,
     ];
 
     /**
@@ -26,8 +28,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::before(function (User $user, $ability) {
+            if ($user->isAdmin()) {
+                return true;
+            }
+        });
+
         Gate::define('admin', function (User $user) {
             return $user->isAdmin();
+        });
+
+        Gate::define('edit-process', function (User $user, Process $process) {
+            return $user->isAdmin() || $process->isEditing();
         });
     }
 }

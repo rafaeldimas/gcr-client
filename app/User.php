@@ -2,13 +2,15 @@
 
 namespace Gcr;
 
+use Gcr\Traits\AccessLinksController;
 use Gcr\Traits\AttributesSelectDynamically;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    use Notifiable, AttributesSelectDynamically;
+    use Notifiable, AttributesSelectDynamically, AccessLinksController;
 
     const TYPE_ADMIN = 1;
     const TYPE_CUSTOMER = 2;
@@ -26,7 +28,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'type'
+        'name', 'email', 'password', 'type', 'logo', 'phone', 'mobile_phone', 'password_change_at'
     ];
 
     /**
@@ -45,6 +47,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password_change_at' => 'datetime',
     ];
 
     public function processes()
@@ -57,8 +60,13 @@ class User extends Authenticatable
         return $this->type === self::TYPE_ADMIN;
     }
 
-    public function getProcessesCountAttribute()
+    public function logoUrl()
     {
-        return $this->processes->count();
+        return Storage::url($this->logo);
+    }
+
+    public function getTypeLabelAttribute()
+    {
+        return array_get(User::attributeOptions('type'), $this->type);
     }
 }

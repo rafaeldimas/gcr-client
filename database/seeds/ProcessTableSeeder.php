@@ -15,7 +15,10 @@ class ProcessTableSeeder extends Seeder
     public function run()
     {
         User::all()->each(function ($user) {
-            factory(Process::class, 5)->create([ 'user_id' => $user->id ]);
+            factory(Process::class, 5)->create([ 'user_id' => $user->id ])
+                ->each(function (Process $process) {
+                    $process->statuses()->attach(Status::getStatusStarting());
+                });
         });
     }
 }

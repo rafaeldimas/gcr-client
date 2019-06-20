@@ -5,16 +5,16 @@ namespace Gcr;
 use Carbon\Carbon;
 use Gcr\Traits\AttributesSelectDynamically;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Owner extends Model
 {
     use AttributesSelectDynamically;
 
-    const JOB_ROLE_HOLDER = 1;
-    const JOB_ROLE_ADMIN = 2;
-    const JOB_ROLE_DEPENDENT = 3;
-    const JOB_ROLE_REPRESENTATIVE = 4;
-    const JOB_ROLE_OTHER = 5;
+    const JOB_ROLES_HOLDER = 1;
+    const JOB_ROLES_ADMIN = 2;
+    const JOB_ROLES_REPRESENTATIVE = 3;
+    const JOB_ROLES_OTHER = 4;
 
     const MARITAL_STATUS_NOT_MARRIED = 1;
     const MARITAL_STATUS_MARRIED = 2;
@@ -29,10 +29,9 @@ class Owner extends Model
     const WEDDING_REGIME_OTHER = 5;
 
     protected static $labels = [
-        'job_role' => [
-            'Titular',
+        'job_roles' => [
+            'Titular/Sócio',
             'Administrador',
-            'Dependente',
             'Representante',
             'Outro',
         ],
@@ -56,8 +55,8 @@ class Owner extends Model
         'id',
         'name',
         'type',
-        'job_role',
-        'job_role_other',
+        'job_roles',
+        'job_roles_other',
         'marital_status',
         'wedding_regime',
         'rg',
@@ -67,6 +66,7 @@ class Owner extends Model
     ];
 
     protected $casts = [
+        'job_roles' => 'array',
         'rg_expedition' => 'date:Y-m-d',
         'date_of_birth' => 'date:Y-m-d',
     ];
@@ -74,6 +74,31 @@ class Owner extends Model
     public function process()
     {
         return $this->belongsTo(Process::class);
+    }
+
+    /**
+     * @param int $jobRole
+     * @return bool
+     */
+    public function containJobRole($jobRole)
+    {
+        return array_has($this->job_roles, $jobRole);
+    }
+
+    /**
+     * @return bool
+     */
+    public function showJobRolesOther()
+    {
+        return $this->containJobRole(self::JOB_ROLES_OTHER);
+    }
+
+    /**
+     * @return bool
+     */
+    public function showWeddingWegime()
+    {
+        return $this->marital_status === self::MARITAL_STATUS_MARRIED;
     }
 
     public function address()

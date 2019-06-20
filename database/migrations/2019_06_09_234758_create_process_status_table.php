@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCompaniesTable extends Migration
+class CreateProcessStatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,10 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('process_status', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('process_id');
-            $table->unsignedInteger('address_id')->nullable();
-            $table->string('name')->nullable();
-            $table->string('nire')->nullable();
-            $table->string('cnpj')->nullable();
-            $table->decimal('share_capital')->nullable();
-            $table->string('activity_description')->nullable();
-            $table->integer('size')->nullable();
-            $table->date('signed')->nullable();
+            $table->unsignedInteger('status_id');
             $table->timestamps();
 
             $table->foreign('process_id')
@@ -31,9 +24,9 @@ class CreateCompaniesTable extends Migration
                 ->on('processes')
                 ->onDelete('cascade');
 
-            $table->foreign('address_id')
+            $table->foreign('status_id')
                 ->references('id')
-                ->on('addresses')
+                ->on('statuses')
                 ->onDelete('cascade');
         });
     }
@@ -45,6 +38,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('process_status');
     }
 }

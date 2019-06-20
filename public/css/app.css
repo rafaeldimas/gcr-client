@@ -343,3 +343,11 @@
   border-radius: 50%;
 }
 
+.text-white {
+  color: #fff;
+}
+
+.text-white:hover {
+  color: #ddd;
+}
+

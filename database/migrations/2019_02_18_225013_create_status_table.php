@@ -17,6 +17,7 @@ class CreateStatusTable extends Migration
             $table->increments('id');
             $table->string('label');
             $table->string('color');
+            $table->boolean('text_white');
             $table->timestamps();
         });
     }

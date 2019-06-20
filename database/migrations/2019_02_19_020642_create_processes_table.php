@@ -16,24 +16,21 @@ class CreateProcessesTable extends Migration
         Schema::create('processes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('status_id');
             $table->unsignedInteger('viability_id')->nullable();
             $table->string('protocol');
             $table->integer('operation')->nullable();
             $table->integer('type_company')->nullable();
+            $table->integer('new_type_company')->nullable();
             $table->text('description')->nullable();
             $table->boolean('editing');
+            $table->boolean('scanned')->nullable();
+            $table->boolean('post_office')->nullable();
             $table->text('fields_editing')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
-
-            $table->foreign('status_id')
-                ->references('id')
-                ->on('statuses')
                 ->onDelete('cascade');
 
             $table->foreign('viability_id')

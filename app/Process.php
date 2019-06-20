@@ -2,12 +2,13 @@
 
 namespace Gcr;
 
+use Gcr\Traits\AccessLinksController;
 use Gcr\Traits\AttributesSelectDynamically;
 use Illuminate\Database\Eloquent\Model;
 
 class Process extends Model
 {
-    use AttributesSelectDynamically;
+    use AttributesSelectDynamically, AccessLinksController;
 
     const OPERATION_CREATING = 1;
     const OPERATION_UPDATING = 2;
@@ -39,7 +40,7 @@ class Process extends Model
         ],
         'fields_editing' => [
             'Pessoas (Empresario, Integrantes, Sócios)',
-            'Empresa',
+            'Dados gerais da Empresa',
             'Cnaes da Empresa',
             'Endereço da Empresa',
         ]
@@ -50,6 +51,7 @@ class Process extends Model
         'status_id',
         'protocol',
         'type_company',
+        'new_type_company',
         'operation',
         'description',
         'fields_editing',
@@ -83,9 +85,19 @@ class Process extends Model
         return $this->belongsTo(Viability::class);
     }
 
-    public function status()
+    public function statuses()
     {
-        return $this->belongsTo(Status::class);
+        return $this->belongsToMany(Status::class)->withTimestamps();
+    }
+
+    public function statusLatest()
+    {
+        return $this->belongsToMany(Status::class)->withTimestamps()->latest('pivot_created_at');
+    }
+
+    public function getStatusLatestFirstAttribute()
+    {
+        return $this->statusLatest->first();
     }
 
     public function owners()
@@ -105,15 +117,21 @@ class Process extends Model
 
     public function scopeCurrentUser($query)
     {
-        if (!auth()->user()->isAdmin()) {
-            $query->where('user_id', auth()->user()->id);
+        $user = auth()->user();
+        if ($user && !$user->isAdmin()) {
+            $query->where('user_id', $user->id);
         }
         return $query;
     }
 
-    public function getEditingAttribute($value)
+    public function getEditingHumanAttribute()
     {
-        return $value ? 'Sim' : 'Não';
+        return $this->editing ? 'Sim' : 'Não';
+    }
+
+    public function isEditing()
+    {
+        return (bool) $this->editing;
     }
 
     public function typeCompanyCode()
@@ -227,5 +245,14 @@ class Process extends Model
         }
 
         return false;
+    }
+
+    /**
+     * @param Model|null $model
+     * @return string
+     */
+    public function linkShow(Model $model = null)
+    {
+        return route("{$this->getBaseRouteModel($model)}.show", $model ?: $this);
     }
 }

@@ -7,6 +7,16 @@
 @stop
 
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @component('dashboard.shared.box.grid.model', $gridData)
         @slot('boxTitle')
             Lista de {{ $title }}
@@ -14,9 +24,8 @@
         @slot('gridHead')
             <tr>
                 <th>Nome</th>
-                <th>E-mail</th>
-                <th>Tipo</th>
-                <th>Número de processos</th>
+                <th>Color</th>
+                <th>Link Branco</th>
                 <th>Ações</th>
             </tr>
         @endslot

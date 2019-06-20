@@ -32,3 +32,10 @@
 .box-add-new-cnae button {
     border-radius: 50%;
 }
+
+.text-white {
+    color: #fff;
+    &:hover {
+        color: #ddd;
+    }
+}

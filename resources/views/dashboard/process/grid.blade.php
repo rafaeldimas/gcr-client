@@ -5,7 +5,6 @@
 @section('content_header')
     <h1>{{ $title }}</h1>
 @stop
-
 @section('content')
     @component('dashboard.shared.box.grid.model', $gridData)
         @slot('boxTitle')
@@ -15,7 +14,7 @@
             <tr>
                 <th>Protocolo</th>
                 <th>Usuário</th>
-                <th>Editando</th>
+                <th>Editável</th>
                 <th>Status</th>
                 <th>Ações</th>
             </tr>
