@@ -193,9 +193,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        /** @var User $user */
-        $user = auth()->user();
-        if ($user && !$user->isAdmin()) {
+        if (auth()->user() && !auth()->user()->isAdmin()) {
             return redirect()->back();
         }
 
