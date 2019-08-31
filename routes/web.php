@@ -16,6 +16,9 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Auth::routes(['register' => false]);
+Auth::routes([
+    'register' => false,
+    'verify' => true,
+]);
 
 Route::get('/documents/{fileName}', 'System\FileController')->name('documents')->middleware('auth');
