@@ -4,11 +4,12 @@ namespace Gcr;
 
 use Gcr\Traits\AccessLinksController;
 use Gcr\Traits\AttributesSelectDynamically;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, AttributesSelectDynamically, AccessLinksController;
 
