@@ -17,7 +17,7 @@
             </div>
 
             <div class="form-group col-xs-12 col-md-3">
-                <label for="viability[registration_number]">Numero de cadastro</label>
+                    <label for="viability[registration_number]">Numero de cadastro</label>
                 <input id="viability[registration_number]" name="viability[registration_number]" type="text" class="form-control" value="{{ !$viability ? '' : $viability->registration_number }}">
             </div>
 

@@ -2,7 +2,6 @@
 
 namespace Gcr;
 
-use Carbon\Carbon;
 use Gcr\Traits\AttributesSelectDynamically;
 use Illuminate\Database\Eloquent\Model;
 
@@ -65,5 +64,15 @@ class Company extends Model
     public function getShareCapitalAttribute($value)
     {
         return $value ? number_format($value, 2, ',', '.') : null;
+    }
+
+    public function sizeCode()
+    {
+        return array_get(self::attributeOptions('size'), (string) $this->size, '');
+    }
+
+    public function cnaesStringFormated()
+    {
+        return $this->cnaes->implode('number', ', ');
     }
 }

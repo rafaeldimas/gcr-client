@@ -2,6 +2,8 @@
 
 namespace Gcr\Providers;
 
+use Gcr\Events\FinishProcess;
+use Gcr\Listeners\SendEmailAfterFinishProcess;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -17,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        FinishProcess::class => [
+            SendEmailAfterFinishProcess::class,
         ],
     ];
 

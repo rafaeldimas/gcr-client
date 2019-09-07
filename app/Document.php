@@ -35,6 +35,11 @@ class Document extends Model
         return route('documents', [ $this->file ]);
     }
 
+    public function getFullPathFile()
+    {
+        return storage_path("app/documents/{$this->file}");
+    }
+
     public function isRg()
     {
         return $this->type === self::TYPE_RG;

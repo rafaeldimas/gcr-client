@@ -76,6 +76,11 @@ class Owner extends Model
         return $this->belongsTo(Process::class);
     }
 
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
+
     /**
      * @param int $jobRole
      * @return bool
@@ -101,8 +106,18 @@ class Owner extends Model
         return $this->marital_status === self::MARITAL_STATUS_MARRIED;
     }
 
-    public function address()
+    public function jobRolesCode()
     {
-        return $this->belongsTo(Address::class);
+        return array_get(self::attributeOptions('job_roles'), (string) $this->job_roles, '');
+    }
+
+    public function maritalStatusCode()
+    {
+        return array_get(self::attributeOptions('marital_status'), (string) $this->marital_status, '');
+    }
+
+    public function weddingRegimeCode()
+    {
+        return array_get(self::attributeOptions('wedding_regime'), (string) $this->wedding_regime, '');
     }
 }
