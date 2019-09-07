@@ -129,6 +129,16 @@ class Process extends Model
         return $this->editing ? 'Sim' : 'Não';
     }
 
+    public function getScannedHumanAttribute()
+    {
+        return $this->scanned ? 'Sim' : 'Não';
+    }
+
+    public function getPostOfficeHumanAttribute()
+    {
+        return $this->post_office ? 'Sim' : 'Não';
+    }
+
     public function isEditing()
     {
         return (bool) $this->editing;
@@ -145,6 +155,17 @@ class Process extends Model
         return array_get($codes, $this->type_company, '');
     }
 
+    public function newTypeCompanyCode()
+    {
+        $codes = array_combine(self::attributeCodes('type_company'), [
+            'EMPRESARIO-INDIVIDUAL',
+            'SOCIEDADE-LIMITADA',
+            'EIRELI',
+            'OUTROS',
+        ]);
+        return array_get($codes, $this->new_type_company, '');
+    }
+
     public function operationCode()
     {
         $codes = array_combine(self::attributeCodes('operation'), [
@@ -154,6 +175,18 @@ class Process extends Model
             'TRANSFORMACAO',
         ]);
         return array_get($codes, $this->operation, '');
+    }
+
+    public function fieldsEditingCode()
+    {
+        $result = [];
+        if (is_array($this->fields_editing)) {
+            $labels = self::attributeOptions('fields_editing');
+            foreach ($this->fields_editing as $field) {
+                $result[$field] = array_get($labels, $field, '');
+            }
+        }
+        return $result;
     }
 
     public function isBusinessman()

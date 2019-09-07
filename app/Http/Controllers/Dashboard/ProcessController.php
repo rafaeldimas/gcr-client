@@ -7,6 +7,7 @@ use Gcr\Address;
 use Gcr\Company;
 use Gcr\Cnae;
 use Gcr\Document;
+use Gcr\Events\FinishProcess;
 use Gcr\Http\Controllers\Controller;
 use Gcr\Owner;
 use Gcr\Process;
@@ -457,6 +458,8 @@ class ProcessController extends Controller
                 $process->fill(['editing' => false]);
                 $process->statuses()->attach(array_get($processData, 'status') ?: Status::getStatusCompleted());
                 $url = route('dashboard.process.index', [ 'type_company' => $process->type_company ]);
+
+                event(new FinishProcess($process));
             }
         }
 

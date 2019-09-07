@@ -43,4 +43,64 @@ class Viability extends Model
     {
         return $this->hasOne(Process::class);
     }
+
+    public function getSameAsBusinessAddressHumanAttribute()
+    {
+        return $this->same_as_business_address ? 'Sim' : 'Não';
+    }
+
+    public function getThirstHumanAttribute()
+    {
+        return $this->thirst ? 'Sim' : 'Não';
+    }
+
+    public function getAdministrativeOfficeHumanAttribute()
+    {
+        return $this->administrative_office ? 'Sim' : 'Não';
+    }
+
+    public function getClosedDepositHumanAttribute()
+    {
+        return $this->closed_deposit ? 'Sim' : 'Não';
+    }
+
+    public function getWarehouseHumanAttribute()
+    {
+        return $this->warehouse ? 'Sim' : 'Não';
+    }
+
+    public function getRepairWorkshopHumanAttribute()
+    {
+        return $this->repair_workshop ? 'Sim' : 'Não';
+    }
+
+    public function getGarageHumanAttribute()
+    {
+        return $this->garage ? 'Sim' : 'Não';
+    }
+
+    public function getFuelSupplyUnitHumanAttribute()
+    {
+        return $this->fuel_supply_unit ? 'Sim' : 'Não';
+    }
+
+    public function getExposurePointHumanAttribute()
+    {
+        return $this->exposure_point ? 'Sim' : 'Não';
+    }
+
+    public function getTrainingCenterHumanAttribute()
+    {
+        return $this->training_center ? 'Sim' : 'Não';
+    }
+
+    public function getDataProcessingCenterHumanAttribute()
+    {
+        return $this->data_processing_center ? 'Sim' : 'Não';
+    }
+
+    public function propertyTypeCode()
+    {
+        return array_get(self::attributeOptions('property_type'), (string) $this->property_type, '');
+    }
 }
