@@ -19,6 +19,11 @@ class FinishProcess extends Mailable implements ShouldQueue
     public $process;
 
     /**
+     * @var string
+     */
+    public $title;
+
+    /**
      * Create a new message instance.
      *
      * @param Process $process
@@ -26,6 +31,7 @@ class FinishProcess extends Mailable implements ShouldQueue
     public function __construct(Process $process)
     {
         $this->process = $process;
+        $this->title = "Processo Finalizado: {{$process->protocol}}";
     }
 
     /**
@@ -37,6 +43,7 @@ class FinishProcess extends Mailable implements ShouldQueue
     {
         return $this
             ->attachDocuments()
+            ->subject($this->title)
             ->view('emails.process.finish');
     }
 

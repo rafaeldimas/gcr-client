@@ -9,7 +9,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Processo Finalizado: {{$process->protocol}}</title>
+    <title>{{ $title }}</title>
     <style>
         /* http://meyerweb.com/eric/tools/css/reset/
            v2.0 | 20110126
@@ -208,7 +208,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <img class="header-logo" src="{{ Illuminate\Support\Facades\Storage::url('site-logo.png') }}" alt="logo">
+        <img class="header-logo" src="{{ asset('storage/site-logo.png') }}" alt="logo">
         <h1>GCR Legalização</h1>
     </div>
     <div class="body">
@@ -527,7 +527,7 @@
     </div>
     <div class="footer">
         <a href="{{route('login')}}" class="link-site">
-            <img class="footer-logo" src="{{ Illuminate\Support\Facades\Storage::url('site-logo.png') }}" alt="logo">
+            <img class="footer-logo" src="{{ asset('storage/site-logo.png') }}" alt="logo">
             <span>GCR Legalização - Area Restrita</span>
         </a>
     </div>
