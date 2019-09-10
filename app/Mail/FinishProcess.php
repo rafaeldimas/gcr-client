@@ -54,7 +54,10 @@ class FinishProcess extends Mailable implements ShouldQueue
     {
         /** @var Document $document */
         foreach ($this->process->documents as $document) {
-            $this->attachFromStorage($document->getFullPathFile());
+            $this->attachFromStorage(
+                $document->getFullPathFile(),
+                array_get(Document::attributeOptions('type'), $document->type)
+            );
         }
         return $this;
     }
