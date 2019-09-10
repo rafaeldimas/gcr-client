@@ -37,7 +37,7 @@ class Document extends Model
 
     public function getFullPathFile()
     {
-        return storage_path("app/documents/{$this->file}");
+        return "documents/{$this->file}";
     }
 
     public function isRg()

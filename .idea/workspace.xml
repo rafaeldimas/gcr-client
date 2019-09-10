@@ -2,17 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2b3b1c54-058c-47a0-9a7d-84f4ba94314c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Company.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Company.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Document.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Document.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Owner.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Owner.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Process.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Process.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/EventServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/EventServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Viability.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Viability.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/viabilities.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/viabilities.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Mail/FinishProcess.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/FinishProcess.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/process/finish.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/process/finish.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -267,6 +260,7 @@
       <workItem from="1561075763662" duration="171000" />
       <workItem from="1567870854389" duration="15415000" />
       <workItem from="1567890710591" duration="3579000" />
+      <workItem from="1568153568751" duration="1907000" />
     </task>
     <servers />
   </component>
