@@ -16,6 +16,7 @@ use Gcr\Viability;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ProcessController extends Controller
@@ -24,6 +25,11 @@ class ProcessController extends Controller
      * @var Process
      */
     private $process;
+
+    /**
+     * @var array
+     */
+    private $validationErrors = [];
 
     public function __construct(Process $process)
     {
@@ -150,11 +156,11 @@ class ProcessController extends Controller
     {
         $this->authorize('edit-process', $process);
 
-        $title = $this->getTitleByTypeCompany($process->type_company) . ' - ' . $process->protocol;
+        $title = $this->getTitleByTypeCompany($process->new_type_company ?? $process->type_company) . ' - ' . $process->protocol;
 
         $steps = [
             'admin' => [ 'label' => 'Administração' ],
-            'owners' => [ 'label' => $this->getOwnersLabelByTypeCompany($process->type_company) ],
+            'owners' => [ 'label' => $this->getOwnersLabelByTypeCompany($process->new_type_company ?? $process->type_company) ],
             'company' => [ 'label' => 'Empresa' ],
             'viabilities' => [ 'label' => 'Questionário de Viabilidade' ],
             'document' => [ 'label' => 'Documentos' ],
@@ -178,7 +184,7 @@ class ProcessController extends Controller
         }
 
         $company = false;
-        if ($companyData = $this->getRequestCompany()) {
+        if ($companyData = $this->getRequestCompany(false, $process)) {
             $company = $this->saveCompanyData($companyData, $process);
         }
 
@@ -197,7 +203,9 @@ class ProcessController extends Controller
             $url = $this->saveProcessData($processData, $process);
         }
 
-        return compact('owners', 'company', 'viability', 'documents', 'url');
+        $validationErrors = $this->validationErrors;
+
+        return compact('owners', 'company', 'viability', 'documents', 'validationErrors', 'url');
     }
 
     /**
@@ -220,6 +228,16 @@ class ProcessController extends Controller
             'owners.*.date_of_birth' => $required,
             'owners.*.cpf' => $required,
             'owners.*.address' => 'required|array',
+        ], [
+            'owners.required' => 'É obrigatório informar ao menos um Empresário|Sócio|Integrante.',
+            'owners.*.id.required' => '',
+            'owners.*.name.required' => 'O campo Nome de Empresário|Sócio|Integrante é obrigatório.',
+            'owners.*.marital_status.required' => 'O campo Estado Civil de Empresário|Sócio|Integrante é obrigatório.',
+            'owners.*.rg.required' => 'O campo RG de Empresário|Sócio|Integrante é obrigatório.',
+            'owners.*.rg_expedition.required' => 'O campo Data de Expedição de Empresário|Sócio|Integrante é obrigatório.',
+            'owners.*.date_of_birth.required' => 'O campo Data de Nacimento de Empresário|Sócio|Integrante é obrigatório.',
+            'owners.*.cpf.required' => 'O campo CPF de Empresário|Sócio|Integrante é obrigatório.',
+            'owners.*.address.required' => 'É obrigatório informar os dados de endereço do Empresário|Sócio|Integrante',
         ]);
     }
 
@@ -262,23 +280,33 @@ class ProcessController extends Controller
 
     /**
      * @param bool $finish
+     * @param Process $process
      * @return array
      */
-    private function getRequestCompany($finish = false)
+    private function getRequestCompany($finish = false, Process $process)
     {
         $required = $finish ? 'required' : 'nullable';
         return request()->validate([
             'company' => 'nullable|array',
             'company.id' => $required,
             'company.name' => $required,
-            'company.nire' => $required,
-            'company.cnpj' => $required,
+            'company.nire' => $finish ? Rule::requiredIf(!$process->isCreating()) : 'nullable',
+            'company.cnpj' => $finish ? Rule::requiredIf(!$process->isCreating()) : 'nullable',
             'company.share_capital' => $required,
             'company.activity_description' => $required,
             'company.size' => $required,
             'company.signed' => $required,
             'company.address' => 'nullable|array',
             'company.cnaes' => 'nullable|array',
+        ], [
+            'company.id.required' => '',
+            'company.name.required' => 'O campo Nome de Empresa é obrigatório',
+            'company.nire.required' => 'O campo NIRE de Empresa é obrigatório',
+            'company.cnpj.required' => 'O campo CNPJ de Empresa é obrigatório',
+            'company.share_capital.required' => 'O campo Capital Social de Empresa é obrigatório',
+            'company.activity_description.required' => 'O campo Descrição da Atividade de Empresa é obrigatório',
+            'company.size.required' => 'O campo Porte da Empresa de Empresa é obrigatório',
+            'company.signed.required' => 'O campo Data de Assinatura de Empresa é obrigatório',
         ]);
     }
 
@@ -351,6 +379,22 @@ class ProcessController extends Controller
             'viability.exposure_point' => $required,
             'viability.training_center' => $required,
             'viability.data_processing_center' => $required,
+        ], [
+            'viability.property_type.required' => 'O campo Tipo do imóvel de Questionario de Viabilidade é obrigatório',
+            'viability.registration_number.required' => 'O campo Numero de cadastro de Questionario de Viabilidade é obrigatório',
+            'viability.property_area.required' => 'O campo Área do imóvel de Questionario de Viabilidade é obrigatório',
+            'viability.establishment_area.required' => 'O campo Área do estabelecimento de Questionario de Viabilidade é obrigatório',
+            'viability.same_as_business_address.required' => 'O campo A atividade é exercida no mesmo local do endereço da empresa de Questionario de Viabilidade é obrigatório',
+            'viability.thirst.required' => 'O campo Administração central da empresa, presidencia, diretoria de Questionario de Viabilidade é obrigatório',
+            'viability.administrative_office.required' => 'O campo Estabelecimento onde são exercidas atividades meramente administratives de Questionario de Viabilidade é obrigatório',
+            'viability.closed_deposit.required' => 'O campo Estabelecimento onde a empresa armazena mercadorias próprias destinadas à industrialização e/ou comercialização, no qual não se realizam vendas de Questionario de Viabilidade é obrigatório',
+            'viability.warehouse.required' => 'O campo Estabelecimento onde a empresa armazena artigos de consumo para uso próprio de Questionario de Viabilidade é obrigatório',
+            'viability.repair_workshop.required' => 'O campo Estabelecimento onde se efetua manutenção e reparação exclusivamente de bens do ativo fixo da própria empresa de Questionario de Viabilidade é obrigatório',
+            'viability.garage.required' => 'O campo Para estabelecimento de veiculos próprios, uso exclusivo da empresa de Questionario de Viabilidade é obrigatório',
+            'viability.fuel_supply_unit.required' => 'O campo Estabelecimento de abastecimento de combustiveis para uso pela frota própria de Questionario de Viabilidade é obrigatório',
+            'viability.exposure_point.required' => 'O campo Estabelecimento para exposição e demonstração de produtos próprios, sem realização de transações comerciais, tipo showroom de Questionario de Viabilidade é obrigatório',
+            'viability.training_center.required' => 'O campo Estabelecimento destinado a treinamento, de uso exclusivo da empresa, para realização de atividades de capacitação e treinamentos de recursos humanos de Questionario de Viabilidade é obrigatório',
+            'viability.data_processing_center.required' => 'O campo Estabelecimento de processo de dados, de uso exclusivo da empresa, para realização de atividades na área de informática em geral de Questionario de Viabilidade é obrigatório',
         ]);
     }
 
@@ -443,6 +487,11 @@ class ProcessController extends Controller
         ]);
     }
 
+    /**
+     * @param $processData
+     * @param Process $process
+     * @return bool|string
+     */
     private function saveProcessData($processData, Process $process)
     {
         $url = false;
@@ -454,7 +503,7 @@ class ProcessController extends Controller
         ]);
 
         if (array_get($processData, 'finished')) {
-            if ($this->validFinishEditingProcess()) {
+            if ($this->validFinishEditingProcess($process)) {
                 $process->fill(['editing' => false]);
                 $process->statuses()->attach(array_get($processData, 'status') ?: Status::getStatusCompleted());
                 $url = route('dashboard.process.index', [ 'type_company' => $process->type_company ]);
@@ -468,19 +517,20 @@ class ProcessController extends Controller
     }
 
     /**
+     * @param Process $process
      * @return bool
      */
-    private function validFinishEditingProcess()
+    private function validFinishEditingProcess(Process $process)
     {
         try {
             $this->getRequestOwners(true);
-            $this->getRequestCompany(true);
+            $this->getRequestCompany(true, $process);
             $this->getRequestDocuments(true);
             $this->getRequestViability(true);
 
             return true;
         } catch (ValidationException $e) {
-            dd($e->getMessage());
+            $this->validationErrors = $e->errors();
             return false;
         }
     }

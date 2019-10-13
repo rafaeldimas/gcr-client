@@ -11,6 +11,7 @@
             <input id="company[name]" name="company[name]" type="text" class="form-control" value="{{ !$company ? '' : $company->name }}">
         </div>
 
+        @if(!$process->isCreating())
         <div class="form-group col-xs-12 col-md-4">
             <label for="company[nire]">NIRE</label>
             <input id="company[nire]" name="company[nire]" type="text" class="form-control" value="{{ !$company ? '' : $company->nire }}" maxlength="11">
@@ -20,6 +21,7 @@
             <label for="company[cnpj]">CNPJ</label>
             <input id="company[cnpj]" name="company[cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse value="{{ !$company ? '' : $company->cnpj }}">
         </div>
+        @endif
     </div>
 
     @if (!$process->isUpdating() || $process->isEditingCompany())

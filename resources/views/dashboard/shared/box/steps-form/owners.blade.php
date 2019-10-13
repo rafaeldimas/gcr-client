@@ -40,7 +40,7 @@
             @endif
         </div>
 
-        @if (!$process->isBusinessman())
+        @if (($process->isTransformation() && !$process->isTransformationBusinessman()) || !$process->isBusinessman())
             <div class="box-add-new-owner">
                 <button type="button" class="btn btn-lg btn-primary" data-button-add-new-owner>
                     <i class="fa fa-plus"></i>

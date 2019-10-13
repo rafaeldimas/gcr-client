@@ -209,6 +209,26 @@ class Process extends Model
         return $this->type_company === self::TYPE_COMPANY_OTHER;
     }
 
+    public function isTransformationBusinessman()
+    {
+        return $this->isTransformation() && $this->new_type_company === self::TYPE_COMPANY_BUSINESSMAN;
+    }
+
+    public function isTransformationSociety()
+    {
+        return $this->isTransformation() && $this->new_type_company === self::TYPE_COMPANY_SOCIETY;
+    }
+
+    public function isTransformationEireli()
+    {
+        return $this->isTransformation() && $this->new_type_company === self::TYPE_COMPANY_EIRELI;
+    }
+
+    public function isTransformationOther()
+    {
+        return $this->isTransformation() && $this->new_type_company === self::TYPE_COMPANY_OTHER;
+    }
+
     public function isCreating()
     {
         return $this->operation === self::OPERATION_CREATING;
