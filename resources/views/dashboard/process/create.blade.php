@@ -50,6 +50,7 @@
                     <div class="form-group col-xs-12 col-md-6">
                         <label for="type_company">Tipo de empresa</label>
                         <select id="type_company" name="type_company" class="form-control">
+                            <option value="" selected>Selecione</option>
                             @foreach(Gcr\Process::attributeOptions('type_company') as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
@@ -68,6 +69,7 @@
                     <div class="form-group col-xs-12 col-md-4 hidden new_type_company">
                         <label for="new_type_company">Novo tipo de empresa</label>
                         <select id="new_type_company" name="new_type_company" class="form-control">
+                            <option value="" selected>Selecione</option>
                             @foreach(Gcr\Process::attributeOptions('type_company') as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach

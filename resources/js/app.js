@@ -36,6 +36,7 @@ window.jQuery(function ($) {
                         const company = response.data.company;
                         const viability = response.data.viability;
                         const documents = response.data.documents;
+                        const validationErrors = response.data.validationErrors;
                         const url = response.data.url;
 
                         $.map(owners, (owner, key) => {
@@ -73,26 +74,28 @@ window.jQuery(function ($) {
                             window.location.replace(url);
                         } else {
                             if (type === 'finished') {
-                                const $alert = $('.alert.alert-danger');
-                                $alert.html(`
-                                    <ul>
-                                        <li>Todos os dados informados foram salvos, para finalizar, preencha todas as informações solicitadas.</li>
-                                    </ul>
-                                `);
-                                $alert.toggleClass('hidden alert-danger alert-success');
-                                setTimeout(() => $alert.toggleClass('hidden alert-danger alert-success'), 9000);
+                                const $template = $('#alert-template');
+
+                                const $alert = $template.clone().find('.alert');
+                                $alert.toggleClass('alert-warning');
+
+                                let $message = '';
+                                $message += '<li>Todos os dados informados foram salvos, para finalizar, preencha todas as informações solicitadas.</li>';
+                                $.map(validationErrors, errors => {
+                                    $.map(errors, error => $message += '<li>'+error+'</li>');
+                                });
+                                $alert.find('ul').html($message);
+                                $('.box-body').prepend($alert);
                             }
                         }
                     }
                 }).catch(error => {
-                    const $alert = $('.alert.alert-danger');
-                    $alert.html(`
-                        <ul>
-                            <li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>
-                        </ul>
-                    `);
-                    $alert.toggleClass('hidden');
-                    setTimeout(() => $alert.toggleClass('hidden'), 9000);
+                    const $template = $('#alert-template');
+
+                    const $alert = $template.clone().find('.alert');
+                    $alert.toggleClass('alert-danger');
+                    $alert.find('ul').html('<li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>');
+                    $('.box-body').prepend($alert);
                 });
             };
 
