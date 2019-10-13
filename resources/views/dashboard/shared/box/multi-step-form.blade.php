@@ -3,8 +3,11 @@
         {{ $title }}
     @endslot
     @slot('body')
-        <div class="alert alert-danger hidden">
-            <ul></ul>
+        <div id="alert-template" class="hidden">
+            <div class="alert alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <ul></ul>
+            </div>
         </div>
         <form data-form-process action="{{ route('dashboard.process.update', [$process]) }}" enctype='multipart/form-data'>
             @method('PUT')

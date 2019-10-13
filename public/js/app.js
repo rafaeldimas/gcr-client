@@ -2036,6 +2036,7 @@ window.jQuery(function ($) {
             var company = response.data.company;
             var viability = response.data.viability;
             var documents = response.data.documents;
+            var validationErrors = response.data.validationErrors;
             var url = response.data.url;
             $.map(owners, function (owner, key) {
               var $owner = $("input[type=\"hidden\"][name=\"owners[".concat(key, "][id]\"]"));
@@ -2069,22 +2070,27 @@ window.jQuery(function ($) {
               window.location.replace(url);
             } else {
               if (type === 'finished') {
-                var $alert = $('.alert.alert-danger');
-                $alert.html("\n                                    <ul>\n                                        <li>Todos os dados informados foram salvos, para finalizar, preencha todas as informa\xE7\xF5es solicitadas.</li>\n                                    </ul>\n                                ");
-                $alert.toggleClass('hidden alert-danger alert-success');
-                setTimeout(function () {
-                  return $alert.toggleClass('hidden alert-danger alert-success');
-                }, 9000);
+                var $template = $('#alert-template');
+                var $alert = $template.clone().find('.alert');
+                $alert.toggleClass('alert-warning');
+                var $message = '';
+                $message += '<li>Todos os dados informados foram salvos, para finalizar, preencha todas as informações solicitadas.</li>';
+                $.map(validationErrors, function (errors) {
+                  $.map(errors, function (error) {
+                    return $message += '<li>' + error + '</li>';
+                  });
+                });
+                $alert.find('ul').html($message);
+                $('.box-body').prepend($alert);
               }
             }
           }
         }).catch(function (error) {
-          var $alert = $('.alert.alert-danger');
-          $alert.html("\n                        <ul>\n                            <li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>\n                        </ul>\n                    ");
-          $alert.toggleClass('hidden');
-          setTimeout(function () {
-            return $alert.toggleClass('hidden');
-          }, 9000);
+          var $template = $('#alert-template');
+          var $alert = $template.clone().find('.alert');
+          $alert.toggleClass('alert-danger');
+          $alert.find('ul').html('<li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>');
+          $('.box-body').prepend($alert);
         });
       };
 
