@@ -113,34 +113,39 @@ return [
     'menu' => [
         'PROCESSOS',
         [
-            'text' => 'Empresário Individual',
-            'icon' => 'user',
-            'route' => [
-                'name' => 'dashboard.process.index',
-                'params' => [ 'type_company' => Process::TYPE_COMPANY_BUSINESSMAN ]
-            ],
-        ],
-        [
-            'text' => 'Sociedade Limitada',
-            'icon' => 'users',
-            'route' => [
-                'name' => 'dashboard.process.index',
-                'params' => [ 'type_company' => Process::TYPE_COMPANY_SOCIETY ]
-            ],
-        ],
-        [
-            'text' => 'Eireli',
-            'icon' => 'user-circle',
-            'route' => [
-                'name' => 'dashboard.process.index',
-                'params' => [ 'type_company' => Process::TYPE_COMPANY_EIRELI ]
-            ],
-        ],
-        [
-            'text' => 'Outros',
-            'route'  => [
-                'name' => 'dashboard.process.index',
-                'params' => [ 'type_company' => Process::TYPE_COMPANY_OTHER ]
+            'text'    => 'Lista de Processos',
+            'submenu' => [
+                [
+                    'text' => 'Empresário Individual',
+                    'icon' => 'user',
+                    'route' => [
+                        'name' => 'dashboard.process.index',
+                        'params' => [ 'type_company' => Process::TYPE_COMPANY_BUSINESSMAN ]
+                    ],
+                ],
+                [
+                    'text' => 'Sociedade Limitada',
+                    'icon' => 'users',
+                    'route' => [
+                        'name' => 'dashboard.process.index',
+                        'params' => [ 'type_company' => Process::TYPE_COMPANY_SOCIETY ]
+                    ],
+                ],
+                [
+                    'text' => 'Eireli',
+                    'icon' => 'user-circle',
+                    'route' => [
+                        'name' => 'dashboard.process.index',
+                        'params' => [ 'type_company' => Process::TYPE_COMPANY_EIRELI ]
+                    ],
+                ],
+                [
+                    'text' => 'Outros',
+                    'route'  => [
+                        'name' => 'dashboard.process.index',
+                        'params' => [ 'type_company' => Process::TYPE_COMPANY_OTHER ]
+                    ],
+                ],
             ],
         ],
         [

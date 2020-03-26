@@ -4,8 +4,12 @@ namespace Gcr;
 
 use Gcr\Traits\AccessLinksController;
 use Gcr\Traits\AttributesSelectDynamically;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method Process|Builder currentUser()
+ */
 class Process extends Model
 {
     use AttributesSelectDynamically, AccessLinksController;
@@ -71,7 +75,7 @@ class Process extends Model
                     $model->user()->associate(auth()->user());
                 }
             }
-            $model->protocol = $model->typeCompanyCode().'-'.$model->operationCode().'-'.date('YmdHis');
+            $model->protocol = date('YmdHis');
         });
     }
 

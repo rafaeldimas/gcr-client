@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
              SubsidiaryTableSeeder::class,
              CnaeTableSeeder::class,
              AddressTableSeeder::class,
-             DocumentTableSeeder::class,
+//             DocumentTableSeeder::class,
          ]);
     }
 }
