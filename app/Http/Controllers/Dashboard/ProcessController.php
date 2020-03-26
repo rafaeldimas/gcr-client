@@ -14,6 +14,7 @@ use Gcr\Process;
 use Gcr\Status;
 use Gcr\Viability;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
@@ -22,7 +23,7 @@ use Illuminate\Validation\ValidationException;
 class ProcessController extends Controller
 {
     /**
-     * @var Process
+     * @var Process|Builder
      */
     private $process;
 
@@ -69,6 +70,22 @@ class ProcessController extends Controller
         $models = $this->process
             ->currentUser()
             ->where('type_company', $typeCompany)
+            ->when($request->input('search.user_id'), function (Builder $builder, $userId) {
+                return $builder->where('user_id', $userId);
+            })
+            ->when($request->input('search.protocol'), function (Builder $builder, $protocol) {
+                return $builder->where('protocol', 'like', "%{$protocol}%");
+            })
+            ->when($request->input('search.company_name'), function (Builder $builder, $companyName) {
+                return $builder->whereHas('company', function (Builder $builder) use ($companyName) {
+                    $builder->where('name', 'like', "%{$companyName}%");
+                });
+            })
+            ->when($request->input('search.company_cnpj'), function (Builder $builder, $companyCnpj) {
+                return $builder->whereHas('company', function (Builder $builder) use ($companyCnpj) {
+                    $builder->where('cnpj', 'like', "%{$companyCnpj}%");
+                });
+            })
             ->with('user', 'statusLatest')
             ->paginate(10);
 
@@ -78,7 +95,7 @@ class ProcessController extends Controller
             'fields' => [
                 'protocol',
                 'user' => ['name'],
-                'editing_human',
+//                'editing_human',
                 'statusLatestFirst' => ['label'],
             ]
         ];

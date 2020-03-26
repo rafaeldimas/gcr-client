@@ -14,7 +14,7 @@
             <tr>
                 <th>Protocolo</th>
                 <th>Usuário</th>
-                <th>Editável</th>
+{{--                <th>Editável</th>--}}
                 <th>Status</th>
                 <th>Ações</th>
             </tr>

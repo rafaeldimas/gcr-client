@@ -1,40 +1,60 @@
-####
-# ATENTION:
-# Replace all occurences of gcr-client with your project's name
-####
+# gcr-client
 
-# v2 syntax
-version: "2"
 
-# Named volumes
-volumes:
-  # MySQL Data
-  gcr-client-mysql-data:
-    driver: local
+# compose syntax version.
+version: "3.6"
 
+# services declaration.
 services:
-  # MySQL (5.7)
+  # MySQL
   mysql:
     image: mysql:5.7
-    container_name: gcr-client-mysql
     volumes:
-      - gcr-client-mysql-data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+      - mysql-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=gcr-client
-      - MYSQL_DATABASE=gcr-client
       - MYSQL_USER=gcr-client
       - MYSQL_PASSWORD=gcr-client
-
-  # PHP (with Nginx)
-  # you can change from nginx to apache, just change session 'image'
-  app:
-    image: ambientum/php:7.2-nginx
-    container_name: gcr-client-app
+      - MYSQL_DATABASE=gcr-client
+    ports:
+      - target: 3306
+        published: 3306
+  # Web Application
+  web:
+    image: ambientum/php:7.3-nginx
     volumes:
       - .:/var/www/app
+      - dot-config:/home/ambientum/.config
+      - dot-cache:/home/ambientum/.cache
+      - dot-local:/home/ambientum/.local
+      - dot-composer:/home/ambientum/.composer
+    environment:
+      - FRAMEWORK=laravel
+      - XDEBUG_ENABLED=true
+      - OPCACHE_MODE=normal
+      - PHP_MEMORY_LIMIT=256M
     ports:
-      - "80:8080"
+      - target: 8080
+        published: 8080
+      - target: 8083
+        published: 8083
     links:
       - mysql
+
+# volumes declaration.
+volumes:
+  # mysql-data
+  mysql-data:
+    driver: local
+  # dot-config
+  dot-config:
+    driver: local
+  # dot-cache
+  dot-cache:
+    driver: local
+  # dot-local
+  dot-local:
+    driver: local
+  # dot-composer
+  dot-composer:
+    driver: local
