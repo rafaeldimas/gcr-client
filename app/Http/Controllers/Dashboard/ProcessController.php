@@ -236,7 +236,7 @@ class ProcessController extends Controller
             'owners' => "{$required}|array",
             'owners.*.id' => $required,
             'owners.*.job_roles' => 'nullable|array',
-            'owners.*.job_roles_other' => 'nullable|array',
+            'owners.*.job_roles_other' => 'nullable|string',
             'owners.*.name' => $required,
             'owners.*.marital_status' => $required,
             'owners.*.wedding_regime' => 'nullable',
