@@ -2010,10 +2010,14 @@ window.jQuery(function ($) {
             }
           }
         })["catch"](function (error) {
+          debugger;
           var $template = $('#alert-template');
           var $alert = $template.clone().find('.alert');
           $alert.toggleClass('alert-danger');
-          $alert.find('ul').html('<li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>');
+          $alert.find('ul').html('<li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>'); // $.map(validationErrors, errors => {
+          //     $.map(errors, error => $message += '<li>'+error+'</li>');
+          // });
+
           $('.box-body').prepend($alert);
         });
       };
@@ -2129,112 +2133,114 @@ window.jQuery(function ($) {
     });
   }
 
-  $(document).on('change', 'select[name*="[marital_status]"]', function (e) {
-    e.preventDefault();
+  (function initEvents() {
+    $(document).on('change', 'select[name*="marital_status"]', function (e) {
+      e.preventDefault();
 
-    if ($(this).val() === '2') {
-      $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
-      $(this).closest('.row').find('select[name*="[wedding_regime]"]').attr('disabled', false);
-      $(this).closest('.row').find('select[name*="[wedding_regime]"]').closest('.form-group').removeClass('hidden');
-    } else {
-      $(this).closest('.form-group').removeClass('col-md-3').addClass('col-md-6');
-      $(this).closest('.row').find('select[name*="[wedding_regime]"]').attr('disabled', true);
-      $(this).closest('.row').find('select[name*="[wedding_regime]"]').closest('.form-group').addClass('hidden');
-    }
-  });
-  $(document).on('change', 'select[name*="[job_role]"]', function (e) {
-    e.preventDefault();
+      if ($(this).val() === '2') {
+        $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
+        $(this).closest('.row').find('select[name*="wedding_regime"]').attr('disabled', false);
+        $(this).closest('.row').find('select[name*="wedding_regime"]').closest('.form-group').removeClass('hidden');
+      } else {
+        $(this).closest('.form-group').removeClass('col-md-3').addClass('col-md-6');
+        $(this).closest('.row').find('select[name*="wedding_regime"]').attr('disabled', true);
+        $(this).closest('.row').find('select[name*="wedding_regime"]').closest('.form-group').addClass('hidden');
+      }
+    });
+    $(document).on('change', 'select[name*="job_role"]', function (e) {
+      e.preventDefault();
 
-    if ($.inArray(4, $(this).val()) !== -1) {
-      $(this).closest('.form-group').removeClass('col-md-12').addClass('col-md-6');
-      $(this).closest('.row').find('input[name*="[job_role_other]"]').attr('disabled', false);
-      $(this).closest('.row').find('input[name*="[job_role_other]"]').closest('.form-group').removeClass('hidden');
-    } else {
-      $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-12');
-      $(this).closest('.row').find('input[name*="[job_role_other]"]').attr('disabled', true);
-      $(this).closest('.row').find('input[name*="[job_role_other]"]').closest('.form-group').addClass('hidden');
-    }
-  });
-  $(document).on('change', '#operation', function (e) {
-    e.preventDefault();
-    var $current = $(this);
-    var $row = $current.closest('.row');
-    $row.find('.form-group.new_type_company, .form-group.fields_editing').addClass('hidden');
-    $row.find('.form-group').removeClass('col-md-4').addClass('col-md-6');
+      if ($.inArray('4', $(this).val()) !== -1) {
+        $(this).closest('.form-group').removeClass('col-md-12').addClass('col-md-6');
+        $(this).closest('.row').find('input[name*="job_roles_other"]').attr('disabled', false);
+        $(this).closest('.row').find('input[name*="job_roles_other"]').closest('.form-group').removeClass('hidden');
+      } else {
+        $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-12');
+        $(this).closest('.row').find('input[name*="job_roles_other"]').attr('disabled', true);
+        $(this).closest('.row').find('input[name*="job_roles_other"]').closest('.form-group').addClass('hidden');
+      }
+    });
+    $(document).on('change', '#operation', function (e) {
+      e.preventDefault();
+      var $current = $(this);
+      var $row = $current.closest('.row');
+      $row.find('.form-group.new_type_company, .form-group.fields_editing').addClass('hidden');
+      $row.find('.form-group').removeClass('col-md-4').addClass('col-md-6');
 
-    if ($current.val() === '2') {
-      $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
-      $row.find('.form-group.fields_editing').removeClass('hidden');
-    } else if ($current.val() === '4') {
-      $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
-      $row.find('.form-group.new_type_company').removeClass('hidden');
-    }
-  });
-  $(document).on('blur', '.postcode', function () {
-    var $address = $(this).closest('.address');
-    var $street = $address.find(".street");
-    var $number = $address.find(".number");
-    var $district = $address.find(".district");
-    var $city = $address.find(".city");
-    var $state = $address.find(".state");
-    var $country = $address.find(".country");
+      if ($current.val() === '2') {
+        $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
+        $row.find('.form-group.fields_editing').removeClass('hidden');
+      } else if ($current.val() === '4') {
+        $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
+        $row.find('.form-group.new_type_company').removeClass('hidden');
+      }
+    });
+    $(document).on('blur', '.postcode', function () {
+      var $address = $(this).closest('.address');
+      var $street = $address.find(".street");
+      var $number = $address.find(".number");
+      var $district = $address.find(".district");
+      var $city = $address.find(".city");
+      var $state = $address.find(".state");
+      var $country = $address.find(".country");
 
-    function limpa_formulário_cep() {
-      $street.val("");
-      $number.val("");
-      $district.val("");
-      $city.val("");
-      $state.val("");
-      $country.val("");
-    } //Nova variável "cep" somente com dígitos.
+      function limpa_formulário_cep() {
+        $street.val("");
+        $number.val("");
+        $district.val("");
+        $city.val("");
+        $state.val("");
+        $country.val("");
+      } //Nova variável "cep" somente com dígitos.
 
 
-    var cep = $(this).val().replace(/\D/g, ''); //Verifica se campo cep possui valor informado.
+      var cep = $(this).val().replace(/\D/g, ''); //Verifica se campo cep possui valor informado.
 
-    if (cep != "") {
-      //Expressão regular para validar o CEP.
-      var validacep = /^[0-9]{8}$/; //Valida o formato do CEP.
+      if (cep != "") {
+        //Expressão regular para validar o CEP.
+        var validacep = /^[0-9]{8}$/; //Valida o formato do CEP.
 
-      if (validacep.test(cep)) {
-        //Preenche os campos com "..." enquanto consulta webservice.
-        $street.val("...");
-        $number.val("...");
-        $district.val("...");
-        $city.val("...");
-        $state.val("...");
-        $country.val("..."); //Consulta o webservice viacep.com.br/
+        if (validacep.test(cep)) {
+          //Preenche os campos com "..." enquanto consulta webservice.
+          $street.val("...");
+          $number.val("...");
+          $district.val("...");
+          $city.val("...");
+          $state.val("...");
+          $country.val("..."); //Consulta o webservice viacep.com.br/
 
-        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
-          if (!("erro" in dados)) {
-            //Atualiza os campos com os valores da consulta.
-            $street.attr('disabled', false).val(dados.logradouro);
-            $district.attr('disabled', false).val(dados.bairro);
-            $city.attr('disabled', false).val(dados.localidade);
-            $state.attr('disabled', false).val(dados.uf);
-            $country.attr('disabled', false).val('Brasil');
-            $number.attr({
-              'disabled': false,
-              'placeholder': ''
-            }).val('').focus();
-          } //end if.
-          else {
-              //CEP pesquisado não foi encontrado.
-              limpa_formulário_cep();
-              alert("CEP não encontrado.");
-            }
-        });
+          $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+            if (!("erro" in dados)) {
+              //Atualiza os campos com os valores da consulta.
+              $street.attr('disabled', false).val(dados.logradouro);
+              $district.attr('disabled', false).val(dados.bairro);
+              $city.attr('disabled', false).val(dados.localidade);
+              $state.attr('disabled', false).val(dados.uf);
+              $country.attr('disabled', false).val('Brasil');
+              $number.attr({
+                'disabled': false,
+                'placeholder': ''
+              }).val('').focus();
+            } //end if.
+            else {
+                //CEP pesquisado não foi encontrado.
+                limpa_formulário_cep();
+                alert("CEP não encontrado.");
+              }
+          });
+        } //end if.
+        else {
+            //cep é inválido.
+            limpa_formulário_cep();
+            alert("Formato de CEP inválido.");
+          }
       } //end if.
       else {
-          //cep é inválido.
+          //cep sem valor, limpa formulário.
           limpa_formulário_cep();
-          alert("Formato de CEP inválido.");
         }
-    } //end if.
-    else {
-        //cep sem valor, limpa formulário.
-        limpa_formulário_cep();
-      }
-  });
+    });
+  })();
 
   function init() {
     var $maskeds = $('[data-masked]');

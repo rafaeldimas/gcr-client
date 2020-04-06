@@ -22,6 +22,12 @@
                     <input id="company[cnaes][{{ $key }}][number]" name="company[cnaes][{{ $key }}][number]" type="text" class="form-control" data-masked="0000-0/00" value="{{ !$cnae ? '' : $cnae->number }}" />
                 </div>
             @endforeach
+        @else
+            <div class="form-group col-xs-12 col-md-3">
+                <input type="hidden" name="company[cnaes][][id]">
+                <label for="company[cnaes][][number]">Cnae</label>
+                <input id="company[cnaes][][number]" name="company[cnaes][][number]" type="text" class="form-control" data-masked="0000-0/00" />
+            </div>
         @endif
     </div>
 
