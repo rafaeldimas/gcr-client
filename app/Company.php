@@ -26,6 +26,7 @@ class Company extends Model
         'name',
         'nire',
         'cnpj',
+        'activity_start',
         'share_capital',
         'activity_description',
         'size',
@@ -34,6 +35,7 @@ class Company extends Model
 
     protected $casts = [
         'signed' => 'date:Y-m-d',
+        'activity_start' => 'date:Y-m-d',
     ];
 
     public function process()

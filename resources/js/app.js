@@ -71,7 +71,21 @@ window.jQuery(function ($) {
                         });
 
                         if (url) {
-                            window.location.replace(url);
+                            const $template = $('#alert-template');
+
+                            const $alert = $template.clone().find('.alert');
+                            $alert.toggleClass('alert-success');
+
+                            $alert.find('ul').html('' +
+                                '<li>' +
+                                    'Todos os dados informados foram salvos, e o processo foi finalizado, aguarde até ser redirecionado para a listagem dos processos.' +
+                                '</li>'
+                            );
+                            $('.box-body').prepend($alert);
+
+                            setTimeout(() => {
+                                window.location.replace(url);
+                            }, 3000);
                         } else {
                             if (type === 'finished') {
                                 const $template = $('#alert-template');
@@ -90,15 +104,11 @@ window.jQuery(function ($) {
                         }
                     }
                 }).catch(error => {
-                    debugger
                     const $template = $('#alert-template');
 
                     const $alert = $template.clone().find('.alert');
                     $alert.toggleClass('alert-danger');
                     $alert.find('ul').html('<li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>');
-                    // $.map(validationErrors, errors => {
-                    //     $.map(errors, error => $message += '<li>'+error+'</li>');
-                    // });
                     $('.box-body').prepend($alert);
                 });
             };

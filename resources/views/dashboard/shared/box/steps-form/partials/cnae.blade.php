@@ -10,7 +10,7 @@
     </template>
 
     <div id="cnaes" data-last-id="{{ !$cnaes ? '0' : $cnaes->count() }}">
-        @if ($cnaes)
+        @if ($cnaes && $cnaes->count())
             @foreach ($cnaes as $key => $cnae)
                 @php
                     $key++

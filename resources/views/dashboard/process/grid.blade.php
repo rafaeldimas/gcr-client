@@ -15,7 +15,7 @@
                 <th>Protocolo</th>
                 <th>Usuário</th>
 {{--                <th>Editável</th>--}}
-                <th>Status</th>
+                <th>Situação</th>
                 <th>Ações</th>
             </tr>
         @endslot
