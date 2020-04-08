@@ -9,6 +9,7 @@ $factory->define(CompanyModel::class, function (Faker $faker) {
 
     return [
         'name' => $faker->company,
+        'activity_start' => $faker->date(),
         'share_capital' => $faker->randomFloat(2, 1, 999999),
         'activity_description' => $faker->sentence,
         'size' => $faker->randomElement(CompanyModel::attributeCodes('size')),

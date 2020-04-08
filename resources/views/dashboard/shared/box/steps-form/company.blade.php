@@ -1,3 +1,9 @@
+<?php
+    /**
+     * @var Gcr\Process $process
+     * @var Gcr\Company|null $company
+     */
+?>
 <h3>{{ $step['label'] }}</h3>
 <section>
     @php
@@ -6,20 +12,27 @@
     <input type="hidden" name="company[id]" value="{{ !$company ? '' : $company->id }}">
 
     <div class="row">
-        <div class="form-group col-xs-12 col-md-4">
+        <div class="form-group col-xs-12 col-md-3">
             <label for="company[name]">Nome Empresarial</label>
             <input id="company[name]" name="company[name]" type="text" class="form-control" value="{{ !$company ? '' : $company->name }}">
         </div>
 
         @if(!$process->isCreating())
-        <div class="form-group col-xs-12 col-md-4">
+        <div class="form-group col-xs-12 col-md-3">
             <label for="company[nire]">NIRE</label>
             <input id="company[nire]" name="company[nire]" type="text" class="form-control" value="{{ !$company ? '' : $company->nire }}" maxlength="11">
         </div>
 
-        <div class="form-group col-xs-12 col-md-4">
+        <div class="form-group col-xs-12 col-md-3">
             <label for="company[cnpj]">CNPJ</label>
             <input id="company[cnpj]" name="company[cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse value="{{ !$company ? '' : $company->cnpj }}">
+        </div>
+        @endif
+
+        @if($process->isCreating())
+        <div class="form-group col-xs-12 col-md-3">
+            <label for="company[activity_start]">Data de início da atividade</label>
+            <input id="company[activity_start]" name="company[activity_start]" type="date" class="form-control dataBr" value="{{ ($company && $company->activity_start) ? $company->activity_start->toDateString() : '' }}">
         </div>
         @endif
     </div>

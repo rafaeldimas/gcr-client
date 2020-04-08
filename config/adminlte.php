@@ -113,7 +113,12 @@ return [
     'menu' => [
         'PROCESSOS',
         [
-            'text'    => 'Lista de Processos',
+            'text' => 'Solicitação de Novo Processo',
+            'icon' => 'file-text',
+            'route'  => 'dashboard.process.create',
+        ],
+        [
+            'text'    => 'Consulte seu Processo',
             'submenu' => [
                 [
                     'text' => 'Empresário Individual',
@@ -147,11 +152,6 @@ return [
                     ],
                 ],
             ],
-        ],
-        [
-            'text' => 'Novo Processo',
-            'icon' => 'file-text',
-            'route'  => 'dashboard.process.create',
         ],
         [
             'header' => 'STATUS',

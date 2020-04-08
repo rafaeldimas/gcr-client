@@ -55,10 +55,10 @@ class ProcessController extends Controller
     private function getOwnersLabelByTypeCompany($typeCompany)
     {
         $ownersLabel = [
-            Process::TYPE_COMPANY_BUSINESSMAN => 'Empresários',
+            Process::TYPE_COMPANY_BUSINESSMAN => 'Empresário',
             Process::TYPE_COMPANY_SOCIETY => 'Sócios',
             Process::TYPE_COMPANY_EIRELI => 'Integrantes',
-            Process::TYPE_COMPANY_OTHER => 'Empresários',
+            Process::TYPE_COMPANY_OTHER => 'Empresário',
         ];
 
         return array_get($ownersLabel, $typeCompany, 'Empresários');
@@ -309,6 +309,7 @@ class ProcessController extends Controller
             'company.name' => $required,
             'company.nire' => $finish ? Rule::requiredIf(!$process->isCreating()) : 'nullable',
             'company.cnpj' => $finish ? Rule::requiredIf(!$process->isCreating()) : 'nullable',
+            'company.activity_start' => $finish ? Rule::requiredIf(!$process->isCreating()) : 'nullable',
             'company.share_capital' => $required,
             'company.activity_description' => $required,
             'company.size' => $required,
@@ -320,6 +321,7 @@ class ProcessController extends Controller
             'company.name.required' => 'O campo Nome de Empresa é obrigatório',
             'company.nire.required' => 'O campo NIRE de Empresa é obrigatório',
             'company.cnpj.required' => 'O campo CNPJ de Empresa é obrigatório',
+            'company.activity_start.required' => 'O campo Data de início da atividade de Empresa é obrigatório',
             'company.share_capital.required' => 'O campo Capital Social de Empresa é obrigatório',
             'company.activity_description.required' => 'O campo Descrição da Atividade de Empresa é obrigatório',
             'company.size.required' => 'O campo Porte da Empresa de Empresa é obrigatório',
@@ -360,10 +362,19 @@ class ProcessController extends Controller
         $company->save();
 
         foreach ($companyCnaesData as $key => $companyCnaeData) {
-            $companyCnaesId = array_get($companyCnaeData, 'id');
+            $companyCnaeId = array_get($companyCnaeData, 'id');
+            $companyCnaeNumber = array_get($companyCnaeData, 'number');
+
+            if ($companyCnaeId && empty($companyCnaeNumber)) {
+                $company->cnaes()->find($companyCnaeId)->delete();
+            }
+
+            if (empty($companyCnaeNumber)) {
+                continue;
+            }
 
             $company->cnaes()->updateOrCreate(
-                [ 'id' => $companyCnaesId ],
+                [ 'id' => $companyCnaeId ],
                 $companyCnaeData
             );
         }
