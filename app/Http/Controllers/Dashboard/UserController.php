@@ -55,14 +55,14 @@ class UserController extends Controller
         $data = $this->storeLogo($data);
 
         $data['password'] = $data['password'] ? bcrypt($data['password']) : false;
-        $data['password_change_at'] = new Carbon();
+        $data['password_change_at'] = now();
 
         $data = array_filter($data);
 
         $user->fill($data);
         $user->save();
 
-        return redirect()->route('dashboard.home');
+        return redirect()->route('dashboard.process.create');
     }
 
     /**
