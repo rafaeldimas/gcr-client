@@ -26,7 +26,13 @@
                             @if($field === 'protocol')
                                 <a href="{{ $model->linkShow() }}" class="@if($model->statusLatestFirst->text_white) text-white @endif">
                             @endif
+
+                            @if($field === 'protocol')
+                                {{ str_start(mb_substr($model->{$field}, -6), '...') }}
+                            @else
                                 {{ $model->{$field} }}
+                            @endif
+
                             @if($field === 'protocol')
                                 </a>
                             @endif

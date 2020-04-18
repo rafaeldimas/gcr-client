@@ -75,7 +75,7 @@ class Process extends Model
                     $model->user()->associate(auth()->user());
                 }
             }
-            $model->protocol = date('YmdHis');
+            $model->protocol = date('YmdHis').mt_rand();
         });
     }
 
