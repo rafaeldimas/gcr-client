@@ -271,6 +271,20 @@ window.jQuery(function ($) {
             }
         });
 
+        $(document).on('change', 'select[name*="establishment_has_avcb_clcb"]', function (e) {
+            e.preventDefault();
+
+            if ($(this).val() === '1') {
+                $(this).closest('.form-group').removeClass('col-md-12').addClass('col-md-6');
+                $(this).closest('.row').find('input[name*="avcb_clcb_number"]').attr('disabled', false);
+                $(this).closest('.row').find('input[name*="avcb_clcb_number"]').closest('.form-group').removeClass('hidden');
+            } else {
+                $(this).closest('.form-group') .removeClass('col-md-6').addClass('col-md-12');
+                $(this).closest('.row').find('input[name*="avcb_clcb_number"]').attr('disabled', true);
+                $(this).closest('.row').find('input[name*="avcb_clcb_number"]').closest('.form-group').addClass('hidden');
+            }
+        });
+
         $(document).on('change', '#operation', function (e) {
             e.preventDefault();
             const $current = $(this);

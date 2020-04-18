@@ -19,6 +19,8 @@ class CreateViabilitiesTable extends Migration
             $table->string('registration_number')->nullable();
             $table->string('property_area')->nullable();
             $table->string('establishment_area')->nullable();
+            $table->string('avcb_clcb_number')->nullable();
+            $table->boolean('establishment_has_avcb_clcb');
             $table->boolean('same_as_business_address');
             $table->boolean('thirst');
             $table->boolean('administrative_office');

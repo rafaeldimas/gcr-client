@@ -1,5 +1,5 @@
-<div class="row box-cnaes">
-    <h2 class="text-center">Cnaes</h2>
+<div class="row box-cnaes">:
+    <h2 class="text-center">Cnaes <small class="text-danger">(Informar na ordem: Cnae Principal, Cnaes Secundário)</small></h2>
 
     <template id="new-cnae">
         <div class="form-group col-xs-12 col-md-3">

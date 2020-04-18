@@ -18,6 +18,8 @@ class Viability extends Model
         'registration_number',
         'property_area',
         'establishment_area',
+        'avcb_clcb_number',
+        'establishment_has_avcb_clcb',
         'same_as_business_address',
         'thirst',
         'administrative_office',
@@ -42,6 +44,11 @@ class Viability extends Model
     public function process()
     {
         return $this->hasOne(Process::class);
+    }
+
+    public function getEstablishmentHasAvcbClcbHumanAttribute()
+    {
+        return $this->establishment_has_avcb_clcb ? 'Sim' : 'Não';
     }
 
     public function getSameAsBusinessAddressHumanAttribute()
