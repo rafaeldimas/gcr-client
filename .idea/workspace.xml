@@ -2,16 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2b3b1c54-058c-47a0-9a7d-84f4ba94314c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/agily.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/agily.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Viability.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Viability.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_02_18_234028_create_viabilities_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_02_18_234028_create_viabilities_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/RedirectIfAuthenticated.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/RedirectIfAuthenticated.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/cnae.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/cnae.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/viabilities.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/viabilities.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/process/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/process/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/grid.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/grid.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/multi-step-form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/multi-step-form.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/company.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/company.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/grid.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/grid.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/user/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/user/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,7 +272,7 @@
       <workItem from="1568153568751" duration="2513000" />
       <workItem from="1570974353700" duration="936000" />
       <workItem from="1585232523407" duration="16668000" />
-      <workItem from="1587235774605" duration="4250000" />
+      <workItem from="1587235774605" duration="11222000" />
     </task>
     <servers />
   </component>
@@ -308,14 +313,14 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="790" y="479" width="399" height="156" key="NewPhpFileDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1585237522227" />
-    <state x="686" y="294" width="618" height="518" key="find.popup" timestamp="1586310443795">
+    <state x="679" y="292" width="618" height="518" key="find.popup" timestamp="1587249619309">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="686" y="294" width="618" height="518" key="find.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1586310443795" />
-    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1587238486981">
+    <state x="679" y="292" width="618" height="518" key="find.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1587249619309" />
+    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1587249047599">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1587238486981" />
+    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1587249047599" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -28,9 +28,9 @@
                     @can('admin')
                         <div class="form-group col-xs-12 col-md-4">
                             <label for="type">Tipo</label>
-                            <select type="text" id="type" name="type" class="form-control" value="{{ old('type') }}">
+                            <select type="text" id="type" name="type" class="form-control">
                                 @foreach(Gcr\User::attributeOptions('type') as $value => $label)
-                                    <option value="{{ $value }}">{{ $label }}</option>
+                                    <option value="{{ $value }}" @if($value === (int) old('type')) selected @endif>{{ $label }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -66,12 +66,12 @@
                 <div class="row">
                     <div class="form-group col-xs-12 col-md-6">
                         <label for="password">Senha</label>
-                        <input type="password" name="password" id="password" class="form-control">
+                        <input type="password" name="password" id="password" class="form-control" required>
                     </div>
 
                     <div class="form-group col-xs-12 col-md-6">
                         <label for="password">Repita a senha</label>
-                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
+                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
                     </div>
                 </div>
 

@@ -5,14 +5,14 @@
     @slot('body')
         @component('dashboard.shared.grid')
             @slot('head')
-                {{ $gridHead}}
+                {{ $gridHead }}
             @endslot
             @slot('body')
-                {{ $gridBody}}
+                {{ $gridBody }}
             @endslot
         @endcomponent
     @endslot
     @slot('footer')
-        {{ $boxFooter}}
+        {{ $boxFooter }}
     @endslot
 @endcomponent

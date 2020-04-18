@@ -49,9 +49,9 @@
 
             <div class="form-group col-xs-12 col-md-4">
                 <label for="company[size]">Porte da Empresa</label>
-                <select id="company[size]" name="company[size]" class="form-control" value="{{ !$company ? '' : $company->size }}">
+                <select id="company[size]" name="company[size]" class="form-control">
                     @foreach(Gcr\Company::attributeOptions('size') as $value => $label)
-                        <option value="{{ $value }}">{{ $label }}</option>
+                        <option value="{{ $value }}" @if($value == optional($company)->size) selected @endif>{{ $label }}</option>
                     @endforeach
                 </select>
             </div>

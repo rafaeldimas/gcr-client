@@ -81,7 +81,13 @@ window.jQuery(function ($) {
                                     'Todos os dados informados foram salvos, e o processo foi finalizado, aguarde até ser redirecionado para a listagem dos processos.' +
                                 '</li>'
                             );
-                            $('.box-body').prepend($alert);
+                            $('.box-body .box-alerts').html('').prepend($alert);
+
+                            window.scroll({
+                                top: 0,
+                                left: 0,
+                                behavior: 'smooth'
+                            });
 
                             setTimeout(() => {
                                 window.location.replace(url);
@@ -99,7 +105,13 @@ window.jQuery(function ($) {
                                     $.map(errors, error => $message += '<li>'+error+'</li>');
                                 });
                                 $alert.find('ul').html($message);
-                                $('.box-body').prepend($alert);
+                                $('.box-body .box-alerts').html('').prepend($alert);
+
+                                window.scroll({
+                                    top: 0,
+                                    left: 0,
+                                    behavior: 'smooth'
+                                });
                             }
                         }
                     }
@@ -109,7 +121,13 @@ window.jQuery(function ($) {
                     const $alert = $template.clone().find('.alert');
                     $alert.toggleClass('alert-danger');
                     $alert.find('ul').html('<li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>');
-                    $('.box-body').prepend($alert);
+                    $('.box-body .box-alerts').html('').prepend($alert);
+
+                    window.scroll({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
                 });
             };
 

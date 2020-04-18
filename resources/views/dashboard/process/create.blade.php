@@ -30,7 +30,7 @@
                         <label for="user_id">Usúario</label>
                         <select id="user_id" name="user_id" class="form-control">
                             @foreach(Gcr\User::all() as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                <option value="{{ $user->id }}" @if($user->id === (int) old('user_id')) selected @endif>{{ $user->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -42,7 +42,7 @@
                         <label for="operation">Operação</label>
                         <select id="operation" name="operation" class="form-control">
                             @foreach(Gcr\Process::attributeOptions('operation') as $value => $label)
-                                <option value="{{ $value }}">{{ $label }}</option>
+                                <option value="{{ $value }}" @if($value === (int) old('operation')) selected @endif>{{ $label }}</option>
                             @endforeach
                         </select>
                     </div>

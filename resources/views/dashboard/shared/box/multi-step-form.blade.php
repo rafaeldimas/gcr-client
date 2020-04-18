@@ -3,6 +3,7 @@
         {{ $title }}
     @endslot
     @slot('body')
+        <div class="box-alerts"></div>
         <div id="alert-template" class="hidden">
             <div class="alert alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
