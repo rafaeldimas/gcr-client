@@ -109,8 +109,13 @@
                     @each('adminlte::partials.menu-item', $adminlte->menu(), 'item')
                 </ul>
                 <!-- /.sidebar-menu -->
-                <div class="margin">
-                    <img class="center-block img-responsive" src="/storage/site-logo.png">
+                <div style="
+                    bottom: 30px;
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                ">
+                    <img src="/storage/site-logo.png">
                 </div>
 
             </section>
