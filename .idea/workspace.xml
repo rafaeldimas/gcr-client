@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2b3b1c54-058c-47a0-9a7d-84f4ba94314c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/vendor/adminlte/page.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/vendor/adminlte/page.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/process/grid.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/process/grid.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/grid/model.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/grid/model.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/search.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/search.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -304,10 +307,10 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="679" y="292" width="618" height="518" key="find.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1587253691385" />
-    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1587253417296">
+    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1587259720128">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1587253417296" />
+    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1587259720128" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

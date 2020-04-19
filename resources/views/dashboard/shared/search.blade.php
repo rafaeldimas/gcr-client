@@ -27,7 +27,7 @@
 
     <div class="form-group col-xs-12 col-md-3">
         <label for="search[company_cnpj]">CNPJ Empresarial</label>
-        <input id="search[company_cnpj]" name="search[company_cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse value="{{ request('search.company_cnpj') }}">
+        <input id="search[company_cnpj]" name="search[company_cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" value="{{ request('search.company_cnpj') }}">
     </div>
 
     <div class="form-group col-xs-12">

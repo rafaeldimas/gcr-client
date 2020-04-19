@@ -14,7 +14,8 @@
             <tr>
                 <th>Protocolo</th>
                 <th>Usuário</th>
-{{--                <th>Editável</th>--}}
+                <th>Nome Empresarial</th>
+                <th>CNPJ Empresarial</th>
                 <th>Situação</th>
                 <th>Ações</th>
             </tr>

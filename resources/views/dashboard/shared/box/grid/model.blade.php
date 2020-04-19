@@ -15,7 +15,7 @@
                 @foreach($fields as $relation => $field)
                     @if(is_array($field))
                         @foreach($field as $childField)
-                            <td>{{ $model->{$relation}->{$childField} }}</td>
+                            <td>{{ optional($model->{$relation})[$childField] }}</td>
                         @endforeach
                     @else
                         <td style="

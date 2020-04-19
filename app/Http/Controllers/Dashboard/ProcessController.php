@@ -86,7 +86,7 @@ class ProcessController extends Controller
                     $builder->where('cnpj', 'like', "%{$companyCnpj}%");
                 });
             })
-            ->with('user', 'statusLatest')
+            ->with('user', 'statusLatest', 'company')
             ->paginate(10);
 
         $title = $this->getTitleByTypeCompany($typeCompany);
@@ -95,7 +95,7 @@ class ProcessController extends Controller
             'fields' => [
                 'protocol',
                 'user' => ['name'],
-//                'editing_human',
+                'company' => ['name', 'cnpj'],
                 'statusLatestFirst' => ['label'],
             ]
         ];
