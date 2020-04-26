@@ -16,11 +16,11 @@ return [
     |
     */
 
-    'title' => 'GCR',
+    'title' => '',
 
-    'title_prefix' => '',
+    'title_prefix' => 'GCR - ',
 
-    'title_postfix' => '',
+    'title_postfix' => ' - Elabore Rápido',
 
     /*
     |--------------------------------------------------------------------------
@@ -88,7 +88,7 @@ return [
     |
     */
 
-    'dashboard_url' => 'dashboard',
+    'dashboard_url' => 'dashboard/process/create',
 
     'logout_url' => 'logout',
 

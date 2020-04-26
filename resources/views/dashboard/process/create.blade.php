@@ -78,7 +78,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-xs-12">
-                        <label for="description">Breve Descrição</label>
+                        <label for="description">Observações e/ou resumo da solicitação</label>
                         <textarea id="description" name="description" class="form-control"></textarea>
                     </div>
                 </div>
