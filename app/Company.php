@@ -48,7 +48,7 @@ class Company extends Model
         return $this->belongsTo(Address::class);
     }
 
-    public function subsidiary()
+    public function subsidiaries()
     {
         return $this->hasMany(Subsidiary::class);
     }

@@ -92,7 +92,7 @@
                     'step' => $step,
                     'address' => !$owner ? '' : $owner->address,
                     'type' => 'owners',
-                    'ownerId' => $key,
+                    'parentId' => $key,
                 ])
                 @endcomponent
         </div>

@@ -12,11 +12,13 @@ use Gcr\Http\Controllers\Controller;
 use Gcr\Owner;
 use Gcr\Process;
 use Gcr\Status;
+use Gcr\Subsidiary;
 use Gcr\Viability;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -179,6 +181,7 @@ class ProcessController extends Controller
             'admin' => [ 'label' => 'Administração' ],
             'owners' => [ 'label' => $this->getOwnersLabelByTypeCompany($process->new_type_company ?? $process->type_company) ],
             'company' => [ 'label' => 'Empresa' ],
+            'subsidiaries' => [ 'label' => 'Filiais' ],
             'viabilities' => [ 'label' => 'Questionário de Viabilidade' ],
             'document' => [ 'label' => 'Documentos' ],
             'finish' => [ 'label' => 'Finalizar' ],
@@ -196,7 +199,7 @@ class ProcessController extends Controller
     public function update(Request $request, Process $process)
     {
         $owners = [];
-        if ($ownersData = $this->getRequestOwners()) {
+        if ($ownersData = $this->getRequestOwners(false, $process)) {
             $owners = $this->saveOwnersData($ownersData, $process);
         }
 
@@ -205,8 +208,13 @@ class ProcessController extends Controller
             $company = $this->saveCompanyData($companyData, $process);
         }
 
+        $subsidiaries = [];
+        if ($subsidiariesData = $this->getRequestSubsidiaries(false, $process)) {
+            $subsidiaries = $this->saveSubsidiariesData($subsidiariesData, $process);
+        }
+
         $viability = false;
-        if ($viabilityData = $this->getRequestViability()) {
+        if ($viabilityData = $this->getRequestViability(false, $process)) {
             $viability = $this->saveViabilityData($viabilityData, $process);
         }
 
@@ -222,18 +230,28 @@ class ProcessController extends Controller
 
         $validationErrors = $this->validationErrors;
 
-        return compact('owners', 'company', 'viability', 'documents', 'validationErrors', 'url');
+        return compact('owners', 'company', 'subsidiaries', 'viability', 'documents', 'validationErrors', 'url');
     }
 
     /**
      * @param bool $finish
+     * @param Process $process
      * @return array
      */
-    private function getRequestOwners($finish = false)
+    private function getRequestOwners($finish, Process $process)
     {
         $required = $finish ? 'required' : 'nullable';
         return request()->validate([
-            'owners' => "{$required}|array",
+            'owners' => [
+                Rule::requiredIf(function () use ($finish, $process) {
+                    if (!$finish) {
+                        return false;
+                    }
+
+                    return !$process->isUpdating() || $process->isEditingOwners();
+                }),
+                'array',
+            ],
             'owners.*.id' => $required,
             'owners.*.job_roles' => 'nullable|array',
             'owners.*.job_roles_other' => 'nullable|string',
@@ -294,28 +312,33 @@ class ProcessController extends Controller
         }
         return $owners;
     }
-
     /**
      * @param bool $finish
      * @param Process $process
      * @return array
      */
-    private function getRequestCompany($finish = false, Process $process)
+    private function getRequestCompany($finish, Process $process)
     {
         $required = $finish ? 'required' : 'nullable';
         return request()->validate([
             'company' => 'nullable|array',
             'company.id' => $required,
             'company.name' => $required,
-            'company.nire' => $finish ? Rule::requiredIf(!$process->isCreating()) : 'nullable',
-            'company.cnpj' => $finish ? Rule::requiredIf(!$process->isCreating()) : 'nullable',
-            'company.activity_start' => $finish ? Rule::requiredIf(!$process->isCreating()) : 'nullable',
-            'company.share_capital' => $required,
-            'company.activity_description' => $required,
-            'company.size' => $required,
-            'company.signed' => $required,
-            'company.address' => 'nullable|array',
-            'company.cnaes' => 'nullable|array',
+            'company.nire' => Rule::requiredIf($finish && (!$process->isCreating())),
+            'company.cnpj' => Rule::requiredIf($finish && (!$process->isCreating())),
+            'company.activity_start' => Rule::requiredIf($finish && ($process->isCreating())),
+            'company.share_capital' => Rule::requiredIf($finish && (!$process->isUpdating() || $process->isEditingCompany())),
+            'company.activity_description' => Rule::requiredIf($finish && (!$process->isUpdating() || $process->isEditingCompany())),
+            'company.size' => Rule::requiredIf($finish && (!$process->isUpdating() || $process->isEditingCompany())),
+            'company.signed' => Rule::requiredIf($finish && (!$process->isUpdating() || $process->isEditingCompany())),
+            'company.address' => [
+                Rule::requiredIf($finish && (!$process->isUpdating() || $process->isEditingCompanyAddress())),
+                'array'
+            ],
+            'company.cnaes' => [
+                Rule::requiredIf($finish && (!$process->isUpdating() || $process->isEditingCompanyCnaes())),
+                'array'
+            ],
         ], [
             'company.id.required' => '',
             'company.name.required' => 'O campo Nome de Empresa é obrigatório',
@@ -326,6 +349,8 @@ class ProcessController extends Controller
             'company.activity_description.required' => 'O campo Descrição da Atividade de Empresa é obrigatório',
             'company.size.required' => 'O campo Porte da Empresa de Empresa é obrigatório',
             'company.signed.required' => 'O campo Data de Assinatura de Empresa é obrigatório',
+            'company.address.required' => 'Os campos de Endereço de Empresa é obrigatório',
+            'company.cnaes.required' => 'É obrigatório informar ao menos um cnae da Empresa.',
         ]);
     }
 
@@ -352,14 +377,16 @@ class ProcessController extends Controller
             $companyDataExceptAddress
         );
 
-        /** @var Address $address */
-        $address = $company->address()->updateOrCreate(
-            [ 'id' => $companyAddressId ],
-            $companyAddressData
-        );
+        if ($companyAddressData) {
+            /** @var Address $address */
+            $address = $company->address()->updateOrCreate(
+                [ 'id' => $companyAddressId ],
+                $companyAddressData
+            );
 
-        $company->address()->associate($address);
-        $company->save();
+            $company->address()->associate($address);
+            $company->save();
+        }
 
         foreach ($companyCnaesData as $key => $companyCnaeData) {
             $companyCnaeId = array_get($companyCnaeData, 'id');
@@ -382,13 +409,83 @@ class ProcessController extends Controller
         return $company->loadMissing('cnaes');
     }
 
+
     /**
      * @param bool $finish
+     * @param Process $process
      * @return array
      */
-    private function getRequestViability($finish = false)
+    private function getRequestSubsidiaries($finish, Process $process)
     {
-        $required = $finish ? 'required' : 'nullable';
+        $required = $finish && $process->isEditingSubsidiary() ? 'required' : 'nullable';
+        return request()->validate([
+            'subsidiaries' => "{$required}|array",
+            'subsidiaries.*.id' => $required,
+            'subsidiaries.*.request' => "{$required}|integer",
+            'subsidiaries.*.nire' => 'required_if:subsidiaries.*.request,2,3|string',
+            'subsidiaries.*.cnpj' => 'required_if:subsidiaries.*.request,2,3|string',
+            'subsidiaries.*.share_capital' => 'required_if:subsidiaries.*.request,1,2|string',
+            'subsidiaries.*.activity_description' => 'required_if:subsidiaries.*.request,1,2|string',
+            'subsidiaries.*.address' => "required_if:subsidiaries.*.request,1,2|array",
+        ], [
+            'subsidiaries.required' => 'É obrigatório informar ao menos uma Filial.',
+            'subsidiaries.*.id.required' => '',
+            'subsidiaries.*.request.required' => 'O campo Tipo de Solicitação das Filiais é obrigatório.',
+            'subsidiaries.*.nire.required' => 'O campo NIRE das Filiais é obrigatório quando o campo Tipo de Solicitação for Alteração ou Cancelamento.',
+            'subsidiaries.*.cnpj.required' => 'O campo CNPJ das Filiais é obrigatório quando o campo Tipo de Solicitação for Alteração ou Cancelamento.',
+            'subsidiaries.*.share_capital.required' => 'O campo Capital Social das Filiais é obrigatório quando o campo Tipo de Solicitação for Abertura ou Alteração.',
+            'subsidiaries.*.activity_description.required' => 'O campo Descrição da Atividade das Filiais é obrigatório quando o campo Tipo de Solicitação for Abertura ou Alteração.',
+            'subsidiaries.*.address.required' => 'É obrigatório informar os dados de endereço das Filiais quando o campo Tipo de Solicitação for Abertura ou Alteração',
+        ]);
+    }
+
+    /**
+     * @param array $subsidiariesData
+     * @param Process $process
+     * @return Subsidiary[]
+     */
+    private function saveSubsidiariesData($subsidiariesData, Process $process)
+    {
+        $subsidiariesData = array_get($subsidiariesData, 'subsidiaries', []);
+
+        $subsidiaries = [];
+        foreach ($subsidiariesData as $key => $subsidiaryData) {
+            $subsidiaryId = array_get($subsidiaryData, 'id');
+            $subsidiaryDataExceptAddress = array_except($subsidiaryData, ['id', 'address']);
+
+            $subsidiaryAddressId = array_get($subsidiaryData, 'address.id');
+            $subsidiaryAddressData = array_except(array_get($subsidiaryData, 'address', []), 'id');
+
+            /** @var Subsidiary $subsidiary */
+            $subsidiary = $process->company->subsidiaries()->updateOrCreate(
+                [ 'id' =>  $subsidiaryId ],
+                $subsidiaryDataExceptAddress
+            );
+
+            if ($subsidiaryAddressData) {
+                /** @var Address $address */
+                $address = $subsidiary->address()->updateOrCreate(
+                    [ 'id' => $subsidiaryAddressId ],
+                    $subsidiaryAddressData
+                );
+
+                $subsidiary->address()->associate($address);
+                $subsidiary->save();
+            }
+
+            $subsidiaries[$key] = $subsidiary;
+        }
+        return $subsidiaries;
+    }
+
+    /**
+     * @param bool $finish
+     * @param Process $process
+     * @return array
+     */
+    private function getRequestViability($finish, Process $process)
+    {
+        $required = $finish && $process->showViability() ? 'required' : 'nullable';
         return request()->validate([
             'viability' => 'nullable|array',
             'viability.id' => 'nullable',
@@ -555,10 +652,11 @@ class ProcessController extends Controller
     private function validFinishEditingProcess(Process $process)
     {
         try {
-            $this->getRequestOwners(true);
+            $this->getRequestOwners(true, $process);
             $this->getRequestCompany(true, $process);
+            $this->getRequestSubsidiaries(true, $process);
             $this->getRequestDocuments(true);
-            $this->getRequestViability(true);
+            $this->getRequestViability(true, $process);
 
             return true;
         } catch (ValidationException $e) {

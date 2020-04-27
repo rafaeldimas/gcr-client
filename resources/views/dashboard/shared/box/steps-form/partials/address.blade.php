@@ -1,5 +1,5 @@
 @php
-    $prefixName = ($type === 'owners') ? "{$type}[{$ownerId}][address]" : "{$type}[address]"
+    $prefixName = in_array($type, [ 'owners', 'subsidiaries' ]) ? "{$type}[{$parentId}][address]" : "{$type}[address]"
 @endphp
 
 <div class="address">

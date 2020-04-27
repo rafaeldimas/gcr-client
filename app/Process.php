@@ -28,6 +28,7 @@ class Process extends Model
     const FIELDS_EDITING_COMPANY = 'company';
     const FIELDS_EDITING_COMPANY_CNAES = 'company_cnaes';
     const FIELDS_EDITING_COMPANY_ADDRESS = 'company_address';
+    const FIELDS_EDITING_SUBSIDIARY = 'subsidiary';
 
     protected static $labels = [
         'operation' => [
@@ -47,6 +48,7 @@ class Process extends Model
             'Dados gerais da Empresa',
             'Cnaes da Empresa',
             'Endereço da Empresa',
+            'Filiais',
         ]
     ];
 
@@ -289,6 +291,15 @@ class Process extends Model
         return false;
     }
 
+    public function isEditingSubsidiary()
+    {
+        if (is_array($this->fields_editing)) {
+            return in_array(self::FIELDS_EDITING_SUBSIDIARY, $this->fields_editing);
+        }
+
+        return false;
+    }
+
     public function showViability()
     {
         if ($this->isCreating() || $this->isTransformation()) {
@@ -296,9 +307,9 @@ class Process extends Model
         }
 
         if ($this->isUpdating()) {
-            if ($this->isEditingCompany()) return true;
-            if ($this->isEditingCompanyCnaes()) return true;
-            if ($this->isEditingCompanyAddress()) return true;
+            return $this->isEditingCompany()
+                || $this->isEditingCompanyCnaes()
+                || $this->isEditingCompanyAddress();
         }
 
         return false;

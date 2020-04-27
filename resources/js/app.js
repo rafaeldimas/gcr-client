@@ -34,6 +34,7 @@ window.jQuery(function ($) {
                     if (response && !response.data.error) {
                         const owners = response.data.owners;
                         const company = response.data.company;
+                        const subsidiaries = response.data.subsidiaries;
                         const viability = response.data.viability;
                         const documents = response.data.documents;
                         const validationErrors = response.data.validationErrors;
@@ -59,6 +60,14 @@ window.jQuery(function ($) {
                                 $cnae.val(cnae.id);
                             });
                         }
+
+                        $.map(subsidiaries, (subsidiary, key) => {
+                            const $subsidiary = $(`input[type="hidden"][name="subsidiaries[${key}][id]"]`);
+                            const $subsidiaryAddress = $(`input[type="hidden"][name="subsidiaries[${key}][address][id]"]`);
+
+                            $subsidiary.val(subsidiary.id);
+                            $subsidiaryAddress.val(subsidiary.address_id);
+                        });
 
                         if (viability) {
                             const $viability = $('input[type="hidden"][name="viability[id]"]');
@@ -232,6 +241,67 @@ window.jQuery(function ($) {
         });
     }
 
+    const $buttonAddNewSubsidiary = $('[data-button-add-new-subsidiary]');
+    if ($buttonAddNewSubsidiary.length) {
+        $buttonAddNewSubsidiary.on('click', function (e) {
+            e.preventDefault();
+
+            const $newSubsidiaryTemplate = $('#new-subsidiary');
+            const $subsidiariesContainer = $('#subsidiaries');
+            const $contents = $newSubsidiaryTemplate.contents().clone(true, true);
+            const lastId = $subsidiariesContainer.attr('data-last-id');
+            const newId = parseInt(lastId, 10) + 1;
+
+            $contents.find('#tab-subsidiary-').attr('id', `#tab-subsidiary-${newId}`);
+
+            $contents.find('a[data-toggle="collapse"]').attr({
+                'aria-controls': `tab-content-subsidiary-${newId}`,
+                'href': `#tab-content-subsidiary-${newId}`
+            }).text($contents.find('a[data-toggle="collapse"]').text().trim() + newId)
+            .on('click', function(e) {
+                e.preventDefault();
+                const $current = $(this);
+                const $panel = $current.closest('.panel');
+                const $content = $panel.find('.panel-collapse');
+
+                $current.attr('aria-expanded', !$current.attr('aria-expanded'));
+                $content.toggleClass('in');
+            });
+
+            $contents.find('#tab-content-subsidiary-').find('input, textarea, select').each((index, element) => {
+                const $current = $(element);
+                const oldStr = $current.attr('name');
+                const newStr = oldStr.replace('subsidiaries[]', `subsidiaries[${newId}]`);
+                $current.attr({
+                    'id': newStr,
+                    'name': newStr
+                });
+                $current.siblings('label').attr('for', newStr);
+            });
+
+            $contents.find('#tab-content-subsidiary-').attr({
+                'id': `#tab-content-subsidiary-${newId}`,
+                'aria-labelledby': `tab-subsidiary-${newId}`
+            });
+
+            $subsidiariesContainer.append($contents);
+            $subsidiariesContainer.attr('data-last-id', newId);
+            init();
+
+            const $lastPanel = $subsidiariesContainer
+                .find('.panel:last');
+
+            $lastPanel
+                .find('a[data-toggle="collapse"]')
+                .click();
+
+            $lastPanel
+                .find('select:first, .panel:last input:first:not([type="hidden"])')
+                .first()
+                .focus();
+        });
+    }
+
     const $buttonAddNewCnae = $('[data-button-add-new-cnae]');
     if ($buttonAddNewCnae.length) {
         $buttonAddNewCnae.on('click', function (e) {
@@ -300,6 +370,64 @@ window.jQuery(function ($) {
                 $(this).closest('.form-group') .removeClass('col-md-6').addClass('col-md-12');
                 $(this).closest('.row').find('input[name*="avcb_clcb_number"]').attr('disabled', true);
                 $(this).closest('.row').find('input[name*="avcb_clcb_number"]').closest('.form-group').addClass('hidden');
+            }
+        });
+
+        $(document).on('change', 'select[name*="request"]', function (e) {
+            e.preventDefault();
+            const fields = {
+                nire: $(this).closest('.row').find('input[name*="nire"]'),
+                cnpj: $(this).closest('.row').find('input[name*="cnpj"]'),
+                share_capital: $(this).closest('.row').find('input[name*="share_capital"]'),
+                activity_description: $(this).closest('.panel-body').find('textarea[name*="activity_description"]'),
+                address: $(this).closest('.panel-body').find('.subsidiary-address input'),
+            }
+
+            Object.keys(fields).map(field => {
+                if (field === 'address') {
+                    fields[field].attr('disabled', true);
+                    fields[field].closest('.subsidiary-address').addClass('hidden');
+
+                    return;
+                }
+
+                fields[field].attr('disabled', true);
+                fields[field].closest('.form-group').addClass('hidden');
+            })
+
+            const request = $(this).val();
+
+            if (request === '1') {
+                fields.share_capital.attr('disabled', false);
+                fields.share_capital.closest('.form-group').removeClass('hidden');
+
+                fields.activity_description.attr('disabled', false);
+                fields.activity_description.closest('.form-group').removeClass('hidden');
+
+                fields.address.attr('disabled', false);
+                fields.address.closest('.subsidiary-address').removeClass('hidden');
+            }
+
+            if (request === '2') {
+                Object.keys(fields).map(field => {
+                    if (field === 'address') {
+                        fields[field].attr('disabled', false);
+                        fields[field].closest('.subsidiary-address').removeClass('hidden');
+
+                        return;
+                    }
+
+                    fields[field].attr('disabled', false);
+                    fields[field].closest('.form-group').removeClass('hidden');
+                })
+            }
+
+            if (request === '3') {
+                fields.nire.attr('disabled', false);
+                fields.nire.closest('.form-group').removeClass('hidden');
+
+                fields.cnpj.attr('disabled', false);
+                fields.cnpj.closest('.form-group').removeClass('hidden');
             }
         });
 
