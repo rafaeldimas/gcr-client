@@ -24,6 +24,9 @@
         @slot('body')
             <form action="{{ route('dashboard.user.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
+
+                <h1 class="text-center">Dados Contador</h1>
+
                 <div class="row">
                     @can('admin')
                         <div class="form-group col-xs-12 col-md-4">
@@ -46,6 +49,7 @@
                         <input id="email" name="email" type="email" class="form-control" value="{{ old('email') }}" required>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="form-group col-xs-12 col-md-4">
                         <label for="phone">Telefone</label>
@@ -74,6 +78,26 @@
                         <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
                     </div>
                 </div>
+
+                <h1 class="text-center">Dados da Contabilidade</h1>
+
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-6">
+                        <label for="accounting[name]">Nome</label>
+                        <input id="accounting[name]" name="accounting[name]" class="form-control" value="{{ old('accounting.name') }}">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-6">
+                        <label for="accounting[email]">E-mail</label>
+                        <input id="accounting[email]" name="accounting[email]" type="email" class="form-control" value="{{ old('accounting.email') }}" required>
+                    </div>
+                </div>
+
+                @component('dashboard.shared.box.steps-form.partials.address', [
+                    'address' => false,
+                    'type' => 'accounting',
+                ])
+                @endcomponent
 
                 <button type="submit" class="btn btn-default">Salvar</button>
             </form>

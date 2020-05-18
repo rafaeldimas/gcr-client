@@ -15,6 +15,7 @@
             <tr>
                 <th>Nome</th>
                 <th>E-mail</th>
+                <th>Contabilidade</th>
                 <th>Tipo</th>
                 <th>Número de processos</th>
                 <th>Ações</th>

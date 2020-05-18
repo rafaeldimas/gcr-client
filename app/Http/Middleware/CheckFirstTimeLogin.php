@@ -21,12 +21,10 @@ class CheckFirstTimeLogin
             'dashboard.user.first.time.login.show'
         );
 
-        $user = auth()->user();
-
-        if (!$isFirstTimeLoginRoute && ($user && $user->password_change_at == null))
-        {
+        if (!$isFirstTimeLoginRoute && optional(auth()->user())->password_change_at == null) {
             return redirect()->route('dashboard.user.first.time.login.show');
         }
+
         return $next($request);
     }
 }

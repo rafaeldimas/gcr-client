@@ -29,7 +29,14 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'type', 'logo', 'phone', 'mobile_phone', 'password_change_at'
+        'name',
+        'email',
+        'password',
+        'type',
+        'logo',
+        'phone',
+        'mobile_phone',
+        'password_change_at'
     ];
 
     /**
@@ -54,6 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function processes()
     {
         return $this->hasMany(Process::class);
+    }
+
+    public function accounting()
+    {
+        return $this->belongsTo(Accounting::class);
     }
 
     public function isAdmin()

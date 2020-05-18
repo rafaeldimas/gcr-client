@@ -87,7 +87,7 @@ window.jQuery(function ($) {
 
                             $alert.find('ul').html('' +
                                 '<li>' +
-                                    'Todos os dados informados foram salvos, e o processo foi finalizado, aguarde até ser redirecionado para a listagem dos processos.' +
+                                    'Todos os dados informados foram transmitidos com sucesso e a sua solicitação já está em andamento. Para consultar seu processo, clique em consulte seu processo na barra lateral.' +
                                 '</li>'
                             );
                             $('.box-body .box-alerts').html('').prepend($alert);
@@ -362,15 +362,23 @@ window.jQuery(function ($) {
         $(document).on('change', 'select[name*="establishment_has_avcb_clcb"]', function (e) {
             e.preventDefault();
 
-            if ($(this).val() === '1') {
-                $(this).closest('.form-group').removeClass('col-md-12').addClass('col-md-6');
-                $(this).closest('.row').find('input[name*="avcb_clcb_number"]').attr('disabled', false);
-                $(this).closest('.row').find('input[name*="avcb_clcb_number"]').closest('.form-group').removeClass('hidden');
-            } else {
-                $(this).closest('.form-group') .removeClass('col-md-6').addClass('col-md-12');
-                $(this).closest('.row').find('input[name*="avcb_clcb_number"]').attr('disabled', true);
-                $(this).closest('.row').find('input[name*="avcb_clcb_number"]').closest('.form-group').addClass('hidden');
-            }
+            $(this)
+                .closest('.form-group')
+                .toggleClass('col-md-12 col-md-6');
+
+            $(this)
+                .closest('.row')
+                .find('input[name*="avcb_clcb_number"]')
+                .prop('disabled', (key, value) => !value)
+                .closest('.form-group')
+                .toggleClass('hidden');
+
+            $(this)
+                .closest('.row')
+                .find('select[name*="avcb_clcb_number_type"]')
+                .prop('disabled', (key, value) => !value)
+                .closest('.form-group')
+                .toggleClass('hidden');
         });
 
         $(document).on('change', 'select[name*="request"]', function (e) {
@@ -446,6 +454,19 @@ window.jQuery(function ($) {
                 $row.find('.form-group').removeClass('col-md-6').addClass('col-md-4');
                 $row.find('.form-group.new_type_company').removeClass('hidden');
             }
+        });
+
+        $(document).on('change', 'select[name*="fields_editing"]', function (e) {
+            e.preventDefault();
+
+            const isCompany = $.inArray('company', $(this).val()) !== -1;
+
+            $(this)
+                .closest('form')
+                .find('.form-group.description_of_changes')
+                .toggleClass('hidden', !isCompany)
+                .find('textarea[name="description_of_changes"]')
+                .prop('disabled', !isCompany);
         });
 
         $(document).on('blur', '.postcode', function() {

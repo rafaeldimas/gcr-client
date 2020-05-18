@@ -25,9 +25,14 @@ class Process extends Model
     const TYPE_COMPANY_OTHER = 4;
 
     const FIELDS_EDITING_OWNERS = 'owners';
-    const FIELDS_EDITING_COMPANY = 'company';
+    const FIELDS_EDITING_CAPITAL = 'capital';
+    const FIELDS_EDITING_COMPANY_NAME = 'company name';
+    const FIELDS_EDITING_COMPANY_SIZE = 'company size';
     const FIELDS_EDITING_COMPANY_CNAES = 'company_cnaes';
     const FIELDS_EDITING_COMPANY_ADDRESS = 'company_address';
+    const FIELDS_EDITING_TRANSFER_TO_ANOTHER_UF = 'transfer_to_another_uf';
+    const FIELDS_EDITING_TRANSFER_FROM_ANOTHER_UF_TO_SP = 'transfer_from_another_uf_to_sp';
+    const FIELDS_EDITING_COMPANY = 'company';
     const FIELDS_EDITING_SUBSIDIARY = 'subsidiary';
 
     protected static $labels = [
@@ -45,20 +50,25 @@ class Process extends Model
         ],
         'fields_editing' => [
             'Pessoas (Empresario, Integrantes, Sócios)',
-            'Dados gerais da Empresa',
+            'Alteração de Capital',
+            'Alteração de Razão Social',
+            'Alteração de Porte da Empresa',
             'Cnaes da Empresa',
             'Endereço da Empresa',
+            'Transferência de Sede Para Outra UF',
+            'Transferência de Sede de Outra UF para SP',
+            'Outras Cláusulas Contratuais',
             'Filiais',
         ]
     ];
 
     protected $fillable = [
         'editing',
-        'status_id',
         'protocol',
         'type_company',
         'new_type_company',
         'operation',
+        'description_of_changes',
         'description',
         'fields_editing',
     ];
@@ -93,12 +103,12 @@ class Process extends Model
 
     public function statuses()
     {
-        return $this->belongsToMany(Status::class)->withTimestamps();
+        return $this->belongsToMany(Status::class)->withTimestamps()->withPivot('description');
     }
 
     public function statusLatest()
     {
-        return $this->belongsToMany(Status::class)->withTimestamps()->latest('pivot_created_at');
+        return $this->statuses()->latest('pivot_created_at');
     }
 
     public function getStatusLatestFirstAttribute()
@@ -264,10 +274,28 @@ class Process extends Model
         return false;
     }
 
-    public function isEditingCompany()
+    public function isEditingCapital()
     {
         if (is_array($this->fields_editing)) {
-            return in_array(self::FIELDS_EDITING_COMPANY, $this->fields_editing);
+            return in_array(self::FIELDS_EDITING_CAPITAL, $this->fields_editing);
+        }
+
+        return false;
+    }
+
+    public function isEditingCompanyName()
+    {
+        if (is_array($this->fields_editing)) {
+            return in_array(self::FIELDS_EDITING_COMPANY_NAME, $this->fields_editing);
+        }
+
+        return false;
+    }
+
+    public function isEditingCompanySize()
+    {
+        if (is_array($this->fields_editing)) {
+            return in_array(self::FIELDS_EDITING_COMPANY_SIZE, $this->fields_editing);
         }
 
         return false;
@@ -291,6 +319,33 @@ class Process extends Model
         return false;
     }
 
+    public function isEditingTransferToAnotherUf()
+    {
+        if (is_array($this->fields_editing)) {
+            return in_array(self::FIELDS_EDITING_TRANSFER_TO_ANOTHER_UF, $this->fields_editing);
+        }
+
+        return false;
+    }
+
+    public function isEditingTransferFromAnotherUfToSp()
+    {
+        if (is_array($this->fields_editing)) {
+            return in_array(self::FIELDS_EDITING_TRANSFER_FROM_ANOTHER_UF_TO_SP, $this->fields_editing);
+        }
+
+        return false;
+    }
+
+    public function isEditingCompany()
+    {
+        if (is_array($this->fields_editing)) {
+            return in_array(self::FIELDS_EDITING_COMPANY, $this->fields_editing);
+        }
+
+        return false;
+    }
+
     public function isEditingSubsidiary()
     {
         if (is_array($this->fields_editing)) {
@@ -308,6 +363,7 @@ class Process extends Model
 
         if ($this->isUpdating()) {
             return $this->isEditingCompany()
+                || $this->isEditingCompanyName()
                 || $this->isEditingCompanyCnaes()
                 || $this->isEditingCompanyAddress();
         }

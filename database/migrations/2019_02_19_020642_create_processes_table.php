@@ -21,6 +21,7 @@ class CreateProcessesTable extends Migration
             $table->integer('operation')->nullable();
             $table->integer('type_company')->nullable();
             $table->integer('new_type_company')->nullable();
+            $table->text('description_of_changes')->nullable();
             $table->text('description')->nullable();
             $table->boolean('editing');
             $table->boolean('scanned')->nullable();

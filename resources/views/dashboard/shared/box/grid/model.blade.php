@@ -42,7 +42,9 @@
                 <td>
                     <a href="{{ $model->linkEdit() }}" class="btn text-bold
                         @if ($model instanceof Gcr\Process)
-                            @if(!$model->editing) disabled @endif
+                            @cannot('admin')
+                                @if(!$model->editing) disabled @endif
+                            @endcannot
                             @if($model->statusLatestFirst->text_white) text-white @endif
                         @endif
                         ">

@@ -54,6 +54,7 @@ class Owner extends Model
     protected $fillable = [
         'id',
         'name',
+        'share_capital',
         'type',
         'job_roles',
         'job_roles_other',

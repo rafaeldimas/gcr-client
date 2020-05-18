@@ -75,6 +75,118 @@
                     @endif
                 </div>
 
+                <p class="login-box-msg">Dados da Contabilidade</p>
+
+                @php
+                    $accounting = optional($user->accounting);
+                    $address = optional($accounting->address);
+                @endphp
+
+                <div class="form-group has-feedback {{ $errors->has('accounting.name') ? 'has-error' : '' }}">
+                    <input type="text" name="accounting[name]" class="form-control"
+                           placeholder="Nome" value="{{ $accounting->name }}">
+                    <span class="glyphicon glyphicon-briefcase form-control-feedback"></span>
+                    @if ($errors->has('accounting.name'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('accounting.name') }}</strong>
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group has-feedback {{ $errors->has('accounting.email') ? 'has-error' : '' }}">
+                    <input type="email" name="accounting[email]" class="form-control"
+                           placeholder="E-mail" value="{{ $accounting->email }}" required>
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    @if ($errors->has('accounting.email'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('accounting.email') }}</strong>
+                        </span>
+                    @endif
+                </div>
+
+                <p class="login-box-msg">Endereço da Contabilidade</p>
+
+                <div class="address">
+                    <input type="hidden" name="accounting[address][id]" value="{{ $address->id }}">
+
+                    <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
+                        <input name="accounting[address][postcode]" class="form-control postcode cep" data-masked="00000-000"
+                               placeholder="CEP" value="{{ $address->postcode }}">
+                        <span class="glyphicon glyphicon-road form-control-feedback"></span>
+                        @if ($errors->has('accounting.address'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('accounting.address') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
+                        <input name="accounting[address][street]" class="form-control street"
+                               placeholder="Logradouro" value="{{ $address->street }}">
+                        <span class="glyphicon glyphicon-road form-control-feedback"></span>
+                        @if ($errors->has('accounting.address'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('accounting.address') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
+                        <input name="accounting[address][number]" class="form-control number"
+                               placeholder="Numero" value="{{ $address->number }}">
+                        <span class="glyphicon glyphicon-road form-control-feedback"></span>
+                        @if ($errors->has('accounting.address'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('accounting.address') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
+                        <input name="accounting[address][district]" class="form-control district"
+                               placeholder="Bairro" value="{{ $address->district }}">
+                        <span class="glyphicon glyphicon-road form-control-feedback"></span>
+                        @if ($errors->has('accounting.address'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('accounting.address') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
+                        <input name="accounting[address][city]" class="form-control city"
+                               placeholder="Cidade" value="{{ $address->city }}">
+                        <span class="glyphicon glyphicon-road form-control-feedback"></span>
+                        @if ($errors->has('accounting.address'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('accounting.address') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
+                        <input name="accounting[address][state]" class="form-control state"
+                               placeholder="Estado" value="{{ $address->state }}">
+                        <span class="glyphicon glyphicon-road form-control-feedback"></span>
+                        @if ($errors->has('accounting.address'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('accounting.address') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
+                        <input name="accounting[address][country]" class="form-control country"
+                               placeholder="País" value="{{ $address->country }}">
+                        <span class="glyphicon glyphicon-road form-control-feedback"></span>
+                        @if ($errors->has('accounting.address'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('accounting.address') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-xs-12">
                         <button type="submit"

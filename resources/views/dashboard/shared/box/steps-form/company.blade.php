@@ -37,7 +37,7 @@
         @endif
     </div>
 
-    @if (!$process->isUpdating() || $process->isEditingCompany())
+    @if (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp())
         <div class="row">
             <div class="form-group col-xs-12 col-md-4">
                 <label for="company[share_capital]">Capital Social</label>
@@ -69,7 +69,7 @@
         </div>
     @endif
 
-    @if (!$process->isUpdating() || $process->isEditingCompanyCnaes())
+    @if (!$process->isUpdating() || $process->isEditingCompanyCnaes() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp())
         @component('dashboard.shared.box.steps-form.partials.cnae', [
             'step' => $step,
             'process' => $process,
@@ -78,7 +78,7 @@
         @endcomponent
     @endif
 
-    @if (!$process->isUpdating() || $process->isEditingCompanyAddress())
+    @if (!$process->isUpdating() || $process->isEditingCompanyAddress() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp())
         @component('dashboard.shared.box.steps-form.partials.address', [
             'step' => $step,
             'company' => $company,

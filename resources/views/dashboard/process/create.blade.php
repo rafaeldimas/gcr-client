@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="form-group col-xs-12 col-md-6">
-                        <label for="type_company">Tipo de empresa</label>
+                        <label for="type_company">Atual Tipo Jurídico da empresa</label>
                         <select id="type_company" name="type_company" class="form-control">
                             <option value="" selected>Selecione</option>
                             @foreach(Gcr\Process::attributeOptions('type_company') as $value => $label)
@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="form-group col-xs-12 col-md-4 hidden new_type_company">
-                        <label for="new_type_company">Novo tipo de empresa</label>
+                        <label for="new_type_company">Novo Tipo Jurídico da empresa</label>
                         <select id="new_type_company" name="new_type_company" class="form-control">
                             <option value="" selected>Selecione</option>
                             @foreach(Gcr\Process::attributeOptions('type_company') as $value => $label)
@@ -76,6 +76,14 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="form-group col-xs-12 hidden description_of_changes">
+                        <label for="description_of_changes">Explique quais alterações serão feitas</label>
+                        <textarea id="description_of_changes" name="description_of_changes" class="form-control" disabled></textarea>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="form-group col-xs-12">
                         <label for="description">Observações e/ou resumo da solicitação</label>

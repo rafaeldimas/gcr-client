@@ -25,6 +25,9 @@
             <form action="{{ route('dashboard.user.update', [$user]) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
+
+                <h1 class="text-center">Dados Contador</h1>
+
                 <div class="row">
                     <div class="form-group col-xs-12 col-md-6">
                         <label for="name">Nome</label>
@@ -66,6 +69,26 @@
                         <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
                     </div>
                 </div>
+
+                <h1 class="text-center">Dados da Contabilidade</h1>
+
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-6">
+                        <label for="accounting[name]">Nome</label>
+                        <input id="accounting[name]" name="accounting[name]" class="form-control" value="{{ optional($user->accounting)->name }}">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-6">
+                        <label for="accounting[email]">E-mail</label>
+                        <input id="accounting[email]" name="accounting[email]" type="email" class="form-control" value="{{ optional($user->accounting)->email }}">
+                    </div>
+                </div>
+
+                @component('dashboard.shared.box.steps-form.partials.address', [
+                    'address' => optional($user->accounting)->address,
+                    'type' => 'accounting',
+                ])
+                @endcomponent
 
                 <button type="submit" class="btn btn-default">Salvar</button>
             </form>

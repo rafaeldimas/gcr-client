@@ -4,8 +4,10 @@ namespace Gcr\Http\Controllers\Dashboard;
 
 use Carbon\Carbon;
 use Exception;
+use Gcr\Accounting;
 use Gcr\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Gcr\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -14,7 +16,7 @@ use Illuminate\Http\UploadedFile;
 class UserController extends Controller
 {
     /**
-     * @var User
+     * @var User|Builder
      */
     private $user;
 
@@ -50,6 +52,9 @@ class UserController extends Controller
             'phone' => 'nullable',
             'mobile_phone' => 'nullable',
             'password' => 'required|string|min:8|confirmed',
+            'accounting.name' => 'nullable',
+            'accounting.email' => 'required|email',
+            'accounting.address' => 'required|array',
         ]);
 
         $data = $this->storeLogo($data);
@@ -59,7 +64,23 @@ class UserController extends Controller
 
         $data = array_filter($data);
 
-        $user->fill($data);
+        $user->fill(array_except($data, 'accounting'));
+
+        /** @var Accounting $accounting */
+        $accounting = $user->accounting()->updateOrCreate(
+            [ 'email' => array_get($data, 'accounting.email') ],
+            array_except(array_get($data, 'accounting'), 'address')
+        );
+
+        $address = $accounting->address()->updateOrCreate(
+            [ 'id' => array_get($data, 'accounting.address.id') ],
+            array_except(array_get($data, 'accounting.address'), 'id')
+        );
+
+        $accounting->address()->associate($address);
+        $accounting->save();
+
+        $user->accounting()->associate($accounting);
         $user->save();
 
         return redirect()->route('dashboard.process.create');
@@ -74,16 +95,16 @@ class UserController extends Controller
     {
         $title = 'Usúarios';
         $gridData = [
-            'models' => $this->user->withCount('processes')->paginate(10),
+            'models' => $this->user->with('accounting')->withCount('processes')->paginate(10),
             'linkEdit' => 'dashboard.user.edit',
             'fields' => [
                 'name',
                 'email',
+                'accounting' => [ 'name' ],
                 'type_label',
                 'processes_count',
             ]
         ];
-//        dd($gridData);
         return view('dashboard.user.grid')->with(compact('title', 'gridData'));
     }
 
@@ -114,6 +135,9 @@ class UserController extends Controller
             'logo' => 'nullable|mimes:jpeg,jpg,png',
             'phone' => 'nullable',
             'mobile_phone' => 'nullable',
+            'accounting.name' => 'nullable',
+            'accounting.email' => 'nullable|email',
+            'accounting.address' => 'nullable|array',
         ]);
 
         if (!array_get($data, 'type', false)) {
@@ -124,7 +148,23 @@ class UserController extends Controller
 
         $data['password'] = bcrypt($data['password']);
 
-        $user = $this->user->newInstance()->fill($data);
+        $user = $this->user->newInstance()->fill(array_except($data, 'accounting'));
+
+        /** @var Accounting $accounting */
+        $accounting = $user->accounting()->updateOrCreate(
+            [ 'email' => array_get($data, 'accounting.email') ],
+            array_except(array_get($data, 'accounting'), 'address')
+        );
+
+        $address = $accounting->address()->updateOrCreate(
+            [ 'id' => array_get($data, 'accounting.address.id') ],
+            array_except(array_get($data, 'accounting.address'), 'id')
+        );
+
+        $accounting->address()->associate($address);
+        $accounting->save();
+
+        $user->accounting()->associate($accounting);
         $user->save();
 
         event(new Registered($user));
@@ -149,6 +189,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $user->load('accounting.address');
         $title = "Editar Usúario: {$user->name}";
         return view('dashboard.user.edit')->with(compact('title', 'user'));
     }
@@ -168,6 +209,9 @@ class UserController extends Controller
             'logo' => 'nullable|mimes:jpeg,jpg,png',
             'phone' => 'nullable',
             'mobile_phone' => 'nullable',
+            'accounting.name' => 'nullable',
+            'accounting.email' => 'required|email',
+            'accounting.address' => 'required|array',
         ]);
 
         $data = $this->storeLogo($data);
@@ -178,7 +222,23 @@ class UserController extends Controller
 
         $data = array_filter($data);
 
-        $user->fill($data);
+        $user->fill(array_except($data, 'accounting'));
+
+        /** @var Accounting $accounting */
+        $accounting = $user->accounting()->updateOrCreate(
+            [ 'email' => array_get($data, 'accounting.email') ],
+            array_except(array_get($data, 'accounting'), 'address')
+        );
+
+        $address = $accounting->address()->updateOrCreate(
+            [ 'id' => array_get($data, 'accounting.address.id') ],
+            array_except(array_get($data, 'accounting.address'), 'id')
+        );
+
+        $accounting->address()->associate($address);
+        $accounting->save();
+
+        $user->accounting()->associate($accounting);
         $user->save();
 
         return redirect()->route('dashboard.user.edit', $user);
@@ -193,7 +253,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if (auth()->user() && !auth()->user()->isAdmin()) {
+        if (!optional(auth()->user())->isAdmin()) {
             return redirect()->back();
         }
 

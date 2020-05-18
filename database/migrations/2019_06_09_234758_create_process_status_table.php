@@ -17,6 +17,7 @@ class CreateProcessStatusTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('process_id');
             $table->unsignedInteger('status_id');
+            $table->text('description')->nullable();
             $table->timestamps();
 
             $table->foreign('process_id')

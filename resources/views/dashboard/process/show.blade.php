@@ -14,6 +14,7 @@
         @slot('gridHead')
             <tr>
                 <th>Status</th>
+                <th>Descrição</th>
                 <th>Data</th>
             </tr>
         @endslot
@@ -21,6 +22,7 @@
             @foreach($statuses as $status)
                 <tr style="background-color: {{ $status->color }};">
                     <td>{{ $status->label }}</td>
+                    <td>{{ $status->pivot->description }}</td>
                     <td>{{ $status->pivot->updated_at->diffForHumans() }}</td>
                 </tr>
             @endforeach

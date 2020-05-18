@@ -13,7 +13,7 @@ class Status extends Model
 
     public function processes()
     {
-        return $this->belongsToMany(Process::class);
+        return $this->belongsToMany(Process::class)->withTimestamps()->withPivot('description');
     }
 
     public function getTextWhiteHumanAttribute()

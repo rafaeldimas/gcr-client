@@ -13,12 +13,16 @@ class Viability extends Model
     const PROPERTY_TYPE_RURAL = 2;
     const PROPERTY_TYPE_WITHOUT_REGULARIZATION = 3;
 
+    const AVCB_CLCB_NUMBER_TYPE_AVCB = 1;
+    const AVCB_CLCB_NUMBER_TYPE_CLCB = 2;
+
     protected $fillable = [
         'property_type',
         'registration_number',
         'property_area',
         'establishment_area',
         'avcb_clcb_number',
+        'avcb_clcb_number_type',
         'establishment_has_avcb_clcb',
         'same_as_business_address',
         'thirst',
@@ -38,6 +42,10 @@ class Viability extends Model
             'Urbano',
             'Rural',
             'Sem regularização',
+        ],
+        'avcb_clcb_number_type' => [
+            'AVCB',
+            'CLCB',
         ],
     ];
 

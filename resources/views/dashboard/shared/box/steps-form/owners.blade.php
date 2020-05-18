@@ -1,4 +1,5 @@
-@if (!$process->isUpdating() || $process->isEditingOwners())
+<?php /** @var \Gcr\Process $process */ ?>
+@if (!$process->isUpdating() || $process->isEditingOwners() || $process->isEditingCapital() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp())
     <h3>{{ $step['label'] }}</h3>
     <section>
         @php
