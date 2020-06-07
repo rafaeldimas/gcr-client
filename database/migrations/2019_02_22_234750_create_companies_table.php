@@ -17,6 +17,7 @@ class CreateCompaniesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('process_id');
             $table->unsignedInteger('address_id')->nullable();
+            $table->text('transformation_with_change')->nullable();
             $table->string('name')->nullable();
             $table->string('nire')->nullable();
             $table->string('cnpj')->nullable();

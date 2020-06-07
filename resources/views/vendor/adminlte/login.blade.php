@@ -21,7 +21,7 @@
         </div>
         <div class="subtitle">
             <h2>
-                <b>{{ trans('adminlte::adminlte.login_message') }}</b>
+                <b style="color: #021c55;">{{ trans('adminlte::adminlte.login_message') }}</b>
             </h2>
         </div>
         <!-- /.login-logo -->

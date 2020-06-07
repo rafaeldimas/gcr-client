@@ -36,6 +36,7 @@
         <div class="box-add-new-subsidiary">
             <button type="button" class="btn btn-lg btn-primary" data-button-add-new-subsidiary>
                 <i class="fa fa-plus"></i>
+                Adicionar Filiais
             </button>
         </div>
     </section>

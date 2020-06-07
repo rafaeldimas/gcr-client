@@ -10,6 +10,7 @@ $factory->define(Gcr\Address::class, function (Faker $faker) {
         'postcode' => $faker->postcode,
         'street' => $faker->streetAddress,
         'number' => $faker->buildingNumber,
+        'complement' => $faker->secondaryAddress,
         'district' => $faker->word,
         'city' => $faker->city,
         'state' => $faker->stateAbbr,

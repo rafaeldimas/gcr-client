@@ -23,6 +23,7 @@ class Company extends Model
 
     protected $fillable = [
         'id',
+        'transformation_with_change',
         'name',
         'nire',
         'cnpj',
@@ -34,6 +35,7 @@ class Company extends Model
     ];
 
     protected $casts = [
+        'transformation_with_change' => 'array',
         'signed' => 'date:Y-m-d',
         'activity_start' => 'date:Y-m-d',
     ];

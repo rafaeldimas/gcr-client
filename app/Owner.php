@@ -16,6 +16,10 @@ class Owner extends Model
     const JOB_ROLES_REPRESENTATIVE = 3;
     const JOB_ROLES_OTHER = 4;
 
+    const CHANGE_TYPE_ADDITION = 1;
+    const CHANGE_TYPE_WITHDRAWAL = 2;
+    const CHANGE_TYPE_DATA_CHANGE = 3;
+
     const MARITAL_STATUS_NOT_MARRIED = 1;
     const MARITAL_STATUS_MARRIED = 2;
     const MARITAL_STATUS_DIVORCED = 3;
@@ -34,6 +38,11 @@ class Owner extends Model
             'Administrador',
             'Representante',
             'Outro',
+        ],
+        'change_type' => [
+            'Adição',
+            'Retirada',
+            'Alteração de Dados',
         ],
         'wedding_regime' => [
             'Comunhão parcial de bens',
@@ -57,6 +66,7 @@ class Owner extends Model
         'share_capital',
         'type',
         'job_roles',
+        'change_type',
         'job_roles_other',
         'marital_status',
         'wedding_regime',

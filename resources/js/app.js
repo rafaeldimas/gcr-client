@@ -345,17 +345,23 @@ window.jQuery(function ($) {
             }
         });
 
-        $(document).on('change', 'select[name*="job_role"]', function (e) {
+        $(document).on('change', 'select[name*="job_roles"]', function (e) {
             e.preventDefault();
 
             if ($.inArray('4', $(this).val()) !== -1) {
-                $(this).closest('.form-group').removeClass('col-md-12').addClass('col-md-6');
+                $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
                 $(this).closest('.row').find('input[name*="job_roles_other"]').attr('disabled', false);
                 $(this).closest('.row').find('input[name*="job_roles_other"]').closest('.form-group').removeClass('hidden');
+
+                $(this).closest('.row').find('select[name*="change_type"]').closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
+                debugger;
             } else {
-                $(this).closest('.form-group') .removeClass('col-md-6').addClass('col-md-12');
+                $(this).closest('.form-group') .removeClass('col-md-3').addClass('col-md-6');
                 $(this).closest('.row').find('input[name*="job_roles_other"]').attr('disabled', true);
                 $(this).closest('.row').find('input[name*="job_roles_other"]').closest('.form-group').addClass('hidden');
+
+                $(this).closest('.row').find('select[name*="change_type"]').closest('.form-group') .removeClass('col-md-3').addClass('col-md-6');
+                debugger;
             }
         });
 
@@ -541,7 +547,7 @@ window.jQuery(function ($) {
                 limpa_formulário_cep();
             }
         });
-    })()
+    })();
 
     function init() {
         const $maskeds = $('[data-masked]');
@@ -556,6 +562,9 @@ window.jQuery(function ($) {
         $selects.each((index, select) => {
             $(select).select2();
         });
+
+        $('#operation').trigger('change');
+        $('select[name*="fields_editing"]').trigger('change');
     }
     init();
 });

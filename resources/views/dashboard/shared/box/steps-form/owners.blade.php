@@ -45,6 +45,7 @@
             <div class="box-add-new-owner">
                 <button type="button" class="btn btn-lg btn-primary" data-button-add-new-owner>
                     <i class="fa fa-plus"></i>
+                    Adicionar {{ $step['label'] }}
                 </button>
             </div>
         @endif

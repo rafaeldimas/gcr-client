@@ -2,6 +2,9 @@
     @slot('title')
         {{ $title }}
     @endslot
+    @slot('titleAddon')
+        <a href="{{ route('dashboard.process.create', [ 'process' => $process->id ]) }}" class="btn btn-primary" style="float: right">Editar dados iniciais do processo</a>
+    @endslot
     @slot('body')
         <div class="box-alerts"></div>
         <div id="alert-template" class="hidden">

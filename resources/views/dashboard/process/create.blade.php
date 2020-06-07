@@ -24,6 +24,9 @@
         @slot('body')
             <form action="{{ route('dashboard.process.store') }}" method="post">
                 @csrf
+
+                <input type="hidden" name="process_id" value="{{ optional($process)->id }}">
+
                 @can('admin')
                 <div class="row">
                     <div class="form-group col-xs-12 col-md-3">
@@ -42,7 +45,14 @@
                         <label for="operation">Operação</label>
                         <select id="operation" name="operation" class="form-control">
                             @foreach(Gcr\Process::attributeOptions('operation') as $value => $label)
-                                <option value="{{ $value }}" @if($value === (int) old('operation')) selected @endif>{{ $label }}</option>
+                                <option
+                                    value="{{ $value }}"
+                                    @if($value === (int) old('operation') || $value === optional($process)->operation)
+                                        selected
+                                    @endif
+                                >
+                                    {{ $label }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -52,7 +62,14 @@
                         <select id="type_company" name="type_company" class="form-control">
                             <option value="" selected>Selecione</option>
                             @foreach(Gcr\Process::attributeOptions('type_company') as $value => $label)
-                                <option value="{{ $value }}">{{ $label }}</option>
+                                <option
+                                    value="{{ $value }}"
+                                    @if($value === (int) old('type_company') || $value === optional($process)->type_company)
+                                        selected
+                                    @endif
+                                >
+                                    {{ $label }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -61,7 +78,14 @@
                         <label for="fields_editing[]">Campos que serão alterados</label>
                         <select id="fields_editing[]" name="fields_editing[]" class="form-control" multiple>
                             @foreach(Gcr\Process::attributeOptions('fields_editing') as $value => $label)
-                                <option value="{{ $value }}">{{ $label }}</option>
+                                <option
+                                    value="{{ $value }}"
+                                    @if(in_array($value, optional($process)->fields_editing ?: []))
+                                        selected
+                                    @endif
+                                >
+                                    {{ $label }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -70,9 +94,14 @@
                         <label for="new_type_company">Novo Tipo Jurídico da empresa</label>
                         <select id="new_type_company" name="new_type_company" class="form-control">
                             <option value="" selected>Selecione</option>
-                            @foreach(Gcr\Process::attributeOptions('type_company') as $value => $label)
-                                <option value="{{ $value }}">{{ $label }}</option>
-                            @endforeach
+                            <option
+                                value="{{ $value }}"
+                                @if($value === (int) old('new_type_company') || $value === optional($process)->new_type_company)
+                                    selected
+                                @endif
+                            >
+                                {{ $label }}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -80,14 +109,14 @@
                 <div class="row">
                     <div class="form-group col-xs-12 hidden description_of_changes">
                         <label for="description_of_changes">Explique quais alterações serão feitas</label>
-                        <textarea id="description_of_changes" name="description_of_changes" class="form-control" disabled></textarea>
+                        <textarea id="description_of_changes" name="description_of_changes" class="form-control" disabled>{{ optional($process)->description_of_changes }}</textarea>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group col-xs-12">
                         <label for="description">Observações e/ou resumo da solicitação</label>
-                        <textarea id="description" name="description" class="form-control"></textarea>
+                        <textarea id="description" name="description" class="form-control">{{ optional($process)->description }}</textarea>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-default">Salvar</button>

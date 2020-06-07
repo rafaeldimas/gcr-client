@@ -113,7 +113,15 @@ class ProcessController extends Controller
     public function create()
     {
         $title = 'Novo Processo';
-        return view('dashboard.process.create')->with(compact('title'));
+
+        $process = \request('process');
+        if ($process) {
+            $process = $this->process->find($process);
+
+            $title = 'Editando dados iniciais do processo ' . $process->protocol;
+        }
+
+        return view('dashboard.process.create')->with(compact('title', 'process'));
     }
 
     /**
@@ -126,7 +134,9 @@ class ProcessController extends Controller
     {
         $updating = Process::OPERATION_UPDATING;
         $transformation = Process::OPERATION_TRANSFORMATION;
+
         $data = $request->validate([
+            'process_id' => 'nullable',
             'operation' => 'required',
             'type_company' => 'required',
             'fields_editing' => "nullable|array|required_if:operation,$updating",
@@ -138,15 +148,25 @@ class ProcessController extends Controller
             'fields_editing.required_if' => 'O campo "Campos que serão alterados" é obrigatório quando "Operação" for "Alteração".',
             'new_type_company.required_if' => 'O campo "Novo tipo de empresa" é obrigatório quando "Operação" for "Transformação".',
         ]);
+
         $defaultData = [ 'editing' => true ];
         if (auth()->user() && auth()->user()->isAdmin()) {
             $defaultData['user_id'] = $request->get('user_id', false);
         }
-        $newProcess = $this->process->newInstance()->fill(array_merge($defaultData, $data));
-        $newProcess->save();
-        $newProcess->statuses()->attach(Status::getStatusStarting());
 
-        return redirect()->route('dashboard.process.edit', [$newProcess]);
+        $process = $this->process->newInstance();
+        if ($processId = array_get($data, 'process_id')) {
+            $process = $this->process->find($processId);
+        }
+
+        $process->fill(array_merge($defaultData, $data));
+        $process->save();
+
+        if (!$processId) {
+            $process->statuses()->attach(Status::getStatusStarting());
+        }
+
+        return redirect()->route('dashboard.process.edit', [$process]);
     }
 
     /**
@@ -265,6 +285,7 @@ class ProcessController extends Controller
             ],
             'owners.*.id' => $required,
             'owners.*.job_roles' => 'nullable|array',
+            'owners.*.change_type' => 'nullable|string',
             'owners.*.job_roles_other' => 'nullable|string',
             'owners.*.name' => $required,
             'owners.*.share_capital' => 'nullable',
@@ -335,6 +356,7 @@ class ProcessController extends Controller
         return request()->validate([
             'company' => 'nullable|array',
             'company.id' => $required,
+            'company.transformation_with_change' => 'nullable|array',
             'company.name' => $required,
             'company.nire' => Rule::requiredIf(function () use($finish, $process) {
                 return $finish && (!$process->isCreating());
@@ -346,26 +368,26 @@ class ProcessController extends Controller
                 return $finish && ($process->isCreating());
             }),
             'company.share_capital' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp());
+                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()));
             }),
             'company.activity_description' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp());
+                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()));
             }),
             'company.size' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp());
+                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()));
             }),
             'company.signed' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp());
+                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()));
             }),
             'company.address' => [
                 Rule::requiredIf(function () use($finish, $process) {
-                    return $finish && (!$process->isUpdating() || $process->isEditingCompanyAddress() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp());
+                    return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyAddress() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp()));
                 }),
                 'array'
             ],
             'company.cnaes' => [
                 Rule::requiredIf(function () use($finish, $process) {
-                    return $finish && (!$process->isUpdating() || $process->isEditingCompanyCnaes() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp());
+                    return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp()));
                 }),
                 'array'
             ],

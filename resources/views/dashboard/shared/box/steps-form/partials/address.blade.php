@@ -11,13 +11,19 @@
             <input id="{{$prefixName}}[postcode]" name="{{$prefixName}}[postcode]" type="text" class="form-control postcode cep" placeholder="Preencha o cep" data-masked="00000-000" value="{{ optional($address)->postcode }}">
         </div>
 
-        <div class="form-group col-xs-12 col-md-6">
+        <div class="form-group col-xs-12 col-md-3">
             <label for="{{$prefixName}}[street]">Logradouro</label>
             <input id="{{$prefixName}}[street]" name="{{$prefixName}}[street]" type="text" class="form-control street" placeholder="Preencha o cep" disabled value="{{ optional($address)->street }}">
         </div>
+
         <div class="form-group col-xs-12 col-md-3">
             <label for="{{$prefixName}}[number]">Numero</label>
             <input id="{{$prefixName}}[number]" name="{{$prefixName}}[number]" type="text" class="form-control number" placeholder="Preencha o cep" disabled value="{{ optional($address)->number }}">
+        </div>
+
+        <div class="form-group col-xs-12 col-md-3">
+            <label for="{{$prefixName}}[complement]">Complemento</label>
+            <input id="{{$prefixName}}[complement]" name="{{$prefixName}}[complement]" type="text" class="form-control complement" placeholder="Preencha o cep" disabled value="{{ optional($address)->complement }}">
         </div>
     </div>
     <div class="row">

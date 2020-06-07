@@ -14,7 +14,20 @@
 
                 @if (!$process->isBusinessman())
                     <div class="row">
-                        <div class="form-group col-xs-12 {{ optional($owner)->showJobRolesOther() ? 'col-md-6' : 'col-md-12' }}">
+                        <div class="form-group col-xs-12 {{ optional($owner)->showJobRolesOther() ? 'col-md-3' : 'col-md-6' }}">
+                            <label for="owners[{{ $key }}][change_type]">Tipo de Alteração</label>
+                            <select id="owners[{{ $key }}][change_type]" name="owners[{{ $key }}][change_type]" class="form-control" data-s2>
+                                @foreach(Gcr\Owner::attributeOptions('change_type') as $value => $label)
+                                    <option
+                                        value="{{ $value }}"
+                                        {{ optional($owner)->containJobRole($value) ? 'selected' : '' }}>
+                                            {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-xs-12 {{ optional($owner)->showJobRolesOther() ? 'col-md-3' : 'col-md-6' }}">
                             <label for="owners[{{ $key }}][job_roles][]">Cargos</label>
                             <select id="owners[{{ $key }}][job_roles][]" name="owners[{{ $key }}][job_roles][]" class="form-control" data-s2 multiple>
                                 @foreach(Gcr\Owner::attributeOptions('job_roles') as $value => $label)

@@ -21,18 +21,21 @@
     position: relative;
 }
 
-.box-add-new-owner,
-.box-add-new-subsidiary,
 .box-add-new-cnae {
     position: absolute;
     top: 20px;
     right: 20px;
 }
 
+.box-add-new-owner,
+.box-add-new-subsidiary {
+    text-align: center;
+}
+
 .box-add-new-owner button,
 .box-add-new-subsidiary button,
 .box-add-new-cnae button {
-    border-radius: 50%;
+    border-radius: 5px;
 }
 
 .text-white {
@@ -40,4 +43,9 @@
     &:hover {
         color: #ddd;
     }
+}
+
+.login-logo a b,
+.register-logo a b {
+    color: #9b7e2b;
 }

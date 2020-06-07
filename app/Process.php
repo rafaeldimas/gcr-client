@@ -26,8 +26,8 @@ class Process extends Model
 
     const FIELDS_EDITING_OWNERS = 'owners';
     const FIELDS_EDITING_CAPITAL = 'capital';
-    const FIELDS_EDITING_COMPANY_NAME = 'company name';
-    const FIELDS_EDITING_COMPANY_SIZE = 'company size';
+    const FIELDS_EDITING_COMPANY_NAME = 'company_name';
+    const FIELDS_EDITING_COMPANY_SIZE = 'company_size';
     const FIELDS_EDITING_COMPANY_CNAES = 'company_cnaes';
     const FIELDS_EDITING_COMPANY_ADDRESS = 'company_address';
     const FIELDS_EDITING_TRANSFER_TO_ANOTHER_UF = 'transfer_to_another_uf';
@@ -74,6 +74,9 @@ class Process extends Model
     ];
 
     protected $casts = [
+        'editing' => 'bool',
+        'type_company' => 'int',
+        'new_type_company' => 'int',
         'fields_editing' => 'array',
     ];
 
@@ -365,7 +368,9 @@ class Process extends Model
             return $this->isEditingCompany()
                 || $this->isEditingCompanyName()
                 || $this->isEditingCompanyCnaes()
-                || $this->isEditingCompanyAddress();
+                || $this->isEditingCompanyAddress()
+                || $this->isEditingTransferToAnotherUf()
+                || $this->isEditingTransferFromAnotherUfToSp();
         }
 
         return false;

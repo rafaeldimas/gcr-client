@@ -143,6 +143,17 @@
                     </div>
 
                     <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
+                        <input name="accounting[address][complement]" class="form-control complement"
+                               placeholder="Complemento" value="{{ $address->complement }}">
+                        <span class="glyphicon glyphicon-road form-control-feedback"></span>
+                        @if ($errors->has('accounting.address'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('accounting.address') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group has-feedback {{ $errors->has('accounting.address') ? 'has-error' : '' }}">
                         <input name="accounting[address][district]" class="form-control district"
                                placeholder="Bairro" value="{{ $address->district }}">
                         <span class="glyphicon glyphicon-road form-control-feedback"></span>

@@ -20,6 +20,7 @@ class CreateOwnersTable extends Migration
             $table->string('name')->nullable();
             $table->decimal('share_capital')->nullable();
             $table->string('job_roles')->nullable();
+            $table->string('change_type')->nullable();
             $table->string('job_roles_other')->nullable();
             $table->integer('marital_status')->nullable();
             $table->integer('wedding_regime')->nullable();

@@ -9,39 +9,52 @@
     @php
         $company = $process->company
     @endphp
-    <input type="hidden" name="company[id]" value="{{ !$company ? '' : $company->id }}">
+    <input type="hidden" name="company[id]" value="{{ optional($company)->id }}">
+
+    @if($process->isTransformation())
+    <div class="row">
+        <div class="form-group col-xs-12">
+            <label for="transformation_with_change[]">Haverá alguma alteração?</label>
+            <select id="transformation_with_change[]" name="transformation_with_change[]" class="form-control" multiple>
+                @foreach(Gcr\Process::attributeOptions('fields_editing') as $value => $label)
+                    <option value="{{ $value }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    @endif
 
     <div class="row">
         <div class="form-group col-xs-12 col-md-3">
             <label for="company[name]">Nome Empresarial</label>
-            <input id="company[name]" name="company[name]" type="text" class="form-control" value="{{ !$company ? '' : $company->name }}">
+            <input id="company[name]" name="company[name]" type="text" class="form-control" value="{{ optional($company)->name }}">
         </div>
 
         @if(!$process->isCreating())
         <div class="form-group col-xs-12 col-md-3">
             <label for="company[nire]">NIRE</label>
-            <input id="company[nire]" name="company[nire]" type="text" class="form-control" value="{{ !$company ? '' : $company->nire }}" maxlength="11">
+            <input id="company[nire]" name="company[nire]" type="text" class="form-control" value="{{ optional($company)->nire }}" maxlength="11">
         </div>
 
         <div class="form-group col-xs-12 col-md-3">
             <label for="company[cnpj]">CNPJ</label>
-            <input id="company[cnpj]" name="company[cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse value="{{ !$company ? '' : $company->cnpj }}">
+            <input id="company[cnpj]" name="company[cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse value="{{ optional($company)->cnpj }}">
         </div>
         @endif
 
         @if($process->isCreating())
         <div class="form-group col-xs-12 col-md-3">
             <label for="company[activity_start]">Data de início da atividade</label>
-            <input id="company[activity_start]" name="company[activity_start]" type="date" class="form-control dataBr" value="{{ ($company && $company->activity_start) ? $company->activity_start->toDateString() : '' }}">
+            <input id="company[activity_start]" name="company[activity_start]" type="date" class="form-control dataBr" value="{{ optional(optional($company)->activity_start)->toDateString() }}">
         </div>
         @endif
     </div>
 
-    @if (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp())
+    @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()))
         <div class="row">
             <div class="form-group col-xs-12 col-md-4">
                 <label for="company[share_capital]">Capital Social</label>
-                <input id="company[share_capital]" name="company[share_capital]" type="text" class="form-control" data-masked="#.##0,00" data-masked-reverse value="{{ !$company ? '' : $company->share_capital }}">
+                <input id="company[share_capital]" name="company[share_capital]" type="text" class="form-control" data-masked="#.##0,00" data-masked-reverse value="{{ optional($company)->share_capital }}">
                 @if ($process->isEireli())
                     <span id="company[share_capital]" class="help-block">A partir de 100 vezes o salário minimo</span>
                 @endif
@@ -58,31 +71,33 @@
 
             <div class="form-group col-xs-12 col-md-4">
                 <label for="company[signed]">Data de Assinatura</label>
-                <input id="company[signed]" name="company[signed]" type="date" class="form-control dataBr" value="{{ ($company && $company->signed) ? $company->signed->toDateString() : '' }}">
+                <input id="company[signed]" name="company[signed]" type="date" class="form-control dataBr" value="{{ optional(optional($company)->signed)->toDateString() }}">
             </div>
         </div>
+        @if (!$process->isUpdating() || $process->isEditingCompanyCnaes())
         <div class="row">
             <div class="form-group col-xs-12">
                 <label for="company[activity_description]">Descrição da Atividade</label>
-                <textarea id="company[activity_description]" name="company[activity_description]" type="text" class="form-control">{{ !$company ? '' : $company->activity_description }}</textarea>
+                <textarea id="company[activity_description]" name="company[activity_description]" type="text" class="form-control">{{ optional($company)->activity_description }}</textarea>
             </div>
         </div>
+        @endif
     @endif
 
-    @if (!$process->isUpdating() || $process->isEditingCompanyCnaes() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp())
+    @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes()))
         @component('dashboard.shared.box.steps-form.partials.cnae', [
             'step' => $step,
             'process' => $process,
-            'cnaes' => !$company ? '' : $company->cnaes,
+            'cnaes' => optional($company)->cnaes,
         ])
         @endcomponent
     @endif
 
-    @if (!$process->isUpdating() || $process->isEditingCompanyAddress() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp())
+    @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyAddress() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp()))
         @component('dashboard.shared.box.steps-form.partials.address', [
             'step' => $step,
             'company' => $company,
-            'address' => !$company ? '' : $company->address,
+            'address' => optional($company)->address,
             'type' => 'company',
         ])
         @endcomponent
