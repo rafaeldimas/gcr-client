@@ -33,4 +33,6 @@
     <div class="form-group col-xs-12">
         <button class="btn btn-primary">Pesquisar</button>
     </div>
+
+    <p class="text-help my-3"><b>Clique no número de protocolo para maiores informações</b></p>
 </form>

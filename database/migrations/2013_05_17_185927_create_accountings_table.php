@@ -17,7 +17,11 @@ class CreateAccountingsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('address_id')->nullable();
             $table->string('name')->nullable();
-            $table->string('email')->unique()->index();
+            $table->string('email_1');
+            $table->string('email_2')->nullable();
+            $table->string('email_3')->nullable();
+            $table->string('email_4')->nullable();
+            $table->string('email_5')->nullable();
             $table->timestamps();
 
             $table->foreign('address_id')

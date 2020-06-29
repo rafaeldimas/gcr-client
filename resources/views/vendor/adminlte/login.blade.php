@@ -9,6 +9,10 @@
             margin-bottom: 25px;
             text-align: center;
         }
+
+        .login-box .login-logo b {
+            color: #9b7e2b
+        }
     </style>
 @stop
 

@@ -15,7 +15,8 @@ class CreateCnaesTable extends Migration
     {
         Schema::create('cnaes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('company_id');
+            $table->unsignedInteger('company_id')->nullable();
+            $table->unsignedInteger('subsidiary_id')->nullable();
             $table->string('number')->nullable();
             $table->timestamps();
 
@@ -24,6 +25,10 @@ class CreateCnaesTable extends Migration
                 ->on('companies')
                 ->onDelete('cascade');
 
+            $table->foreign('subsidiary_id')
+                ->references('id')
+                ->on('subsidiaries')
+                ->onDelete('cascade');
         });
     }
 

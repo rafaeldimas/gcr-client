@@ -14,7 +14,9 @@ class Owner extends Model
     const JOB_ROLES_HOLDER = 1;
     const JOB_ROLES_ADMIN = 2;
     const JOB_ROLES_REPRESENTATIVE = 3;
-    const JOB_ROLES_OTHER = 4;
+    const JOB_ROLES_REPRESENTED = 4;
+    const JOB_ROLES_LEGAL_REPRESENTATIVE = 5;
+    const JOB_ROLES_OTHER = 6;
 
     const CHANGE_TYPE_ADDITION = 1;
     const CHANGE_TYPE_WITHDRAWAL = 2;
@@ -36,7 +38,9 @@ class Owner extends Model
         'job_roles' => [
             'Titular/Sócio',
             'Administrador',
-            'Representante',
+            'Representante/Procurador',
+            'Representado',
+            'Representante Legal Perante a Receita Federal',
             'Outro',
         ],
         'change_type' => [

@@ -53,7 +53,11 @@ class UserController extends Controller
             'mobile_phone' => 'nullable',
             'password' => 'required|string|min:8|confirmed',
             'accounting.name' => 'nullable',
-            'accounting.email' => 'required|email',
+            'accounting.email_1' => 'required|email',
+            'accounting.email_2' => 'nullable|email',
+            'accounting.email_3' => 'nullable|email',
+            'accounting.email_4' => 'nullable|email',
+            'accounting.email_5' => 'nullable|email',
             'accounting.address' => 'required|array',
         ]);
 
@@ -68,7 +72,7 @@ class UserController extends Controller
 
         /** @var Accounting $accounting */
         $accounting = $user->accounting()->updateOrCreate(
-            [ 'email' => array_get($data, 'accounting.email') ],
+            [ 'email_1' => array_get($data, 'accounting.email_1') ],
             array_except(array_get($data, 'accounting'), 'address')
         );
 
@@ -136,7 +140,11 @@ class UserController extends Controller
             'phone' => 'nullable',
             'mobile_phone' => 'nullable',
             'accounting.name' => 'nullable',
-            'accounting.email' => 'nullable|email',
+            'accounting.email_1' => 'nullable|email',
+            'accounting.email_2' => 'nullable|email',
+            'accounting.email_3' => 'nullable|email',
+            'accounting.email_4' => 'nullable|email',
+            'accounting.email_5' => 'nullable|email',
             'accounting.address' => 'nullable|array',
         ]);
 
@@ -152,7 +160,7 @@ class UserController extends Controller
 
         /** @var Accounting $accounting */
         $accounting = $user->accounting()->updateOrCreate(
-            [ 'email' => array_get($data, 'accounting.email') ],
+            [ 'email_1' => array_get($data, 'accounting.email_1') ],
             array_except(array_get($data, 'accounting'), 'address')
         );
 
@@ -210,7 +218,11 @@ class UserController extends Controller
             'phone' => 'nullable',
             'mobile_phone' => 'nullable',
             'accounting.name' => 'nullable',
-            'accounting.email' => 'required|email',
+            'accounting.email_1' => 'required|email',
+            'accounting.email_2' => 'nullable|email',
+            'accounting.email_3' => 'nullable|email',
+            'accounting.email_4' => 'nullable|email',
+            'accounting.email_5' => 'nullable|email',
             'accounting.address' => 'required|array',
         ]);
 
@@ -226,7 +238,7 @@ class UserController extends Controller
 
         /** @var Accounting $accounting */
         $accounting = $user->accounting()->updateOrCreate(
-            [ 'email' => array_get($data, 'accounting.email') ],
+            [ 'email_1' => array_get($data, 'accounting.email_1') ],
             array_except(array_get($data, 'accounting'), 'address')
         );
 

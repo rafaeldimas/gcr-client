@@ -22,7 +22,7 @@
                         @foreach(Gcr\Subsidiary::attributeOptions('request') as $value => $label)
                             <option
                                 value="{{ $value }}"
-                                {{ $subsidiary->request === $value ? 'selected' : '' }}>
+                                {{ $value === $subsidiary->request ? 'selected' : '' }}>
                                 {{ $label }}
                             </option>
                         @endforeach
@@ -55,10 +55,20 @@
                 </div>
             </div>
 
+            <div class="subsidiary-cnaes @if(!$subsidiary->cnaes) hidden @endif">
+                @component('dashboard.shared.box.steps-form.partials.cnae', [
+                    'step' => $step,
+                    'cnaes' => optional($subsidiary)->cnaes,
+                    'type' => 'subsidiaries',
+                    'parentId' => $key,
+                ])
+                @endcomponent
+            </div>
+
             <div class="subsidiary-address @if(!$subsidiary->address) hidden @endif">
                 @component('dashboard.shared.box.steps-form.partials.address', [
                     'step' => $step,
-                    'address' => !$subsidiary ? '' : $subsidiary->address,
+                    'address' => optional($subsidiary)->address,
                     'type' => 'subsidiaries',
                     'parentId' => $key,
                 ])

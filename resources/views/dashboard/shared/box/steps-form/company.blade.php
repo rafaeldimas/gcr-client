@@ -50,38 +50,41 @@
         @endif
     </div>
 
-    @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()))
-        <div class="row">
-            <div class="form-group col-xs-12 col-md-4">
-                <label for="company[share_capital]">Capital Social</label>
-                <input id="company[share_capital]" name="company[share_capital]" type="text" class="form-control" data-masked="#.##0,00" data-masked-reverse value="{{ optional($company)->share_capital }}">
-                @if ($process->isEireli())
-                    <span id="company[share_capital]" class="help-block">A partir de 100 vezes o salário minimo</span>
-                @endif
-            </div>
-
-            <div class="form-group col-xs-12 col-md-4">
-                <label for="company[size]">Porte da Empresa</label>
-                <select id="company[size]" name="company[size]" class="form-control">
-                    @foreach(Gcr\Company::attributeOptions('size') as $value => $label)
-                        <option value="{{ $value }}" @if($value == optional($company)->size) selected @endif>{{ $label }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group col-xs-12 col-md-4">
-                <label for="company[signed]">Data de Assinatura</label>
-                <input id="company[signed]" name="company[signed]" type="date" class="form-control dataBr" value="{{ optional(optional($company)->signed)->toDateString() }}">
-            </div>
-        </div>
-        @if (!$process->isUpdating() || $process->isEditingCompanyCnaes())
-        <div class="row">
-            <div class="form-group col-xs-12">
-                <label for="company[activity_description]">Descrição da Atividade</label>
-                <textarea id="company[activity_description]" name="company[activity_description]" type="text" class="form-control">{{ optional($company)->activity_description }}</textarea>
-            </div>
+    <div class="row">
+        @if(!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital()))
+        <div class="form-group col-xs-12 col-md-4">
+            <label for="company[share_capital]">Capital Social</label>
+            <input id="company[share_capital]" name="company[share_capital]" type="text" class="form-control" data-masked="#.##0,00" data-masked-reverse value="{{ optional($company)->share_capital }}">
+            @if ($process->isEireli())
+                <span id="company[share_capital]" class="help-block">A partir de 100 vezes o salário minimo</span>
+            @endif
         </div>
         @endif
+
+        @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany()))
+        <div class="form-group col-xs-12 col-md-4">
+            <label for="company[size]">Porte da Empresa</label>
+            <select id="company[size]" name="company[size]" class="form-control">
+                @foreach(Gcr\Company::attributeOptions('size') as $value => $label)
+                    <option value="{{ $value }}" @if($value == optional($company)->size) selected @endif>{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+        @endif
+
+        <div class="form-group col-xs-12 col-md-4">
+            <label for="company[signed]">Data de Assinatura</label>
+            <input id="company[signed]" name="company[signed]" type="date" class="form-control dataBr" value="{{ optional(optional($company)->signed)->toDateString() }}">
+        </div>
+    </div>
+
+    @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes()))
+    <div class="row">
+        <div class="form-group col-xs-12">
+            <label for="company[activity_description]">Descrição da Atividade</label>
+            <textarea id="company[activity_description]" name="company[activity_description]" type="text" class="form-control">{{ optional($company)->activity_description }}</textarea>
+        </div>
+    </div>
     @endif
 
     @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes()))
@@ -89,6 +92,7 @@
             'step' => $step,
             'process' => $process,
             'cnaes' => optional($company)->cnaes,
+            'type' => 'company',
         ])
         @endcomponent
     @endif

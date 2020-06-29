@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/app" isTestSource="false" packagePrefix="Gcr\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Tests\" />
+      <excludeFolder url="file://$MODULE_DIR$/public" />
       <excludeFolder url="file://$MODULE_DIR$/public/storage" />
       <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/a6" />
       <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/dc" />

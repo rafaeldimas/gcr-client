@@ -54,7 +54,7 @@
                         <input id="owners[{{ $key }}][name]" name="owners[{{ $key }}][name]" type="text" class="form-control" value="{{ optional($owner)->name}}">
                     </div>
 
-                    <div class="form-group col-xs-12 col-md-3 {{ $process->isSociety() || $process->isEireli() ? '' : 'hidden' }}">
+                    <div class="form-group col-xs-12 col-md-3 {{ ($process->isSociety() || $process->isEireli()) ? '' : 'hidden' }}">
                         <label for="owners[{{ $key }}][share_capital]">Capital Social Individual</label>
                         <input id="owners[{{ $key }}][share_capital]" name="owners[{{ $key }}][share_capital]" type="text" class="form-control" data-masked="#.##0,00" data-masked-reverse value="{{ optional($owner)->share_capital}}" {{ $process->isSociety() || $process->isEireli() ? '' : 'disabled' }}>
                     </div>

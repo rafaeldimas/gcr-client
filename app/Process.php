@@ -365,8 +365,7 @@ class Process extends Model
         }
 
         if ($this->isUpdating()) {
-            return $this->isEditingCompany()
-                || $this->isEditingCompanyName()
+            return $this->isEditingCompanyName()
                 || $this->isEditingCompanyCnaes()
                 || $this->isEditingCompanyAddress()
                 || $this->isEditingTransferToAnotherUf()

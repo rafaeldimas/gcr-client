@@ -2,13 +2,12 @@
 
 namespace Gcr\Http\Controllers\Dashboard;
 
-use Exception;
 use Gcr\Address;
 use Gcr\Company;
-use Gcr\Cnae;
 use Gcr\Document;
 use Gcr\Events\FinishProcess;
 use Gcr\Http\Controllers\Controller;
+use Gcr\Http\Requests\ProcessUpdateStatusRequest;
 use Gcr\Owner;
 use Gcr\Process;
 use Gcr\Status;
@@ -18,7 +17,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -64,6 +62,17 @@ class ProcessController extends Controller
         ];
 
         return array_get($ownersLabel, $typeCompany, 'Empresários');
+    }
+
+    public function updateStatus(ProcessUpdateStatusRequest $processUpdateStatusRequest, Process $process)
+    {
+        $data = $processUpdateStatusRequest->validated();
+        $process->statuses()->attach(
+            array_get($data, 'status'),
+            array_only($data, 'description')
+        );
+
+        return redirect()->back();
     }
 
     public function index(Request $request)
@@ -181,7 +190,7 @@ class ProcessController extends Controller
         $title = $process->protocol;
 
         $statuses = $process->statuses;
-        return view('dashboard.process.show')->with(compact('title', 'statuses'));
+        return view('dashboard.process.show')->with(compact('title', 'statuses', 'process'));
     }
 
     /**
@@ -209,7 +218,6 @@ class ProcessController extends Controller
         $title = $this->getTitleByTypeCompany($process->new_type_company ?? $process->type_company) . ' - ' . $process->protocol;
 
         $steps = [
-            'admin' => [ 'label' => 'Administração' ],
             'owners' => [ 'label' => $this->getOwnersLabelByTypeCompany($process->new_type_company ?? $process->type_company) ],
             'company' => [ 'label' => 'Empresa' ],
             'subsidiaries' => [ 'label' => 'Filiais' ],
@@ -279,7 +287,7 @@ class ProcessController extends Controller
                         return false;
                     }
 
-                    return !$process->isUpdating() || $process->isEditingOwners() || $process->isEditingCapital() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp();
+                    return !$process->isDeleting() && (!$process->isUpdating() || $process->isEditingOwners());
                 }),
                 'array',
             ],
@@ -297,7 +305,7 @@ class ProcessController extends Controller
             'owners.*.cpf' => $required,
             'owners.*.address' => 'required|array',
         ], [
-            'owners.required' => 'É obrigatório informar ao menos um Empresário|Sócio|Integrante.',
+            'owners.required_if' => 'É obrigatório informar ao menos um Empresário|Sócio|Integrante.',
             'owners.*.id.required' => '',
             'owners.*.name.required' => 'O campo Nome de Empresário|Sócio|Integrante é obrigatório.',
             'owners.*.marital_status.required' => 'O campo Estado Civil de Empresário|Sócio|Integrante é obrigatório.',
@@ -359,26 +367,24 @@ class ProcessController extends Controller
             'company.transformation_with_change' => 'nullable|array',
             'company.name' => $required,
             'company.nire' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isCreating());
+                return $finish && !$process->isCreating();
             }),
             'company.cnpj' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isCreating());
+                return $finish && !$process->isCreating();
             }),
             'company.activity_start' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && ($process->isCreating());
+                return $finish && $process->isCreating();
             }),
             'company.share_capital' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()));
+                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital()));
             }),
             'company.activity_description' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()));
+                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes()));
             }),
             'company.size' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()));
+                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany()));
             }),
-            'company.signed' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital() || $process->isEditingCompanyName() || $process->isEditingCompanySize()));
-            }),
+            'company.signed' => $required,
             'company.address' => [
                 Rule::requiredIf(function () use($finish, $process) {
                     return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyAddress() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp()));
@@ -387,22 +393,22 @@ class ProcessController extends Controller
             ],
             'company.cnaes' => [
                 Rule::requiredIf(function () use($finish, $process) {
-                    return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp()));
+                    return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes()));
                 }),
                 'array'
             ],
         ], [
             'company.id.required' => '',
-            'company.name.required' => 'O campo Nome de Empresa é obrigatório',
-            'company.nire.required' => 'O campo NIRE de Empresa é obrigatório',
-            'company.cnpj.required' => 'O campo CNPJ de Empresa é obrigatório',
-            'company.activity_start.required' => 'O campo Data de início da atividade de Empresa é obrigatório',
-            'company.share_capital.required' => 'O campo Capital Social de Empresa é obrigatório',
-            'company.activity_description.required' => 'O campo Descrição da Atividade de Empresa é obrigatório',
-            'company.size.required' => 'O campo Porte da Empresa de Empresa é obrigatório',
+            'company.name.required' => 'O campo Nome Empresarial de Empresa é obrigatório',
+            'company.nire.required_if' => 'O campo NIRE de Empresa é obrigatório',
+            'company.cnpj.required_if' => 'O campo CNPJ de Empresa é obrigatório',
+            'company.activity_start.required_if' => 'O campo Data de início da atividade de Empresa é obrigatório',
+            'company.share_capital.required_if' => 'O campo Capital Social de Empresa é obrigatório',
+            'company.activity_description.required_if' => 'O campo Descrição da Atividade de Empresa é obrigatório',
+            'company.size.required_if' => 'O campo Porte da Empresa de Empresa é obrigatório',
             'company.signed.required' => 'O campo Data de Assinatura de Empresa é obrigatório',
-            'company.address.required' => 'Os campos de Endereço de Empresa é obrigatório',
-            'company.cnaes.required' => 'É obrigatório informar ao menos um cnae da Empresa.',
+            'company.address.required_if' => 'Os campos de Endereço de Empresa é obrigatório',
+            'company.cnaes.required_if' => 'É obrigatório informar ao menos um cnae da Empresa.',
         ]);
     }
 
@@ -473,21 +479,23 @@ class ProcessController extends Controller
         return request()->validate([
             'subsidiaries' => "{$required}|array",
             'subsidiaries.*.id' => $required,
-            'subsidiaries.*.request' => "{$required}|integer",
-            'subsidiaries.*.nire' => 'required_if:subsidiaries.*.request,2,3|string',
-            'subsidiaries.*.cnpj' => 'required_if:subsidiaries.*.request,2,3|string',
-            'subsidiaries.*.share_capital' => 'required_if:subsidiaries.*.request,1,2|string',
-            'subsidiaries.*.activity_description' => 'required_if:subsidiaries.*.request,1,2|string',
-            'subsidiaries.*.address' => "required_if:subsidiaries.*.request,1,2|array",
+            'subsidiaries.*.request' => "{$required}|integer|in:".implode(',', Subsidiary::attributeCodes('request')),
+            'subsidiaries.*.nire' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,2,3,4,5|string',
+            'subsidiaries.*.cnpj' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,2,3,4,5|string',
+            'subsidiaries.*.share_capital' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1,5|string',
+            'subsidiaries.*.activity_description' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1,3|string',
+            'subsidiaries.*.address' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1,4|array',
+            'subsidiaries.*.cnaes' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1,3|array',
         ], [
             'subsidiaries.required' => 'É obrigatório informar ao menos uma Filial.',
             'subsidiaries.*.id.required' => '',
-            'subsidiaries.*.request.required' => 'O campo Tipo de Solicitação das Filiais é obrigatório.',
-            'subsidiaries.*.nire.required' => 'O campo NIRE das Filiais é obrigatório quando o campo Tipo de Solicitação for Alteração ou Cancelamento.',
-            'subsidiaries.*.cnpj.required' => 'O campo CNPJ das Filiais é obrigatório quando o campo Tipo de Solicitação for Alteração ou Cancelamento.',
-            'subsidiaries.*.share_capital.required' => 'O campo Capital Social das Filiais é obrigatório quando o campo Tipo de Solicitação for Abertura ou Alteração.',
-            'subsidiaries.*.activity_description.required' => 'O campo Descrição da Atividade das Filiais é obrigatório quando o campo Tipo de Solicitação for Abertura ou Alteração.',
-            'subsidiaries.*.address.required' => 'É obrigatório informar os dados de endereço das Filiais quando o campo Tipo de Solicitação for Abertura ou Alteração',
+            'subsidiaries.*.requests.required' => 'O campo Tipo de Solicitação das Filiais é obrigatório.',
+            'subsidiaries.*.nire.required_if' => 'O campo NIRE das Filiais é obrigatório quando o campo Tipo de Solicitação for Cancelamento, Alteração Atividade, Alteração Endereço, Alteração Capital.',
+            'subsidiaries.*.cnpj.required_if' => 'O campo CNPJ das Filiais é obrigatório quando o campo Tipo de Solicitação for Cancelamento, Alteração Atividade, Alteração Endereço, Alteração Capital.',
+            'subsidiaries.*.share_capital.required_if' => 'O campo Capital Social das Filiais é obrigatório quando o campo Tipo de Solicitação for Abertura ou  Alteração Capital.',
+            'subsidiaries.*.activity_description.required_if' => 'O campo Descrição da Atividade das Filiais é obrigatório quando o campo Tipo de Solicitação for Abertura ou Alteração Atividade.',
+            'subsidiaries.*.address.required_if' => 'É obrigatório informar os dados de endereço das Filiais quando o campo Tipo de Solicitação for Abertura ou Alteração Endereço',
+            'subsidiaries.*.cnaes.required_if' => 'É obrigatório informar os dados de cnaes das Filiais quando o campo Tipo de Solicitação for Abertura ou Alteração Atividade',
         ]);
     }
 
@@ -525,7 +533,27 @@ class ProcessController extends Controller
                 $subsidiary->save();
             }
 
-            $subsidiaries[$key] = $subsidiary;
+            $subsidiaryCnaesData = array_get($subsidiaryData, 'cnaes', []);
+
+            foreach ($subsidiaryCnaesData as $key => $subsidiaryCnaeData) {
+                $subsidiaryCnaeId = array_get($subsidiaryCnaeData, 'id');
+                $subsidiaryCnaeNumber = array_get($subsidiaryCnaeData, 'number');
+
+                if ($subsidiaryCnaeId && empty($subsidiaryCnaeNumber)) {
+                    $subsidiary->cnaes()->find($subsidiaryCnaeId)->delete();
+                }
+
+                if (empty($subsidiaryCnaeNumber)) {
+                    continue;
+                }
+
+                $subsidiary->cnaes()->updateOrCreate(
+                    [ 'id' => $subsidiaryCnaeId ],
+                    $subsidiaryCnaeData
+                );
+            }
+
+            $subsidiaries[$key] = $subsidiary->loadMissing('cnaes');
         }
         return $subsidiaries;
     }
@@ -662,8 +690,6 @@ class ProcessController extends Controller
     {
         return request()->validate([
             'process' => 'nullable|array',
-            'process.status_id' => 'nullable',
-            'process.status_description' => 'nullable',
             'process.finished' => 'nullable|boolean',
             'process.scanned' => 'nullable|boolean',
             'process.post_office' => 'nullable|boolean',
@@ -689,12 +715,12 @@ class ProcessController extends Controller
             if ($this->validFinishEditingProcess($process)) {
                 $process->fill(['editing' => false]);
                 $process->statuses()->attach(
-                    array_get($processData, 'status_id') ?: Status::getStatusCompleted(),
-                    [ 'description' => array_get($processData, 'status_description') ]
+                    Status::getStatusCompleted(),
+                    [ 'description' => 'Processo finalizado edição.' ]
                 );
                 $url = route('dashboard.process.index', [ 'type_company' => $process->type_company ]);
 
-                event(new FinishProcess($process));
+//                event(new FinishProcess($process));
             }
         }
 

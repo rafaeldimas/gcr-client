@@ -8,7 +8,11 @@ class Accounting extends Model
 {
     protected $fillable = [
         'name',
-        'email',
+        'email_1',
+        'email_2',
+        'email_3',
+        'email_4',
+        'email_5',
     ];
 
     public function address()

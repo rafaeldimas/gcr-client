@@ -67,6 +67,11 @@ window.jQuery(function ($) {
 
                             $subsidiary.val(subsidiary.id);
                             $subsidiaryAddress.val(subsidiary.address_id);
+
+                            $.map(subsidiary.cnaes, (cnae, cnaeKey) => {
+                                const $cnae = $(`input[type="hidden"][name="subsidiaries[${key}][cnaes][${cnaeKey}][id]"]`);
+                                $cnae.val(cnae.id);
+                            });
                         });
 
                         if (viability) {
@@ -241,6 +246,36 @@ window.jQuery(function ($) {
         });
     }
 
+    function addEventButtonAddNewCane() {
+        const $buttonAddNewCnae = $('[data-button-add-new-cnae]');
+        if ($buttonAddNewCnae.length) {
+            $buttonAddNewCnae.on('click', function (e) {
+                e.preventDefault();
+
+                const $newCnaeTemplate = $('#new-cnae');
+                const $cnaesContainer = $('#cnaes');
+                const $contents = $newCnaeTemplate.contents().clone(true, true);
+                const lastId = $cnaesContainer.attr('data-last-id');
+                const newId = parseInt(lastId, 10) + 1;
+
+                $contents.find('input').each((index, element) => {
+                    const $current = $(element);
+                    const oldStr = $current.attr('name');
+                    const newStr = oldStr.replace('[cnaes][]', `[cnaes][${newId}]`);
+                    $current.attr({
+                        'id': newStr,
+                        'name': newStr
+                    });
+                    $current.siblings('label').attr('for', newStr);
+                });
+
+                $cnaesContainer.append($contents);
+                $cnaesContainer.attr('data-last-id', newId);
+                init();
+            });
+        }
+    }
+
     const $buttonAddNewSubsidiary = $('[data-button-add-new-subsidiary]');
     if ($buttonAddNewSubsidiary.length) {
         $buttonAddNewSubsidiary.on('click', function (e) {
@@ -299,34 +334,8 @@ window.jQuery(function ($) {
                 .find('select:first, .panel:last input:first:not([type="hidden"])')
                 .first()
                 .focus();
-        });
-    }
 
-    const $buttonAddNewCnae = $('[data-button-add-new-cnae]');
-    if ($buttonAddNewCnae.length) {
-        $buttonAddNewCnae.on('click', function (e) {
-            e.preventDefault();
-
-            const $newCnaeTemplate = $('#new-cnae');
-            const $cnaesContainer = $('#cnaes');
-            const $contents = $newCnaeTemplate.contents().clone(true, true);
-            const lastId = $cnaesContainer.attr('data-last-id');
-            const newId = parseInt(lastId, 10) + 1;
-
-            $contents.find('input').each((index, element) => {
-                const $current = $(element);
-                const oldStr = $current.attr('name');
-                const newStr = oldStr.replace('company[cnaes][]', `company[cnaes][${newId}]`);
-                $current.attr({
-                    'id': newStr,
-                    'name': newStr
-                });
-                $current.siblings('label').attr('for', newStr);
-            });
-
-            $cnaesContainer.append($contents);
-            $cnaesContainer.attr('data-last-id', newId);
-            init();
+            addEventButtonAddNewCane();
         });
     }
 
@@ -348,20 +357,29 @@ window.jQuery(function ($) {
         $(document).on('change', 'select[name*="job_roles"]', function (e) {
             e.preventDefault();
 
-            if ($.inArray('4', $(this).val()) !== -1) {
+            const JOB_ROLES_OTHER = '6';
+            const JOB_ROLES_REPRESENTATIVE = '3';
+
+            if ($.inArray(JOB_ROLES_OTHER, $(this).val()) !== -1) {
                 $(this).closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
                 $(this).closest('.row').find('input[name*="job_roles_other"]').attr('disabled', false);
                 $(this).closest('.row').find('input[name*="job_roles_other"]').closest('.form-group').removeClass('hidden');
 
                 $(this).closest('.row').find('select[name*="change_type"]').closest('.form-group').removeClass('col-md-6').addClass('col-md-3');
-                debugger;
             } else {
                 $(this).closest('.form-group') .removeClass('col-md-3').addClass('col-md-6');
                 $(this).closest('.row').find('input[name*="job_roles_other"]').attr('disabled', true);
                 $(this).closest('.row').find('input[name*="job_roles_other"]').closest('.form-group').addClass('hidden');
 
                 $(this).closest('.row').find('select[name*="change_type"]').closest('.form-group') .removeClass('col-md-3').addClass('col-md-6');
-                debugger;
+            }
+
+            if ($.inArray(JOB_ROLES_REPRESENTATIVE, $(this).val()) !== -1) {
+                $(this).closest('.panel-body').find('input[name*="share_capital"]').attr('disabled', true);
+                $(this).closest('.panel-body').find('input[name*="share_capital"]').closest('.form-group').addClass('hidden');
+            } else {
+                $(this).closest('.panel-body').find('input[name*="share_capital"]').attr('disabled', false);
+                $(this).closest('.panel-body').find('input[name*="share_capital"]').closest('.form-group').removeClass('hidden');
             }
         });
 
@@ -393,11 +411,19 @@ window.jQuery(function ($) {
                 nire: $(this).closest('.row').find('input[name*="nire"]'),
                 cnpj: $(this).closest('.row').find('input[name*="cnpj"]'),
                 share_capital: $(this).closest('.row').find('input[name*="share_capital"]'),
+                cnaes: $(this).closest('.panel-body').find('.subsidiary-cnaes input[type="text"]'),
                 activity_description: $(this).closest('.panel-body').find('textarea[name*="activity_description"]'),
                 address: $(this).closest('.panel-body').find('.subsidiary-address input'),
             }
 
             Object.keys(fields).map(field => {
+                if (field === 'cnaes') {
+                    fields[field].attr('disabled', true);
+                    fields[field].closest('.subsidiary-cnaes').addClass('hidden');
+
+                    return;
+                }
+
                 if (field === 'address') {
                     fields[field].attr('disabled', true);
                     fields[field].closest('.subsidiary-address').addClass('hidden');
@@ -409,39 +435,70 @@ window.jQuery(function ($) {
                 fields[field].closest('.form-group').addClass('hidden');
             })
 
+            const REQUEST_OPENING = '1';
+            const REQUEST_CANCELING = '2';
+            const REQUEST_CHANGING_ACTIVITY = '3';
+            const REQUEST_CHANGING_ADDRESS = '4';
+            const REQUEST_CHANGING_CAPITAL = '5';
+
             const request = $(this).val();
 
-            if (request === '1') {
+            if (REQUEST_OPENING === request) {
                 fields.share_capital.attr('disabled', false);
                 fields.share_capital.closest('.form-group').removeClass('hidden');
 
                 fields.activity_description.attr('disabled', false);
                 fields.activity_description.closest('.form-group').removeClass('hidden');
 
+                fields.cnaes.attr('disabled', false);
+                fields.cnaes.closest('.subsidiary-cnaes').removeClass('hidden');
+
                 fields.address.attr('disabled', false);
                 fields.address.closest('.subsidiary-address').removeClass('hidden');
             }
 
-            if (request === '2') {
-                Object.keys(fields).map(field => {
-                    if (field === 'address') {
-                        fields[field].attr('disabled', false);
-                        fields[field].closest('.subsidiary-address').removeClass('hidden');
-
-                        return;
-                    }
-
-                    fields[field].attr('disabled', false);
-                    fields[field].closest('.form-group').removeClass('hidden');
-                })
-            }
-
-            if (request === '3') {
+            if (REQUEST_CANCELING === request) {
                 fields.nire.attr('disabled', false);
                 fields.nire.closest('.form-group').removeClass('hidden');
 
                 fields.cnpj.attr('disabled', false);
                 fields.cnpj.closest('.form-group').removeClass('hidden');
+            }
+
+            if (REQUEST_CHANGING_ACTIVITY === request) {
+                fields.nire.attr('disabled', false);
+                fields.nire.closest('.form-group').removeClass('hidden');
+
+                fields.cnpj.attr('disabled', false);
+                fields.cnpj.closest('.form-group').removeClass('hidden');
+
+                fields.activity_description.attr('disabled', false);
+                fields.activity_description.closest('.form-group').removeClass('hidden');
+
+                fields.cnaes.attr('disabled', false);
+                fields.cnaes.closest('.subsidiary-cnaes').removeClass('hidden');
+            }
+
+            if (REQUEST_CHANGING_ADDRESS === request) {
+                fields.nire.attr('disabled', false);
+                fields.nire.closest('.form-group').removeClass('hidden');
+
+                fields.cnpj.attr('disabled', false);
+                fields.cnpj.closest('.form-group').removeClass('hidden');
+
+                fields.address.attr('disabled', false);
+                fields.address.closest('.subsidiary-address').removeClass('hidden');
+            }
+
+            if (REQUEST_CHANGING_CAPITAL === request) {
+                fields.nire.attr('disabled', false);
+                fields.nire.closest('.form-group').removeClass('hidden');
+
+                fields.cnpj.attr('disabled', false);
+                fields.cnpj.closest('.form-group').removeClass('hidden');
+
+                fields.share_capital.attr('disabled', false);
+                fields.share_capital.closest('.form-group').removeClass('hidden');
             }
         });
 
@@ -480,6 +537,7 @@ window.jQuery(function ($) {
 
             const $street = $address.find(".street");
             const $number = $address.find(".number");
+            const $complement = $address.find(".complement");
             const $district = $address.find(".district");
             const $city = $address.find(".city");
             const $state = $address.find(".state");
@@ -488,6 +546,7 @@ window.jQuery(function ($) {
             function limpa_formulário_cep() {
                 $street.val("");
                 $number.val("");
+                $complement.val("");
                 $district.val("");
                 $city.val("");
                 $state.val("");
@@ -509,6 +568,7 @@ window.jQuery(function ($) {
                     //Preenche os campos com "..." enquanto consulta webservice.
                     $street.val("...");
                     $number.val("...");
+                    $complement.val("...");
                     $district.val("...");
                     $city.val("...");
                     $state.val("...");
@@ -528,6 +588,7 @@ window.jQuery(function ($) {
                                 'disabled': false,
                                 'placeholder': ''
                             }).val('').focus();
+                            $complement.attr('disabled', false).val('');
                         } //end if.
                         else {
                             //CEP pesquisado não foi encontrado.
@@ -547,6 +608,8 @@ window.jQuery(function ($) {
                 limpa_formulário_cep();
             }
         });
+
+        addEventButtonAddNewCane();
     })();
 
     function init() {
@@ -565,6 +628,8 @@ window.jQuery(function ($) {
 
         $('#operation').trigger('change');
         $('select[name*="fields_editing"]').trigger('change');
+
+        $('select[name*="request"]').trigger('change');
     }
     init();
 });

@@ -94,6 +94,7 @@
                         <label for="new_type_company">Novo Tipo Jurídico da empresa</label>
                         <select id="new_type_company" name="new_type_company" class="form-control">
                             <option value="" selected>Selecione</option>
+                            @foreach(Gcr\Process::attributeOptions('type_company') as $value => $label)
                             <option
                                 value="{{ $value }}"
                                 @if($value === (int) old('new_type_company') || $value === optional($process)->new_type_company)
@@ -102,6 +103,7 @@
                             >
                                 {{ $label }}
                             </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

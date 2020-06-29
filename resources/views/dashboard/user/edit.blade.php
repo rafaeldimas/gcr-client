@@ -79,8 +79,28 @@
                     </div>
 
                     <div class="form-group col-xs-12 col-md-6">
-                        <label for="accounting[email]">E-mail</label>
-                        <input id="accounting[email]" name="accounting[email]" type="email" class="form-control" value="{{ optional($user->accounting)->email }}">
+                        <label for="accounting[email_1]">E-mail 1</label>
+                        <input id="accounting[email_1]" name="accounting[email_1]" type="email" class="form-control" value="{{ optional($user->accounting)->email_1 }}">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-6">
+                        <label for="accounting[email_2]">E-mail 2</label>
+                        <input id="accounting[email_2]" name="accounting[email_2]" type="email" class="form-control" value="{{ optional($user->accounting)->email_2 }}">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-6">
+                        <label for="accounting[email_3]">E-mail 3</label>
+                        <input id="accounting[email_3]" name="accounting[email_3]" type="email" class="form-control" value="{{ optional($user->accounting)->email_3 }}">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-6">
+                        <label for="accounting[email_4]">E-mail 4</label>
+                        <input id="accounting[email_4]" name="accounting[email_4]" type="email" class="form-control" value="{{ optional($user->accounting)->email_4 }}">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-6">
+                        <label for="accounting[email_5]">E-mail 5</label>
+                        <input id="accounting[email_5]" name="accounting[email_5]" type="email" class="form-control" value="{{ optional($user->accounting)->email_5 }}">
                     </div>
                 </div>
 

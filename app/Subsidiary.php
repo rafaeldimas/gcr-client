@@ -10,14 +10,18 @@ class Subsidiary extends Model
     use AttributesSelectDynamically;
 
     const REQUEST_OPENING = 1;
-    const REQUEST_CHANGING = 2;
-    const REQUEST_CANCELING = 3;
+    const REQUEST_CANCELING = 2;
+    const REQUEST_CHANGING_ACTIVITY = 3;
+    const REQUEST_CHANGING_ADDRESS = 4;
+    const REQUEST_CHANGING_CAPITAL = 5;
 
     protected static $labels = [
         'request' => [
             'Abertura',
-            'Alteração',
             'Cancelamento',
+            'Alteração Atividade',
+            'Alteração Endereço',
+            'Alteração Capital',
         ]
     ];
 
@@ -37,6 +41,11 @@ class Subsidiary extends Model
     public function address()
     {
         return $this->belongsTo(Address::class);
+    }
+
+    public function cnaes()
+    {
+        return $this->hasMany(Cnae::class);
     }
 
     public function setShareCapitalAttribute($value)

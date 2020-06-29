@@ -93,13 +93,57 @@
                     @endif
                 </div>
 
-                <div class="form-group has-feedback {{ $errors->has('accounting.email') ? 'has-error' : '' }}">
-                    <input type="email" name="accounting[email]" class="form-control"
-                           placeholder="E-mail" value="{{ $accounting->email }}" required>
+                <div class="form-group has-feedback {{ $errors->has('accounting.email_1') ? 'has-error' : '' }}">
+                    <input type="email" name="accounting[email_1]" class="form-control"
+                           placeholder="E-mail 1" value="{{ $accounting->email_1 }}" required>
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                    @if ($errors->has('accounting.email'))
+                    @if ($errors->has('accounting.email_1'))
                         <span class="help-block">
-                            <strong>{{ $errors->first('accounting.email') }}</strong>
+                            <strong>{{ $errors->first('accounting.email_1') }}</strong>
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group has-feedback {{ $errors->has('accounting.email_2') ? 'has-error' : '' }}">
+                    <input type="email" name="accounting[email_2]" class="form-control"
+                           placeholder="E-mail 2" value="{{ $accounting->email_2 }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    @if ($errors->has('accounting.email_2'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('accounting.email_2') }}</strong>
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group has-feedback {{ $errors->has('accounting.email_3') ? 'has-error' : '' }}">
+                    <input type="email" name="accounting[email_3]" class="form-control"
+                           placeholder="E-mail 3" value="{{ $accounting->email_3 }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    @if ($errors->has('accounting.email_3'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('accounting.email_3') }}</strong>
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group has-feedback {{ $errors->has('accounting.email_4') ? 'has-error' : '' }}">
+                    <input type="email" name="accounting[email_4]" class="form-control"
+                           placeholder="E-mail 4" value="{{ $accounting->email_4 }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    @if ($errors->has('accounting.email_4'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('accounting.email_4') }}</strong>
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group has-feedback {{ $errors->has('accounting.email_5') ? 'has-error' : '' }}">
+                    <input type="email" name="accounting[email_5]" class="form-control"
+                           placeholder="E-mail 5" value="{{ $accounting->email_5 }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    @if ($errors->has('accounting.email_5'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('accounting.email_5') }}</strong>
                         </span>
                     @endif
                 </div>

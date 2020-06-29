@@ -1,5 +1,5 @@
 <?php /** @var \Gcr\Process $process */ ?>
-@if (!$process->isUpdating() || $process->isEditingOwners() || $process->isEditingCapital() || $process->isEditingTransferToAnotherUf() || $process->isEditingTransferFromAnotherUfToSp())
+@if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingOwners() || ($process->isEditingCapital() && $process->isSociety())))
     <h3>{{ $step['label'] }}</h3>
     <section>
         @php

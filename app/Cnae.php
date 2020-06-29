@@ -13,4 +13,8 @@ class Cnae extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function subsidiary()
+    {
+        return $this->belongsTo(Subsidiary::class);
+    }
 }

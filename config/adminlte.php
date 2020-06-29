@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'logo' => '<b style="color: #9b7e2b">GCR</b> Legalização',
+    'logo' => '<b>GCR</b> Legalização',
 
     'logo_mini' => '<b>G</b>CR',
 
