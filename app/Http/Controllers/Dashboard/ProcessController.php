@@ -724,7 +724,7 @@ class ProcessController extends Controller
                 );
                 $url = route('dashboard.process.index', [ 'type_company' => $process->type_company ]);
 
-//                event(new FinishProcess($process));
+                event(new FinishProcess($process));
             }
         }
 
