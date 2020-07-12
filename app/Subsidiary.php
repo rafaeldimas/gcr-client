@@ -11,14 +11,19 @@ class Subsidiary extends Model
 
     const REQUEST_OPENING = 1;
     const REQUEST_CANCELING = 2;
-    const REQUEST_CHANGING_ACTIVITY = 3;
-    const REQUEST_CHANGING_ADDRESS = 4;
-    const REQUEST_CHANGING_CAPITAL = 5;
+    const REQUEST_CHANGING = 3;
+
+    const FIELDS_CHANGED_ACTIVITY = 1;
+    const FIELDS_CHANGED_ADDRESS = 2;
+    const FIELDS_CHANGED_CAPITAL = 3;
 
     protected static $labels = [
         'request' => [
             'Abertura',
             'Cancelamento',
+            'Alteração',
+        ],
+        'fields_changed' => [
             'Alteração Atividade',
             'Alteração Endereço',
             'Alteração Capital',
@@ -27,10 +32,15 @@ class Subsidiary extends Model
 
     protected $fillable = [
         'request',
+        'fields_changed',
         'nire',
         'cnpj',
         'share_capital',
         'activity_description',
+    ];
+
+    protected $casts = [
+        'fields_changed' => 'array',
     ];
 
     public function company()

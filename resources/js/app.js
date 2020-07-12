@@ -375,11 +375,17 @@ window.jQuery(function ($) {
             }
 
             if ($.inArray(JOB_ROLES_REPRESENTATIVE, $(this).val()) !== -1) {
-                $(this).closest('.panel-body').find('input[name*="share_capital"]').attr('disabled', true);
-                $(this).closest('.panel-body').find('input[name*="share_capital"]').closest('.form-group').addClass('hidden');
+                $(this).closest('.panel-body').find('input[name*="name_represented"]').attr('disabled', false);
+                $(this).closest('.panel-body').find('input[name*="name_represented"]').closest('.form-group').removeClass('hidden');
+
+                $(this).closest('.panel-body').find('input[name*="cpf_represented"]').attr('disabled', false);
+                $(this).closest('.panel-body').find('input[name*="cpf_represented"]').closest('.form-group').removeClass('hidden');
             } else {
-                $(this).closest('.panel-body').find('input[name*="share_capital"]').attr('disabled', false);
-                $(this).closest('.panel-body').find('input[name*="share_capital"]').closest('.form-group').removeClass('hidden');
+                $(this).closest('.panel-body').find('input[name*="name_represented"]').attr('disabled', true);
+                $(this).closest('.panel-body').find('input[name*="name_represented"]').closest('.form-group').addClass('hidden');
+
+                $(this).closest('.panel-body').find('input[name*="cpf_represented"]').attr('disabled', true);
+                $(this).closest('.panel-body').find('input[name*="cpf_represented"]').closest('.form-group').addClass('hidden');
             }
         });
 
@@ -405,102 +411,129 @@ window.jQuery(function ($) {
                 .toggleClass('hidden');
         });
 
-        $(document).on('change', 'select[name*="request"]', function (e) {
-            e.preventDefault();
-            const fields = {
-                nire: $(this).closest('.row').find('input[name*="nire"]'),
-                cnpj: $(this).closest('.row').find('input[name*="cnpj"]'),
-                share_capital: $(this).closest('.row').find('input[name*="share_capital"]'),
-                cnaes: $(this).closest('.panel-body').find('.subsidiary-cnaes input[type="text"]'),
-                activity_description: $(this).closest('.panel-body').find('textarea[name*="activity_description"]'),
-                address: $(this).closest('.panel-body').find('.subsidiary-address input'),
+        function subsidiaryFieldsFunction($request) {
+            return {
+                fields_changed: $request.closest('.row').find('select[name*="fields_changed"]'),
+                nire: $request.closest('.panel-body').find('input[name*="nire"]'),
+                cnpj: $request.closest('.panel-body').find('input[name*="cnpj"]'),
+                share_capital: $request.closest('.panel-body').find('input[name*="share_capital"]'),
+                cnaes: $request.closest('.panel-body').find('.subsidiary-cnaes input[type="text"]'),
+                activity_description: $request.closest('.panel-body').find('textarea[name*="activity_description"]'),
+                address: $request.closest('.panel-body').find('.subsidiary-address input'),
             }
+        }
 
-            Object.keys(fields).map(field => {
+        function resetSubsidiaryFields(subsidiaryFields) {
+            Object.keys(subsidiaryFields).map(field => {
                 if (field === 'cnaes') {
-                    fields[field].attr('disabled', true);
-                    fields[field].closest('.subsidiary-cnaes').addClass('hidden');
+                    subsidiaryFields[field].attr('disabled', true).attr('required', false);
+                    subsidiaryFields[field].closest('.subsidiary-cnaes').addClass('hidden');
 
                     return;
                 }
 
                 if (field === 'address') {
-                    fields[field].attr('disabled', true);
-                    fields[field].closest('.subsidiary-address').addClass('hidden');
+                    subsidiaryFields[field].attr('disabled', true).attr('required', false);
+                    subsidiaryFields[field].closest('.subsidiary-address').addClass('hidden');
 
                     return;
                 }
 
-                fields[field].attr('disabled', true);
-                fields[field].closest('.form-group').addClass('hidden');
-            })
+                subsidiaryFields[field].attr('disabled', true);
+                subsidiaryFields[field].closest('.form-group').addClass('hidden');
+            });
+        }
+
+        $(document).on('change', 'select[name*="request"]', function (e) {
+            e.preventDefault();
+
+            const subsidiaryFields = subsidiaryFieldsFunction($(this));
+
+            resetSubsidiaryFields(subsidiaryFields);
 
             const REQUEST_OPENING = '1';
             const REQUEST_CANCELING = '2';
-            const REQUEST_CHANGING_ACTIVITY = '3';
-            const REQUEST_CHANGING_ADDRESS = '4';
-            const REQUEST_CHANGING_CAPITAL = '5';
+            const REQUEST_CHANGING = '3';
 
             const request = $(this).val();
 
             if (REQUEST_OPENING === request) {
-                fields.share_capital.attr('disabled', false);
-                fields.share_capital.closest('.form-group').removeClass('hidden');
+                subsidiaryFields.share_capital.attr('disabled', false);
+                subsidiaryFields.share_capital.closest('.form-group').removeClass('hidden');
 
-                fields.activity_description.attr('disabled', false);
-                fields.activity_description.closest('.form-group').removeClass('hidden');
+                subsidiaryFields.activity_description.attr('disabled', false);
+                subsidiaryFields.activity_description.closest('.form-group').removeClass('hidden');
 
-                fields.cnaes.attr('disabled', false);
-                fields.cnaes.closest('.subsidiary-cnaes').removeClass('hidden');
+                subsidiaryFields.cnaes.attr('disabled', false).attr('required', true);
+                subsidiaryFields.cnaes.closest('.subsidiary-cnaes').removeClass('hidden');
 
-                fields.address.attr('disabled', false);
-                fields.address.closest('.subsidiary-address').removeClass('hidden');
+                subsidiaryFields.address.attr('disabled', false).attr('required', true);
+                subsidiaryFields.address.closest('.subsidiary-address').removeClass('hidden');
             }
 
             if (REQUEST_CANCELING === request) {
-                fields.nire.attr('disabled', false);
-                fields.nire.closest('.form-group').removeClass('hidden');
+                subsidiaryFields.nire.attr('disabled', false);
+                subsidiaryFields.nire.closest('.form-group').removeClass('hidden');
 
-                fields.cnpj.attr('disabled', false);
-                fields.cnpj.closest('.form-group').removeClass('hidden');
+                subsidiaryFields.cnpj.attr('disabled', false);
+                subsidiaryFields.cnpj.closest('.form-group').removeClass('hidden');
             }
 
-            if (REQUEST_CHANGING_ACTIVITY === request) {
-                fields.nire.attr('disabled', false);
-                fields.nire.closest('.form-group').removeClass('hidden');
-
-                fields.cnpj.attr('disabled', false);
-                fields.cnpj.closest('.form-group').removeClass('hidden');
-
-                fields.activity_description.attr('disabled', false);
-                fields.activity_description.closest('.form-group').removeClass('hidden');
-
-                fields.cnaes.attr('disabled', false);
-                fields.cnaes.closest('.subsidiary-cnaes').removeClass('hidden');
-            }
-
-            if (REQUEST_CHANGING_ADDRESS === request) {
-                fields.nire.attr('disabled', false);
-                fields.nire.closest('.form-group').removeClass('hidden');
-
-                fields.cnpj.attr('disabled', false);
-                fields.cnpj.closest('.form-group').removeClass('hidden');
-
-                fields.address.attr('disabled', false);
-                fields.address.closest('.subsidiary-address').removeClass('hidden');
-            }
-
-            if (REQUEST_CHANGING_CAPITAL === request) {
-                fields.nire.attr('disabled', false);
-                fields.nire.closest('.form-group').removeClass('hidden');
-
-                fields.cnpj.attr('disabled', false);
-                fields.cnpj.closest('.form-group').removeClass('hidden');
-
-                fields.share_capital.attr('disabled', false);
-                fields.share_capital.closest('.form-group').removeClass('hidden');
+            if (REQUEST_CHANGING === request) {
+                subsidiaryFields.fields_changed.attr('disabled', false);
+                subsidiaryFields.fields_changed.closest('.form-group').removeClass('hidden');
             }
         });
+
+        $(document).on('change', 'select[name*="fields_changed"]', function (e) {
+            const subsidiaryFields = subsidiaryFieldsFunction($(this));
+
+            delete subsidiaryFields.fields_changed;
+
+            resetSubsidiaryFields(subsidiaryFields);
+
+            const FIELDS_CHANGED_ACTIVITY = '1';
+            const FIELDS_CHANGED_ADDRESS = '2';
+            const FIELDS_CHANGED_CAPITAL = '3';
+
+            const fieldsChanged = $(this).val();
+
+            if ($.inArray(FIELDS_CHANGED_ACTIVITY, fieldsChanged) !== -1) {
+                subsidiaryFields.nire.attr('disabled', false);
+                subsidiaryFields.nire.closest('.form-group').removeClass('hidden');
+
+                subsidiaryFields.cnpj.attr('disabled', false);
+                subsidiaryFields.cnpj.closest('.form-group').removeClass('hidden');
+
+                subsidiaryFields.activity_description.attr('disabled', false);
+                subsidiaryFields.activity_description.closest('.form-group').removeClass('hidden');
+
+                subsidiaryFields.cnaes.attr('disabled', false).attr('required', true);
+                subsidiaryFields.cnaes.closest('.subsidiary-cnaes').removeClass('hidden');
+            }
+
+            if ($.inArray(FIELDS_CHANGED_ADDRESS, fieldsChanged) !== -1) {
+                subsidiaryFields.nire.attr('disabled', false);
+                subsidiaryFields.nire.closest('.form-group').removeClass('hidden');
+
+                subsidiaryFields.cnpj.attr('disabled', false);
+                subsidiaryFields.cnpj.closest('.form-group').removeClass('hidden');
+
+                subsidiaryFields.address.attr('disabled', false).attr('required', true);
+                subsidiaryFields.address.closest('.subsidiary-address').removeClass('hidden');
+            }
+
+            if ($.inArray(FIELDS_CHANGED_CAPITAL, fieldsChanged) !== -1) {
+                subsidiaryFields.nire.attr('disabled', false);
+                subsidiaryFields.nire.closest('.form-group').removeClass('hidden');
+
+                subsidiaryFields.cnpj.attr('disabled', false);
+                subsidiaryFields.cnpj.closest('.form-group').removeClass('hidden');
+
+                subsidiaryFields.share_capital.attr('disabled', false);
+                subsidiaryFields.share_capital.closest('.form-group').removeClass('hidden');
+            }
+        })
 
         $(document).on('change', '#operation', function (e) {
             e.preventDefault();
@@ -630,6 +663,7 @@ window.jQuery(function ($) {
         $('select[name*="fields_editing"]').trigger('change');
 
         $('select[name*="request"]').trigger('change');
+        $('select[name*="fields_changed"]').trigger('change');
     }
     init();
 });

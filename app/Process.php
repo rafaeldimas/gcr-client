@@ -70,6 +70,9 @@ class Process extends Model
         'operation',
         'description_of_changes',
         'description',
+        'scanned',
+        'post_office',
+        'sign_digital_certificate',
         'fields_editing',
     ];
 

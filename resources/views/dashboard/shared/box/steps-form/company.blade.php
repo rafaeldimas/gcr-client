@@ -61,7 +61,7 @@
         </div>
         @endif
 
-        @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany()))
+        @if (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCompanySize()))
         <div class="form-group col-xs-12 col-md-4">
             <label for="company[size]">Porte da Empresa</label>
             <select id="company[size]" name="company[size]" class="form-control">

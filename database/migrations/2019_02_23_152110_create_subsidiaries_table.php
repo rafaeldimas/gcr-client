@@ -18,6 +18,7 @@ class CreateSubsidiariesTable extends Migration
             $table->unsignedInteger('company_id')->nullable();
             $table->unsignedInteger('address_id')->nullable();
             $table->integer('request')->nullable();
+            $table->text('fields_changed')->nullable();
             $table->string('nire')->nullable();
             $table->string('cnpj')->nullable();
             $table->decimal('share_capital')->nullable();

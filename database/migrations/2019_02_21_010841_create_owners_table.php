@@ -28,6 +28,8 @@ class CreateOwnersTable extends Migration
             $table->date('rg_expedition')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('cpf')->nullable();
+            $table->string('name_represented')->nullable();
+            $table->string('cpf_represented')->nullable();
             $table->timestamps();
 
             $table->foreign('process_id')

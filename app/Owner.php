@@ -44,7 +44,7 @@ class Owner extends Model
             'Outro',
         ],
         'change_type' => [
-            'Adição',
+            'Admissão',
             'Retirada',
             'Alteração de Dados',
         ],
@@ -77,7 +77,9 @@ class Owner extends Model
         'rg',
         'rg_expedition',
         'date_of_birth',
-        'cpf'
+        'cpf',
+        'name_represented',
+        'cpf_represented',
     ];
 
     protected $casts = [

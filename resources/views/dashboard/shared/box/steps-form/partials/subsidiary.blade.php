@@ -15,7 +15,7 @@
             <input type="hidden" name="subsidiaries[{{ $key }}][id]" value="{{ $subsidiary->id }}">
 
             <div class="row">
-                <div class="form-group col-xs-12 col-md-3">
+                <div class="form-group col-xs-12 col-md-6">
                     <label for="subsidiaries[{{ $key }}][request]">Tipo de solicitação</label>
                     <select id="subsidiaries[{{ $key }}][request]" name="subsidiaries[{{ $key }}][request]" class="form-control" data-s2 required>
                         <option value="" selected disabled>Selecione...</option>
@@ -29,19 +29,34 @@
                     </select>
                 </div>
 
-                <div class="form-group col-xs-12 col-md-3 @if(!$subsidiary->nire) hidden @endif">
+                <div class="form-group col-xs-12 col-md-6 @if(!$subsidiary->request !== \Gcr\Subsidiary::REQUEST_CHANGING) hidden @endif">
+                    <label for="subsidiaries[{{ $key }}][fields_changed][]">Tipo de Alteração</label>
+                    <select id="subsidiaries[{{ $key }}][fields_changed][]" name="subsidiaries[{{ $key }}][fields_changed][]" class="form-control" data-s2 multiple @if(!$subsidiary->request !== \Gcr\Subsidiary::REQUEST_CHANGING) disabled @endif required>
+                        <option value="" disabled>Selecione...</option>
+                        @foreach(Gcr\Subsidiary::attributeOptions('fields_changed') as $value => $label)
+                            <option
+                                value="{{ $value }}"
+                                {{ in_array($value, optional($subsidiary)->fields_changed ?: []) ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-12 col-md-4 @if(!$subsidiary->nire) hidden @endif">
                     <label for="subsidiaries[{{ $key }}][nire]">NIRE</label>
-                    <input id="subsidiaries[{{ $key }}][nire]" name="subsidiaries[{{ $key }}][nire]" type="text" class="form-control" @if(!$subsidiary->nire) disabled @endif value="{{ $subsidiary->nire }}" maxlength="11">
+                    <input id="subsidiaries[{{ $key }}][nire]" name="subsidiaries[{{ $key }}][nire]" type="text" class="form-control" @if(!$subsidiary->nire) disabled @endif required value="{{ $subsidiary->nire }}" maxlength="11">
                 </div>
 
-                <div class="form-group col-xs-12 col-md-3 @if(!$subsidiary->cnpj) hidden @endif">
+                <div class="form-group col-xs-12 col-md-4 @if(!$subsidiary->cnpj) hidden @endif">
                     <label for="subsidiaries[{{ $key }}][cnpj]">CNPJ</label>
-                    <input id="subsidiaries[{{ $key }}][cnpj]" name="subsidiaries[{{ $key }}][cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse @if(!$subsidiary->cnpj) disabled @endif value="{{ $subsidiary->cnpj }}">
+                    <input id="subsidiaries[{{ $key }}][cnpj]" name="subsidiaries[{{ $key }}][cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse @if(!$subsidiary->cnpj) disabled @endif required value="{{ $subsidiary->cnpj }}">
                 </div>
 
-                <div class="form-group col-xs-12 col-md-3 @if(!$subsidiary->share_capital) hidden @endif">
+                <div class="form-group col-xs-12 col-md-4 @if(!$subsidiary->share_capital) hidden @endif">
                     <label for="subsidiaries[{{ $key }}][share_capital]">Capital Social</label>
-                    <input id="subsidiaries[{{ $key }}][share_capital]" name="subsidiaries[{{ $key }}][share_capital]" type="text" class="form-control" data-masked="#.##0,00" data-masked-reverse @if(!$subsidiary->share_capital) disabled @endif value="{{ $subsidiary->share_capital }}">
+                    <input id="subsidiaries[{{ $key }}][share_capital]" name="subsidiaries[{{ $key }}][share_capital]" type="text" class="form-control" data-masked="#.##0,00" data-masked-reverse @if(!$subsidiary->share_capital) disabled @endif required value="{{ $subsidiary->share_capital }}">
                     @if ($process->isEireli())
                         <span id="subsidiaries[{{ $key }}][share_capital]" class="help-block">A partir de 100 vezes o salário minimo</span>
                     @endif
@@ -51,7 +66,7 @@
             <div class="row">
                 <div class="form-group col-xs-12 @if(!$subsidiary->activity_description) hidden @endif">
                     <label for="subsidiaries[{{ $key }}][activity_description]">Descrição da Atividade</label>
-                    <textarea id="subsidiaries[{{ $key }}][activity_description]" name="subsidiaries[{{ $key }}][activity_description]" class="form-control" @if(!$subsidiary->activity_description) disabled @endif>{{ $subsidiary->activity_description }}</textarea>
+                    <textarea id="subsidiaries[{{ $key }}][activity_description]" name="subsidiaries[{{ $key }}][activity_description]" class="form-control" @if(!$subsidiary->activity_description) disabled @endif required>{{ $subsidiary->activity_description }}</textarea>
                 </div>
             </div>
 

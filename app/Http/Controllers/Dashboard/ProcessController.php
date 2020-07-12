@@ -17,6 +17,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Fluent;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -382,7 +383,7 @@ class ProcessController extends Controller
                 return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes()));
             }),
             'company.size' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany()));
+                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCompanySize()));
             }),
             'company.signed' => $required,
             'company.address' => [
@@ -480,12 +481,13 @@ class ProcessController extends Controller
             'subsidiaries' => "{$required}|array",
             'subsidiaries.*.id' => $required,
             'subsidiaries.*.request' => "{$required}|integer|in:".implode(',', Subsidiary::attributeCodes('request')),
-            'subsidiaries.*.nire' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,2,3,4,5|string',
-            'subsidiaries.*.cnpj' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,2,3,4,5|string',
-            'subsidiaries.*.share_capital' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1,5|string',
-            'subsidiaries.*.activity_description' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1,3|string',
-            'subsidiaries.*.address' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1,4|array',
-            'subsidiaries.*.cnaes' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1,3|array',
+            'subsidiaries.*.fields_changed' => !$finish ? 'nullable' : "required_if:subsidiaries.*.request,3|array",
+            'subsidiaries.*.nire' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,2|required_if:subsidiaries.*.fields_changed,1,2,3|string',
+            'subsidiaries.*.cnpj' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,2|required_if:subsidiaries.*.fields_changed,1,2,3|string',
+            'subsidiaries.*.share_capital' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,3|string',
+            'subsidiaries.*.activity_description' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,1|string',
+            'subsidiaries.*.address' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,2|array',
+            'subsidiaries.*.cnaes' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,1|array',
         ], [
             'subsidiaries.required' => 'É obrigatório informar ao menos uma Filial.',
             'subsidiaries.*.id.required' => '',
@@ -693,6 +695,7 @@ class ProcessController extends Controller
             'process.finished' => 'nullable|boolean',
             'process.scanned' => 'nullable|boolean',
             'process.post_office' => 'nullable|boolean',
+            'process.sign_digital_certificate' => 'nullable|boolean',
         ]);
     }
 
@@ -709,6 +712,7 @@ class ProcessController extends Controller
         $process->fill([
             'scanned' => array_get($processData, 'scanned', false),
             'post_office' => array_get($processData, 'post_office', false),
+            'sign_digital_certificate' => array_get($processData, 'sign_digital_certificate', false),
         ]);
 
         if (array_get($processData, 'finished')) {

@@ -48,6 +48,18 @@
                 @endif
 
                 <div class="row">
+                    <div class="form-group col-xs-12 col-md-6 {{ !optional($owner)->name_represented ? 'hidden' : '' }}">
+                        <label for="owners[{{ $key }}][name_represented]">Nome Completo do Representado (Adicionar {{ str_singular($step['label']) }} Representado)</label>
+                        <input id="owners[{{ $key }}][name_represented]" name="owners[{{ $key }}][name_represented]" type="text" class="form-control" @if(!optional($owner)->cpf_represented) disabled @endif value="{{ optional($owner)->name_represented }}">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-6 {{ !optional($owner)->cpf_represented ? 'hidden' : '' }}">
+                        <label for="owners[{{ $key }}][cpf_represented]">CPF do Representado</label>
+                        <input id="owners[{{ $key }}][cpf_represented]" name="owners[{{ $key }}][cpf_represented]" type="text" class="form-control cpf" data-masked="000.000.000-00" data-masked-reverse @if(!optional($owner)->cpf_represented) disabled @endif value="{{ optional($owner)->cpf_represented }}">
+                    </div>
+                </div>
+
+                <div class="row">
 
                     <div class="form-group col-xs-12 {{ $process->isSociety() || $process->isEireli() ? 'col-md-3' : 'col-md-6' }}">
                         <label for="owners[{{ $key }}][name]">Nome Completo</label>

@@ -26,6 +26,7 @@ class CreateProcessesTable extends Migration
             $table->boolean('editing');
             $table->boolean('scanned')->nullable();
             $table->boolean('post_office')->nullable();
+            $table->boolean('sign_digital_certificate')->nullable();
             $table->text('fields_editing')->nullable();
             $table->timestamps();
 
