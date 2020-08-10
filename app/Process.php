@@ -372,7 +372,8 @@ class Process extends Model
                 || $this->isEditingCompanyCnaes()
                 || $this->isEditingCompanyAddress()
                 || $this->isEditingTransferToAnotherUf()
-                || $this->isEditingTransferFromAnotherUfToSp();
+                || $this->isEditingTransferFromAnotherUfToSp()
+                || $this->isEditingSubsidiary();
         }
 
         return false;

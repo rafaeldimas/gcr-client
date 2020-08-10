@@ -262,28 +262,28 @@
                     <div class="fields">
                         <div class="field">
                             <span class="label">Tipo de Usúario: </span>
-                            <span class="value">{{ $process->user->typeLabel }}</span>
+                            <span class="value">{{ optional($process->user)->typeLabel }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Nome: </span>
-                            <span class="value">{{ $process->user->name }}</span>
+                            <span class="value">{{ optional($process->user)->name }}</span>
                         </div>
                         <div class="field">
                             <span class="label">E-mail: </span>
-                            <span class="value">{{ $process->user->email }}</span>
+                            <span class="value">{{ optional($process->user)->email }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Telefone: </span>
-                            <span class="value">{{ $process->user->phone }}</span>
+                            <span class="value">{{ optional($process->user)->phone }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Celular: </span>
-                            <span class="value">{{ $process->user->mobile_phone }}</span>
+                            <span class="value">{{ optional($process->user)->mobile_phone }}</span>
                         </div>
                     </div>
-                    @if($process->user->logo)
+                    @if(optional($process->user)->logo)
                     <div class="user-logo">
-                        <img src="{{ $process->user->logoUrl() }}" alt="Logo do Usúario"/>
+                        <img src="{{ optional($process->user)->logoUrl() }}" alt="Logo do Usúario"/>
                     </div>
                     @endif
                 </div>
@@ -328,7 +328,7 @@
                                     </div>
                                     <div class="field">
                                         <span class="label">Data de Expedição: </span>
-                                        <span class="value">{{ $owner->rg_expedition->format('d/m/Y') }}</span>
+                                        <span class="value">{{ optional($owner->rg_expedition)->format('d/m/Y') }}</span>
                                     </div>
                                     <div class="field">
                                         <span class="label">CPF: </span>
@@ -336,7 +336,7 @@
                                     </div>
                                     <div class="field">
                                         <span class="label">Data de Nacimento: </span>
-                                        <span class="value">{{ $owner->date_of_birth->format('d/m/Y') }}</span>
+                                        <span class="value">{{ optional($owner->date_of_birth)->format('d/m/Y') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -345,31 +345,31 @@
                                 <div class="fields">
                                     <div class="field">
                                         <span class="label">CEP: </span>
-                                        <span class="value">{{ $owner->address->postcode }}</span>
+                                        <span class="value">{{ optional($owner->address)->postcode }}</span>
                                     </div>
                                     <div class="field">
                                         <span class="label">Logradouro: </span>
-                                        <span class="value">{{ $owner->address->street }}</span>
+                                        <span class="value">{{ optional($owner->address)->street }}</span>
                                     </div>
                                     <div class="field">
                                         <span class="label">Número: </span>
-                                        <span class="value">{{ $owner->address->number }}</span>
+                                        <span class="value">{{ optional($owner->address)->number }}</span>
                                     </div>
                                     <div class="field">
                                         <span class="label">Bairro: </span>
-                                        <span class="value">{{ $owner->address->district }}</span>
+                                        <span class="value">{{ optional($owner->address)->district }}</span>
                                     </div>
                                     <div class="field">
                                         <span class="label">Cidade: </span>
-                                        <span class="value">{{ $owner->address->city }}</span>
+                                        <span class="value">{{ optional($owner->address)->city }}</span>
                                     </div>
                                     <div class="field">
                                         <span class="label">Estado: </span>
-                                        <span class="value">{{ $owner->address->state }}</span>
+                                        <span class="value">{{ optional($owner->address)->state }}</span>
                                     </div>
                                     <div class="field">
                                         <span class="label">País: </span>
-                                        <span class="value">{{ $owner->address->country }}</span>
+                                        <span class="value">{{ optional($owner->address)->country }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -387,35 +387,35 @@
                         <div class="fields">
                             <div class="field">
                                 <span class="label">Nome: </span>
-                                <span class="value">{{ $process->company->name }}</span>
+                                <span class="value">{{ optional($process->company)->name }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">NIRE: </span>
-                                <span class="value">{{ $process->company->nire }}</span>
+                                <span class="value">{{ optional($process->company)->nire }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">CNPJ: </span>
-                                <span class="value">{{ $process->company->cnpj }}</span>
+                                <span class="value">{{ optional($process->company)->cnpj }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Capital Social: </span>
-                                <span class="value">{{ $process->company->share_capital }}</span>
+                                <span class="value">{{ optional($process->company)->share_capital }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Descrição da Atividade: </span>
-                                <span class="value">{{ $process->company->activity_description }}</span>
+                                <span class="value">{{ optional($process->company)->activity_description }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Porte da Empresa: </span>
-                                <span class="value">{{ $process->company->sizeCode() }}</span>
+                                <span class="value">{{ optional($process->company)->sizeCode() }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Data de Assinatura: </span>
-                                <span class="value">{{ $process->company->signed->format('d/m/Y') }}</span>
+                                <span class="value">{{ optional($process->company)->signed->format('d/m/Y') }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">CNAES: </span>
-                                <span class="value">{{ $process->company->cnaesStringFormated() }}</span>
+                                <span class="value">{{ optional($process->company)->cnaesStringFormated() }}</span>
                             </div>
                         </div>
                     </div>
@@ -424,31 +424,31 @@
                         <div class="fields">
                             <div class="field">
                                 <span class="label">CEP: </span>
-                                <span class="value">{{ $process->company->address->postcode }}</span>
+                                <span class="value">{{ optional(optional($process->company)->address)->postcode }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Logradouro: </span>
-                                <span class="value">{{ $process->company->address->street }}</span>
+                                <span class="value">{{ optional(optional($process->company)->address)->street }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Número: </span>
-                                <span class="value">{{ $process->company->address->number }}</span>
+                                <span class="value">{{ optional(optional($process->company)->address)->number }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Bairro: </span>
-                                <span class="value">{{ $process->company->address->district }}</span>
+                                <span class="value">{{ optional(optional($process->company)->address)->district }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Cidade: </span>
-                                <span class="value">{{ $process->company->address->city }}</span>
+                                <span class="value">{{ optional(optional($process->company)->address)->city }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Estado: </span>
-                                <span class="value">{{ $process->company->address->state }}</span>
+                                <span class="value">{{ optional(optional($process->company)->address)->state }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">País: </span>
-                                <span class="value">{{ $process->company->address->country }}</span>
+                                <span class="value">{{ optional(optional($process->company)->address)->country }}</span>
                             </div>
                         </div>
                     </div>
@@ -462,63 +462,63 @@
                     <div class="fields">
                         <div class="field">
                             <span class="label">Tipo do imóvel: </span>
-                            <span class="value">{{ $process->viability->propertyTypeCode() }}</span>
+                            <span class="value">{{ optional($process->viability)->propertyTypeCode() }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Numero de cadastro: </span>
-                            <span class="value">{{ $process->viability->registration_number }}</span>
+                            <span class="value">{{ optional($process->viability)->registration_number }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Área do imóvel: </span>
-                            <span class="value">{{ $process->viability->property_area }}</span>
+                            <span class="value">{{ optional($process->viability)->property_area }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Área do estabelecimento: </span>
-                            <span class="value">{{ $process->viability->establishment_area }}</span>
+                            <span class="value">{{ optional($process->viability)->establishment_area }}</span>
                         </div>
                         <div class="field">
                             <span class="label">A atividade é exercida no mesmo local do endereço da empresa: </span>
-                            <span class="value">{{ $process->viability->same_as_business_address_human }}</span>
+                            <span class="value">{{ optional($process->viability)->same_as_business_address_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Administração central da empresa, presidencia, diretoria: </span>
-                            <span class="value">{{ $process->viability->thirst_human }}</span>
+                            <span class="value">{{ optional($process->viability)->thirst_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento onde são exercidas atividades meramente administratives: </span>
-                            <span class="value">{{ $process->viability->administrative_office_human }}</span>
+                            <span class="value">{{ optional($process->viability)->administrative_office_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento onde a empresa armazena mercadorias próprias destinadas à industrialização e/ou comercialização, no qual não se realizam vendas: </span>
-                            <span class="value">{{ $process->viability->closed_deposit_human }}</span>
+                            <span class="value">{{ optional($process->viability)->closed_deposit_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento onde a empresa armazena artigos de consumo para uso próprio: </span>
-                            <span class="value">{{ $process->viability->warehouse_human }}</span>
+                            <span class="value">{{ optional($process->viability)->warehouse_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento onde se efetua manutenção e reparação exclusivamente de bens do ativo fixo da própria empresa: </span>
-                            <span class="value">{{ $process->viability->repair_workshop_human }}</span>
+                            <span class="value">{{ optional($process->viability)->repair_workshop_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Para estabelecimento de veiculos próprios, uso exclusivo da empresa: </span>
-                            <span class="value">{{ $process->viability->garage_human }}</span>
+                            <span class="value">{{ optional($process->viability)->garage_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento de abastecimento de combustiveis para uso pela frota própria: </span>
-                            <span class="value">{{ $process->viability->fuel_supply_unit_human }}</span>
+                            <span class="value">{{ optional($process->viability)->fuel_supply_unit_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento para exposição e demonstração de produtos próprios, sem realização de transações comerciais, tipo showroom: </span>
-                            <span class="value">{{ $process->viability->exposure_point_human }}</span>
+                            <span class="value">{{ optional($process->viability)->exposure_point_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento destinado a treinamento, de uso exclusivo da empresa, para realização de atividades de capacitação e treinamentos de recursos humanos: </span>
-                            <span class="value">{{ $process->viability->training_center_human }}</span>
+                            <span class="value">{{ optional($process->viability)->training_center_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento de processo de dados, de uso exclusivo da empresa, para realização de atividades na área de informática em geral: </span>
-                            <span class="value">{{ $process->viability->data_processing_center_human }}</span>
+                            <span class="value">{{ optional($process->viability)->data_processing_center_human }}</span>
                         </div>
                     </div>
                 </div>

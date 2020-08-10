@@ -212,7 +212,8 @@ class ProcessController extends Controller
             'statusLatest',
             'owners.address',
             'company.address',
-            'company.subsidiaries',
+            'company.subsidiaries.cnaes',
+            'company.subsidiaries.address',
             'documents',
         ]);
 
@@ -717,14 +718,18 @@ class ProcessController extends Controller
 
         if (array_get($processData, 'finished')) {
             if ($this->validFinishEditingProcess($process)) {
-                $process->fill(['editing' => false]);
-                $process->statuses()->attach(
-                    Status::getStatusCompleted(),
-                    [ 'description' => 'Processo finalizado edição.' ]
-                );
-                $url = route('dashboard.process.index', [ 'type_company' => $process->type_company ]);
+                $statusCompleted = Status::getStatusCompleted();
+                if (!$process->statuses()->where('statuses.id', $statusCompleted->id)->exists()) {
+                    $process->fill(['editing' => false]);
 
-                event(new FinishProcess($process));
+                    $process->statuses()->attach(
+                        $statusCompleted,
+                        [ 'description' => 'Processo finalizado edição.' ]
+                    );
+
+                    event(new FinishProcess($process));
+                }
+                $url = route('dashboard.process.index', [ 'type_company' => $process->type_company ]);
             }
         }
 

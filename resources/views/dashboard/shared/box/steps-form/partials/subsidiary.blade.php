@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="form-group col-xs-12 col-md-4 @if(!$subsidiary->share_capital) hidden @endif">
-                    <label for="subsidiaries[{{ $key }}][share_capital]">Capital Social</label>
+                    <label for="subsidiaries[{{ $key }}][share_capital]">Capital Social @if($process->request === \Gcr\Subsidiary::REQUEST_OPENING) (Não havendo destaque de capital, favor preencher 0,00) @endif</label>
                     <input id="subsidiaries[{{ $key }}][share_capital]" name="subsidiaries[{{ $key }}][share_capital]" type="text" class="form-control" data-masked="#.##0,00" data-masked-reverse @if(!$subsidiary->share_capital) disabled @endif required value="{{ $subsidiary->share_capital }}">
                     @if ($process->isEireli())
                         <span id="subsidiaries[{{ $key }}][share_capital]" class="help-block">A partir de 100 vezes o salário minimo</span>

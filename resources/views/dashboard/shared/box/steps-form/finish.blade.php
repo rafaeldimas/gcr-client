@@ -14,7 +14,7 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" name="process[sign_digital_certificate]" value="1" @if($process->sign_digital_certificate) checked @endif> Deseja que o seu processo seja assinado 100% digitalmente, através do Certificado Digital?
+            <input type="checkbox" name="process[sign_digital_certificate]" value="1" @if($process->sign_digital_certificate) checked @endif> Deseja que seu processo seja assinado com certificado digital?
         </label>
     </div>
 </section>

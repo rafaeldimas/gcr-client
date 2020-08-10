@@ -423,6 +423,8 @@ window.jQuery(function ($) {
             }
         }
 
+        const DEFAULT_LABEL_SHARE_CAPITAL = 'Capital Social';
+
         function resetSubsidiaryFields(subsidiaryFields) {
             Object.keys(subsidiaryFields).map(field => {
                 if (field === 'cnaes') {
@@ -439,6 +441,12 @@ window.jQuery(function ($) {
                     return;
                 }
 
+                if (field === 'share_capital') {
+                    subsidiaryFields[field]
+                        .closest('.form-group')
+                        .find('label')
+                        .html(DEFAULT_LABEL_SHARE_CAPITAL);
+                }
                 subsidiaryFields[field].attr('disabled', true);
                 subsidiaryFields[field].closest('.form-group').addClass('hidden');
             });
@@ -460,6 +468,10 @@ window.jQuery(function ($) {
             if (REQUEST_OPENING === request) {
                 subsidiaryFields.share_capital.attr('disabled', false);
                 subsidiaryFields.share_capital.closest('.form-group').removeClass('hidden');
+                subsidiaryFields.share_capital
+                    .closest('.form-group')
+                    .find('label')
+                    .html(DEFAULT_LABEL_SHARE_CAPITAL + ' (Não havendo destaque de capital, favor preencher 0,00)');
 
                 subsidiaryFields.activity_description.attr('disabled', false);
                 subsidiaryFields.activity_description.closest('.form-group').removeClass('hidden');
@@ -469,6 +481,7 @@ window.jQuery(function ($) {
 
                 subsidiaryFields.address.attr('disabled', false).attr('required', true);
                 subsidiaryFields.address.closest('.subsidiary-address').removeClass('hidden');
+                subsidiaryFields.address.filter('.complement').attr('required', false);
             }
 
             if (REQUEST_CANCELING === request) {
@@ -521,6 +534,7 @@ window.jQuery(function ($) {
 
                 subsidiaryFields.address.attr('disabled', false).attr('required', true);
                 subsidiaryFields.address.closest('.subsidiary-address').removeClass('hidden');
+                subsidiaryFields.address.filter('.complement').attr('required', false);
             }
 
             if ($.inArray(FIELDS_CHANGED_CAPITAL, fieldsChanged) !== -1) {
@@ -663,7 +677,9 @@ window.jQuery(function ($) {
         $('select[name*="fields_editing"]').trigger('change');
 
         $('select[name*="request"]').trigger('change');
-        $('select[name*="fields_changed"]').trigger('change');
+        if ($('select[name*="request"]').val() === '3') {
+            $('select[name*="fields_changed"]').trigger('change');
+        }
     }
     init();
 });

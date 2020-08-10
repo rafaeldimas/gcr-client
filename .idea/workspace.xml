@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b3b1c54-058c-47a0-9a7d-84f4ba94314c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Process.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Process.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/company.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/company.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/finish.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/finish.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/subsidiary.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/subsidiary.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/process/finish.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/process/finish.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -273,7 +281,9 @@
       <workItem from="1591488240721" duration="3926000" />
       <workItem from="1593380546872" duration="23106000" />
       <workItem from="1593436134769" duration="18000" />
-      <workItem from="1594558041798" duration="17776000" />
+      <workItem from="1594558041798" duration="17835000" />
+      <workItem from="1594639774002" duration="12000" />
+      <workItem from="1597025832848" duration="4682000" />
     </task>
     <servers />
   </component>
@@ -302,10 +312,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="802" y="166" width="366" height="790" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1586310507100">
-      <screen x="70" y="27" width="1850" height="1053" />
-    </state>
-    <state x="802" y="166" width="366" height="790" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1586310507100" />
     <state x="729" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1594568762342">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
@@ -322,24 +328,18 @@
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="757" y="232" width="467" height="650" key="VCS.ChangeListViewerDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1593403386833" />
-    <state x="606" y="167" width="770" height="780" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1587954658389">
+    <state x="680" y="292" width="908" height="548" key="find.popup" timestamp="1597027424669">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state x="606" y="167" width="770" height="780" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/72.27.1848.1053@72.27.1848.1053" timestamp="1587954658389" />
-    <state x="680" y="292" width="908" height="548" key="find.popup" timestamp="1593301519202">
-      <screen x="72" y="27" width="1848" height="1053" />
-    </state>
-    <state x="679" y="292" width="618" height="518" key="find.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1587253691385" />
-    <state x="680" y="292" width="908" height="548" key="find.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1593301519202" />
+    <state x="680" y="292" width="908" height="548" key="find.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1597027424669" />
     <state x="660" y="252" key="run.anything.popup" timestamp="1594570148827">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="660" y="252" key="run.anything.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1594570148827" />
-    <state x="659" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1594586342697">
+    <state x="659" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1597030370904">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1587259720128" />
-    <state x="659" y="259" width="672" height="678" key="search.everywhere.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1594586342697" />
+    <state x="659" y="259" width="672" height="678" key="search.everywhere.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1597030370904" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
