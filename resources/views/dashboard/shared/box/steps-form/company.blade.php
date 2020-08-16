@@ -14,7 +14,7 @@
     @if($process->isTransformation())
     <div class="row">
         <div class="form-group col-xs-12">
-            <label for="transformation_with_change[]">Havendo alguma alteração além da transformação tipo jurídico, favor inserir/selecionar no campo abaixo?</label>
+            <label for="transformation_with_change[]">Havendo alguma alteração além da transformação do tipo jurídico, favor inserir/selecionar no campo abaixo?</label>
             <select id="transformation_with_change[]" name="transformation_with_change[]" class="form-control" multiple>
                 @foreach(Gcr\Process::attributeOptions('fields_editing') as $value => $label)
                     <option value="{{ $value }}">{{ $label }}</option>
@@ -32,12 +32,12 @@
 
         @if(!$process->isCreating())
         <div class="form-group col-xs-12 col-md-3">
-            <label for="company[nire]">NIRE @if ($process->isEditingSubsidiary()) (da filial) @endif</label>
+            <label for="company[nire]">NIRE</label>
             <input id="company[nire]" name="company[nire]" type="text" class="form-control" value="{{ optional($company)->nire }}" maxlength="11">
         </div>
 
         <div class="form-group col-xs-12 col-md-3">
-            <label for="company[cnpj]">CNPJ @if ($process->isEditingSubsidiary()) (da filial) @endif</label>
+            <label for="company[cnpj]">CNPJ</label>
             <input id="company[cnpj]" name="company[cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse value="{{ optional($company)->cnpj }}">
         </div>
         @endif

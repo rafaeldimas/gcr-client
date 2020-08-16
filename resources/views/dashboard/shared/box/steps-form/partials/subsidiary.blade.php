@@ -45,12 +45,12 @@
             </div>
             <div class="row">
                 <div class="form-group col-xs-12 col-md-4 @if(!$subsidiary->nire) hidden @endif">
-                    <label for="subsidiaries[{{ $key }}][nire]">NIRE</label>
+                    <label for="subsidiaries[{{ $key }}][nire]">NIRE @if ($process->isEditingSubsidiary()) (da filial) @endif</label>
                     <input id="subsidiaries[{{ $key }}][nire]" name="subsidiaries[{{ $key }}][nire]" type="text" class="form-control" @if(!$subsidiary->nire) disabled @endif required value="{{ $subsidiary->nire }}" maxlength="11">
                 </div>
 
                 <div class="form-group col-xs-12 col-md-4 @if(!$subsidiary->cnpj) hidden @endif">
-                    <label for="subsidiaries[{{ $key }}][cnpj]">CNPJ</label>
+                    <label for="subsidiaries[{{ $key }}][cnpj]">CNPJ @if ($process->isEditingSubsidiary()) (da filial) @endif</label>
                     <input id="subsidiaries[{{ $key }}][cnpj]" name="subsidiaries[{{ $key }}][cnpj]" type="text" class="form-control cnpj" data-masked="00.000.000/0000-00" data-masked-reverse @if(!$subsidiary->cnpj) disabled @endif required value="{{ $subsidiary->cnpj }}">
                 </div>
 

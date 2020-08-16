@@ -27,7 +27,7 @@
         <div class="login-logo">
             <a href="{{ url(config('adminlte.dashboard_url', 'home')) }}">{!! config('adminlte.logo', '<b>Admin</b>LTE') !!}</a>
         </div>
-        <p style="text-align: center">Gustavo Camargo, Marçal & Saggioro Serviços Ltda</p>
+        <p style="text-align: center; font-size: 17px;">Gustavo Camargo, Marçal & Saggioro Serviços Ltda</p>
         <div class="subtitle">
             <h2>
                 <b style="color: #021c55;">{{ trans('adminlte::adminlte.login_message') }}</b>
