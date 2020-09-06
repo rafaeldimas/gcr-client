@@ -477,7 +477,7 @@ class ProcessController extends Controller
      */
     private function getRequestSubsidiaries($finish, Process $process)
     {
-        $required = $finish && $process->isEditingSubsidiary() ? 'required' : 'nullable';
+        $required = 'nullable';
         return request()->validate([
             'subsidiaries' => "{$required}|array",
             'subsidiaries.*.id' => $required,

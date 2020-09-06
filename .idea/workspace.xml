@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2b3b1c54-058c-47a0-9a7d-84f4ba94314c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/company.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/company.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/subsidiary.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/subsidiary.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/vendor/adminlte/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/vendor/adminlte/login.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,6 +165,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="web-ide.project.structure" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -280,7 +279,9 @@
       <workItem from="1594639774002" duration="12000" />
       <workItem from="1597025832848" duration="5077000" />
       <workItem from="1597077597867" duration="16000" />
-      <workItem from="1597597481188" duration="874000" />
+      <workItem from="1597597481188" duration="1108000" />
+      <workItem from="1597683865058" duration="55000" />
+      <workItem from="1599421405914" duration="226000" />
     </task>
     <servers />
   </component>
@@ -333,10 +334,11 @@
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="660" y="252" key="run.anything.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1594570148827" />
-    <state x="659" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1597597835714">
-      <screen x="72" y="27" width="1848" height="1053" />
+    <state x="659" y="261" width="672" height="677" key="search.everywhere.popup" timestamp="1599421481256">
+      <screen x="72" y="29" width="1848" height="1051" />
     </state>
     <state x="659" y="259" width="672" height="678" key="search.everywhere.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1597597835714" />
+    <state x="659" y="261" width="672" height="677" key="search.everywhere.popup/72.29.1848.1051@72.29.1848.1051" timestamp="1599421481256" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
