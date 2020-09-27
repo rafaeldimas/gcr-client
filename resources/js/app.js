@@ -339,6 +339,26 @@ window.jQuery(function ($) {
         });
     }
 
+    function addEventButtonRemoveSubsidiary() {
+        const $buttonRemoveSubsidiary = $('[data-button-remove-subsidiary]');
+        if ($buttonRemoveSubsidiary.length) {
+            $buttonRemoveSubsidiary.on('click', function (e) {
+                e.preventDefault();
+
+                const $button = $(this);
+
+                $button.closest('.panel').remove();
+
+                const subsidiaryId = $button.data('button-remove-subsidiary');
+                if (!subsidiaryId) {
+                    return;
+                }
+
+                window.axios.delete(`/dashboard/process/subsidiary/${subsidiaryId}`);
+            });
+        }
+    }
+
     (function initEvents () {
         $(document).on('change', 'select[name*="marital_status"]', function (e) {
             e.preventDefault();
@@ -657,6 +677,7 @@ window.jQuery(function ($) {
         });
 
         addEventButtonAddNewCane();
+        addEventButtonRemoveSubsidiary();
     })();
 
     function init() {

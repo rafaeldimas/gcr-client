@@ -4,10 +4,13 @@
 @endphp
 <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="tab-subsidiary-{{ $key }}">
-        <h4 class="panel-title">
+        <h4 class="panel-title" style="display: flex; justify-content: space-between; align-items: baseline">
             <a role="button" data-toggle="collapse" data-parent="#subsidiaries" href="#tab-content-subsidiary-{{ $key }}" aria-expanded="false" aria-controls="tab-content-subsidiary-{{ $key }}">
                 {{ $step['label'] }} #{{ $key }}
             </a>
+            <button class="btn btn-danger" data-button-remove-subsidiary="{{ $subsidiary->id }}">
+                <i class="fa fa-close"></i>
+            </button>
         </h4>
     </div>
     <div id="tab-content-subsidiary-{{ $key }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="tab-subsidiary-{{ $key }}">

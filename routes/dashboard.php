@@ -13,4 +13,5 @@ Route::post('password/change/{user}', 'UserController@firstTimeLogin')->name('us
 Route::resource('status', 'StatusController')->except(['show']);
 
 Route::put('process/{process}/status', 'ProcessController@updateStatus')->name('process.update.status');
+Route::delete('process/subsidiary/{subsidiary}', 'ProcessController@destroySubsidiary')->name('process.destroy.subsidiary');
 Route::resource('process', 'ProcessController')->except(['destroy']);

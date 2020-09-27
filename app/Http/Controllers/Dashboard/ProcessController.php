@@ -76,6 +76,14 @@ class ProcessController extends Controller
         return redirect()->back();
     }
 
+
+    public function destroySubsidiary(Subsidiary $subsidiary)
+    {
+        $subsidiary->delete();
+
+        return response()->json([ 'sucesso' => true ]);
+    }
+
     public function index(Request $request)
     {
         $typeCompany = $request->get('type_company', '');
