@@ -278,21 +278,25 @@ window.jQuery(function ($) {
 
     function addEventButtonRemoveSubsidiary() {
         const $buttonRemoveSubsidiary = $('#subsidiaries').find('[data-button-remove-subsidiary]');
-
+        debugger;
         if ($buttonRemoveSubsidiary.length) {
             $buttonRemoveSubsidiary.on('click', function (e) {
+                debugger
                 e.preventDefault();
 
                 const $button = $(this);
 
                 $button.closest('.panel').remove();
+                debugger
 
                 const subsidiaryId = $button.data('button-remove-subsidiary');
+                debugger
                 if (!subsidiaryId) {
                     return;
                 }
 
                 window.axios.delete(`/dashboard/process/subsidiary/${subsidiaryId}`);
+                debugger
             });
         }
     }
