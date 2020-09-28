@@ -278,31 +278,25 @@ window.jQuery(function ($) {
 
     function addEventButtonRemoveSubsidiary() {
         const $buttonRemoveSubsidiary = $('#subsidiaries').find('[data-button-remove-subsidiary]');
-        debugger;
         if ($buttonRemoveSubsidiary.length) {
             $buttonRemoveSubsidiary.on('click', function (e) {
-                debugger
                 e.preventDefault();
 
                 const $button = $(this);
 
                 $button.closest('.panel').remove();
-                debugger
 
                 const subsidiaryId = $button.data('button-remove-subsidiary');
-                debugger
                 if (!subsidiaryId) {
                     return;
                 }
 
                 window.axios.delete(`/dashboard/process/subsidiary/${subsidiaryId}`);
-                debugger
             });
         }
     }
 
     const $buttonAddNewSubsidiary = $('[data-button-add-new-subsidiary]');
-    debugger
     if ($buttonAddNewSubsidiary.length) {
         $buttonAddNewSubsidiary.on('click', function (e) {
             e.preventDefault();
@@ -312,17 +306,14 @@ window.jQuery(function ($) {
             const $contents = $newSubsidiaryTemplate.contents().clone(true, true);
             const lastId = $subsidiariesContainer.attr('data-last-id');
             const newId = parseInt(lastId, 10) + 1;
-            debugger
 
             $contents.find('#tab-subsidiary-').attr('id', `#tab-subsidiary-${newId}`);
-            debugger
 
             $contents.find('a[data-toggle="collapse"]').attr({
                 'aria-controls': `tab-content-subsidiary-${newId}`,
                 'href': `#tab-content-subsidiary-${newId}`
             }).text($contents.find('a[data-toggle="collapse"]').text().trim() + newId)
             .on('click', function(e) {
-                debugger
                 e.preventDefault();
                 const $current = $(this);
                 const $panel = $current.closest('.panel');
@@ -331,7 +322,6 @@ window.jQuery(function ($) {
                 $current.attr('aria-expanded', !$current.attr('aria-expanded'));
                 $content.toggleClass('in');
             });
-            debugger
 
             $contents.find('#tab-content-subsidiary-').find('input, textarea, select').each((index, element) => {
                 const $current = $(element);
@@ -343,39 +333,30 @@ window.jQuery(function ($) {
                 });
                 $current.siblings('label').attr('for', newStr);
             });
-            debugger
 
             $contents.find('#tab-content-subsidiary-').attr({
                 'id': `#tab-content-subsidiary-${newId}`,
                 'aria-labelledby': `tab-subsidiary-${newId}`
             });
-            debugger
 
             $subsidiariesContainer.append($contents);
-            debugger
             $subsidiariesContainer.attr('data-last-id', newId);
-            debugger
             init();
 
             const $lastPanel = $subsidiariesContainer
                 .find('.panel:last');
 
-            debugger
             $lastPanel
                 .find('a[data-toggle="collapse"]')
                 .click();
-            debugger
 
             $lastPanel
                 .find('select:first, .panel:last input:first:not([type="hidden"])')
                 .first()
                 .focus();
 
-            debugger
             addEventButtonAddNewCane();
-            debugger
             addEventButtonRemoveSubsidiary();
-            debugger
         });
     }
 
