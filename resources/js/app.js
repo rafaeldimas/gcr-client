@@ -341,7 +341,7 @@ window.jQuery(function ($) {
     }
 
     function addEventButtonRemoveSubsidiary() {
-        const $buttonRemoveSubsidiary = $('[data-button-remove-subsidiary]');
+        const $buttonRemoveSubsidiary = $('#subsidiaries').find('[data-button-remove-subsidiary]');
         if ($buttonRemoveSubsidiary.length) {
             $buttonRemoveSubsidiary.on('click', function (e) {
                 e.preventDefault();

@@ -8,7 +8,7 @@
             <a role="button" data-toggle="collapse" data-parent="#subsidiaries" href="#tab-content-subsidiary-{{ $key }}" aria-expanded="false" aria-controls="tab-content-subsidiary-{{ $key }}">
                 {{ $step['label'] }} #{{ $key }}
             </a>
-            <button class="btn btn-danger" data-button-remove-subsidiary="{{ $subsidiary->id }}">
+            <button type="button" class="btn btn-danger" data-button-remove-subsidiary="{{ $subsidiary->id }}">
                 <i class="fa fa-close"></i>
             </button>
         </h4>
