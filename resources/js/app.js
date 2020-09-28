@@ -336,6 +336,7 @@ window.jQuery(function ($) {
                 .focus();
 
             addEventButtonAddNewCane();
+            addEventButtonRemoveSubsidiary();
         });
     }
 
