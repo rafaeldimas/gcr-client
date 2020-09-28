@@ -276,6 +276,27 @@ window.jQuery(function ($) {
         }
     }
 
+    function addEventButtonRemoveSubsidiary() {
+        const $buttonRemoveSubsidiary = $('#subsidiaries').find('[data-button-remove-subsidiary]');
+
+        if ($buttonRemoveSubsidiary.length) {
+            $buttonRemoveSubsidiary.on('click', function (e) {
+                e.preventDefault();
+
+                const $button = $(this);
+
+                $button.closest('.panel').remove();
+
+                const subsidiaryId = $button.data('button-remove-subsidiary');
+                if (!subsidiaryId) {
+                    return;
+                }
+
+                window.axios.delete(`/dashboard/process/subsidiary/${subsidiaryId}`);
+            });
+        }
+    }
+
     const $buttonAddNewSubsidiary = $('[data-button-add-new-subsidiary]');
     if ($buttonAddNewSubsidiary.length) {
         $buttonAddNewSubsidiary.on('click', function (e) {
@@ -338,26 +359,6 @@ window.jQuery(function ($) {
             addEventButtonAddNewCane();
             addEventButtonRemoveSubsidiary();
         });
-    }
-
-    function addEventButtonRemoveSubsidiary() {
-        const $buttonRemoveSubsidiary = $('#subsidiaries').find('[data-button-remove-subsidiary]');
-        if ($buttonRemoveSubsidiary.length) {
-            $buttonRemoveSubsidiary.on('click', function (e) {
-                e.preventDefault();
-
-                const $button = $(this);
-
-                $button.closest('.panel').remove();
-
-                const subsidiaryId = $button.data('button-remove-subsidiary');
-                if (!subsidiaryId) {
-                    return;
-                }
-
-                window.axios.delete(`/dashboard/process/subsidiary/${subsidiaryId}`);
-            });
-        }
     }
 
     (function initEvents () {
