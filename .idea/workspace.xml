@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2b3b1c54-058c-47a0-9a7d-84f4ba94314c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/subsidiary.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/subsidiary.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -284,7 +284,7 @@
       <workItem from="1599421405914" duration="294000" />
       <workItem from="1601166659204" duration="5232000" />
       <workItem from="1601220527715" duration="32000" />
-      <workItem from="1601308331629" duration="970000" />
+      <workItem from="1601308331629" duration="1747000" />
     </task>
     <servers />
   </component>
@@ -328,11 +328,11 @@
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="660" y="252" key="run.anything.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1594570148827" />
-    <state x="659" y="261" width="672" height="677" key="search.everywhere.popup" timestamp="1601308383739">
+    <state x="659" y="261" width="672" height="677" key="search.everywhere.popup" timestamp="1601309739865">
       <screen x="72" y="29" width="1848" height="1051" />
     </state>
     <state x="659" y="259" width="672" height="678" key="search.everywhere.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1597597835714" />
-    <state x="659" y="261" width="672" height="677" key="search.everywhere.popup/72.29.1848.1051@72.29.1848.1051" timestamp="1601308383739" />
+    <state x="659" y="261" width="672" height="677" key="search.everywhere.popup/72.29.1848.1051@72.29.1848.1051" timestamp="1601309739865" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
