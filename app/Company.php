@@ -79,4 +79,16 @@ class Company extends Model
     {
         return $this->cnaes->implode('number', ', ');
     }
+
+    public function transformationWithChangeStringFormated()
+    {
+        $result = [];
+        if (is_array($this->transformation_with_change)) {
+            $labels = self::attributeOptions('fields_editing');
+            foreach ($this->transformation_with_change as $field) {
+                $result[$field] = array_get($labels, $field, '');
+            }
+        }
+        return implode(', ', $result);
+    }
 }

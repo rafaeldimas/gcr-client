@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b3b1c54-058c-47a0-9a7d-84f4ba94314c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Company.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Company.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Owner.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Owner.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Process.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Process.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Subsidiary.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Subsidiary.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Viability.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Viability.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/subsidiary.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/shared/box/steps-form/partials/subsidiary.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/process/finish.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/process/finish.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/app/public/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/storage/app/public/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -283,7 +291,8 @@
       <workItem from="1599421405914" duration="294000" />
       <workItem from="1601166659204" duration="5232000" />
       <workItem from="1601220527715" duration="32000" />
-      <workItem from="1601308331629" duration="3663000" />
+      <workItem from="1601308331629" duration="3825000" />
+      <workItem from="1602200596739" duration="8836000" />
     </task>
     <servers />
   </component>
@@ -301,38 +310,6 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="729" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1594568762342">
-      <screen x="72" y="27" width="1848" height="1053" />
-    </state>
-    <state x="729" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1594568762342" />
-    <state x="779" y="311" width="495" height="520" key="FileChooserDialogImpl" timestamp="1593290606625">
-      <screen x="72" y="27" width="1848" height="1053" />
-    </state>
-    <state x="779" y="311" width="495" height="520" key="FileChooserDialogImpl/72.27.1848.1053@72.27.1848.1053" timestamp="1593290606625" />
-    <state x="485" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1593290622306">
-      <screen x="72" y="27" width="1848" height="1053" />
-    </state>
-    <state x="485" y="188" width="1022" height="737" key="SettingsEditor/72.27.1848.1053@72.27.1848.1053" timestamp="1593290622306" />
-    <state x="757" y="232" width="467" height="650" key="VCS.ChangeListViewerDialog" timestamp="1593403386833">
-      <screen x="72" y="27" width="1848" height="1053" />
-    </state>
-    <state x="757" y="232" width="467" height="650" key="VCS.ChangeListViewerDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1593403386833" />
-    <state x="680" y="292" width="908" height="622" key="find.popup" timestamp="1597597550548">
-      <screen x="72" y="27" width="1848" height="1053" />
-    </state>
-    <state x="680" y="292" width="908" height="622" key="find.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1597597550548" />
-    <state x="660" y="254" key="run.anything.popup" timestamp="1601311557285">
-      <screen x="72" y="29" width="1848" height="1051" />
-    </state>
-    <state x="660" y="252" key="run.anything.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1594570148827" />
-    <state x="660" y="254" key="run.anything.popup/72.29.1848.1051@72.29.1848.1051" timestamp="1601311557285" />
-    <state x="659" y="261" width="672" height="677" key="search.everywhere.popup" timestamp="1601309739865">
-      <screen x="72" y="29" width="1848" height="1051" />
-    </state>
-    <state x="659" y="259" width="672" height="678" key="search.everywhere.popup/72.27.1848.1053@72.27.1848.1053" timestamp="1597597835714" />
-    <state x="659" y="261" width="672" height="677" key="search.everywhere.popup/72.29.1848.1051@72.29.1848.1051" timestamp="1601309739865" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

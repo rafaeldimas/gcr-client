@@ -118,4 +118,9 @@ class Viability extends Model
     {
         return array_get(self::attributeOptions('property_type'), (string) $this->property_type, '');
     }
+
+    public function avcbClcbNumberTypeCode()
+    {
+        return array_get(self::attributeOptions('avcb_clcb_number_type'), (string) $this->avcb_clcb_number_type, '');
+    }
 }

@@ -125,7 +125,12 @@ class Owner extends Model
 
     public function jobRolesCode()
     {
-        return array_get(self::attributeOptions('job_roles'), (string) $this->job_roles, '');
+        $jobRolesOptions = self::attributeOptions('job_roles');
+        $options = [];
+        foreach ($this->job_roles as $jobRole) {
+            $options[] = array_get($jobRolesOptions, $jobRole, '');
+        }
+        return implode(', ', $options);
     }
 
     public function maritalStatusCode()
@@ -136,5 +141,20 @@ class Owner extends Model
     public function weddingRegimeCode()
     {
         return array_get(self::attributeOptions('wedding_regime'), (string) $this->wedding_regime, '');
+    }
+
+    public function changeTypeCode()
+    {
+        return array_get(self::attributeOptions('change_type'), (string) $this->change_type, '');
+    }
+
+    public function setShareCapitalAttribute($value)
+    {
+        $this->attributes['share_capital'] = ($value && is_string($value)) ? str_replace(['.', ','], ['', '.'], $value) : null;
+    }
+
+    public function getShareCapitalAttribute($value)
+    {
+        return $value ? number_format($value, 2, ',', '.') : null;
     }
 }

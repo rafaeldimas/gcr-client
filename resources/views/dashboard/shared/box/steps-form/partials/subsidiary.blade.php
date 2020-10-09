@@ -30,7 +30,7 @@
                             </option>
                         @endforeach
                     </select>
-                    <span id="subsidiaries[{{ $key }}][request]" class="help-block">Questionário de Viabilidade obrigatório para os atos de abertura, alteração de endereço e/ou atividade.</span>
+                    <span id="subsidiaries[{{ $key }}][request]" class="help-block text-bold text-red">Questionário de Viabilidade obrigatório para os atos de abertura, alteração de endereço e/ou atividade.</span>
                 </div>
 
                 <div class="form-group col-xs-12 col-md-6 @if(!$subsidiary->request !== \Gcr\Subsidiary::REQUEST_CHANGING) hidden @endif">

@@ -156,6 +156,11 @@ class Process extends Model
         return $this->scanned ? 'Sim' : 'Não';
     }
 
+    public function getSignDigitalCertificateHumanAttribute()
+    {
+        return $this->sign_digital_certificate ? 'Sim' : 'Não';
+    }
+
     public function getPostOfficeHumanAttribute()
     {
         return $this->post_office ? 'Sim' : 'Não';

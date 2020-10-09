@@ -1,7 +1,16 @@
-<?php
-/** @var Gcr\Process $process */
-/** @var Gcr\Owner $owner */
-?>
+@php
+    /** @var \Gcr\Process $process */
+    /** @var \Gcr\User $user */
+    /** @var \Gcr\Owner $owner */
+    /** @var \Gcr\Company $company */
+    /** @var \Gcr\Subsidiary $subsidiary */
+    /** @var \Gcr\Viability $viability */
+
+    $user = optional($process->user);
+    $company = optional($process->company);
+    $viability = optional($process->viability);
+@endphp
+
 <!doctype html>
 <html lang="pt-br">
 <head>
@@ -145,7 +154,8 @@
         }
 
         .body .steps .step-card.owners .step-body .owner,
-        .body .steps .step-card.company .step-body {
+        .body .steps .step-card.company .step-body,
+        .body .steps .step-card.subsidiary .step-body {
             margin: 15px auto;
             padding: 15px;
             display: inline-block;
@@ -155,18 +165,21 @@
         }
 
         .body .steps .step-card.owners .step-body .owner > div,
-        .body .steps .step-card.company .step-body > div {
+        .body .steps .step-card.company .step-body > div,
+        .body .steps .step-card.subsidiary .step-body > div {
             float: left;
             width: 45%;
         }
 
         .body .steps .step-card.owners .step-body .owner > div:first-of-type,
-        .body .steps .step-card.company .step-body > div:first-of-type {
+        .body .steps .step-card.company .step-body > div:first-of-type,
+        .body .steps .step-card.subsidiary .step-body > div:first-of-type {
             margin-right: 5%;
         }
 
         .body .steps .step-card.owners .step-body .owner h2,
-        .body .steps .step-card.company .step-body h2 {
+        .body .steps .step-card.company .step-body h2,
+        .body .steps .step-card.subsidiary .step-body h2 {
             margin-bottom: 15px;
             padding-bottom: 5px;
             color: #010c23;
@@ -248,6 +261,10 @@
                             <span class="value">{{ $process->post_office_human }}</span>
                         </div>
                         <div class="field">
+                            <span class="label">Deseja que seu processo seja assinado com certificado digital? </span>
+                            <span class="value">{{ $process->sign_digital_certificate_human }}</span>
+                        </div>
+                        <div class="field">
                             <span class="label">Breve Descrição: </span>
                             <span class="value">{{ $process->description }}</span>
                         </div>
@@ -262,28 +279,28 @@
                     <div class="fields">
                         <div class="field">
                             <span class="label">Tipo de Usúario: </span>
-                            <span class="value">{{ optional($process->user)->typeLabel }}</span>
+                            <span class="value">{{ $user->typeLabel }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Nome: </span>
-                            <span class="value">{{ optional($process->user)->name }}</span>
+                            <span class="value">{{ $user->name }}</span>
                         </div>
                         <div class="field">
                             <span class="label">E-mail: </span>
-                            <span class="value">{{ optional($process->user)->email }}</span>
+                            <span class="value">{{ $user->email }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Telefone: </span>
-                            <span class="value">{{ optional($process->user)->phone }}</span>
+                            <span class="value">{{ $user->phone }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Celular: </span>
-                            <span class="value">{{ optional($process->user)->mobile_phone }}</span>
+                            <span class="value">{{ $user->mobile_phone }}</span>
                         </div>
                     </div>
-                    @if(optional($process->user)->logo)
+                    @if($user->logo)
                     <div class="user-logo">
-                        <img src="{{ optional($process->user)->logoUrl() }}" alt="Logo do Usúario"/>
+                        <img src="{{ $user->logoUrl() }}" alt="Logo do Usúario"/>
                     </div>
                     @endif
                 </div>
@@ -299,6 +316,10 @@
                                 <h2>Dados da pessoa</h2>
                                 <div class="fields">
                                     <div class="field">
+                                        <span class="label">Tipo de Alteração: </span>
+                                        <span class="value">{{ $owner->changeTypeCode() }}</span>
+                                    </div>
+                                    <div class="field">
                                         <span class="label">Cargo: </span>
                                         <span class="value">{{ $owner->jobRolesCode() }}</span>
                                     </div>
@@ -311,6 +332,10 @@
                                     <div class="field">
                                         <span class="label">Nome Completo: </span>
                                         <span class="value">{{ $owner->name }}</span>
+                                    </div>
+                                    <div class="field">
+                                        <span class="label">Capital Social: </span>
+                                        <span class="value">{{ $owner->share_capital }}</span>
                                     </div>
                                     <div class="field">
                                         <span class="label">Estado Civil: </span>
@@ -338,6 +363,18 @@
                                         <span class="label">Data de Nacimento: </span>
                                         <span class="value">{{ optional($owner->date_of_birth)->format('d/m/Y') }}</span>
                                     </div>
+                                    @if ($owner->name_represented)
+                                    <div class="field">
+                                        <span class="label">Nome do Representado: </span>
+                                        <span class="value">{{ $owner->name_represented }}</span>
+                                    </div>
+                                    @endif
+                                    @if ($owner->cpf_represented)
+                                    <div class="field">
+                                        <span class="label">CPF do Representado: </span>
+                                        <span class="value">{{ $owner->cpf_represented }}</span>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="address">
@@ -383,40 +420,46 @@
                 </div>
                 <div class="step-body">
                     <div class="data">
-                        <h2>Dados da pessoa</h2>
+                        <h2>Dados da empresa</h2>
                         <div class="fields">
                             <div class="field">
                                 <span class="label">Nome: </span>
-                                <span class="value">{{ optional($process->company)->name }}</span>
+                                <span class="value">{{ $company->name }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">NIRE: </span>
-                                <span class="value">{{ optional($process->company)->nire }}</span>
+                                <span class="value">{{ $company->nire }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">CNPJ: </span>
-                                <span class="value">{{ optional($process->company)->cnpj }}</span>
+                                <span class="value">{{ $company->cnpj }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Capital Social: </span>
-                                <span class="value">{{ optional($process->company)->share_capital }}</span>
+                                <span class="value">{{ $company->share_capital }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Descrição da Atividade: </span>
-                                <span class="value">{{ optional($process->company)->activity_description }}</span>
+                                <span class="value">{{ $company->activity_description }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Porte da Empresa: </span>
-                                <span class="value">{{ optional($process->company)->sizeCode() }}</span>
+                                <span class="value">{{ $company->sizeCode() }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Data de Assinatura: </span>
-                                <span class="value">{{ optional($process->company)->signed->format('d/m/Y') }}</span>
+                                <span class="value">{{ $company->signed->format('d/m/Y') }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">CNAES: </span>
-                                <span class="value">{{ optional($process->company)->cnaesStringFormated() }}</span>
+                                <span class="value">{{ $company->cnaesStringFormated() }}</span>
                             </div>
+                            @if ($company->transformation_with_change)
+                            <div class="field">
+                                <span class="label">Alterações além da transformação do tipo jurídico: </span>
+                                <span class="value">{{ $company->transformationWithChangeStringFormated() }}</span>
+                            </div>
+                            @endif
                         </div>
                     </div>
                     <div class="address">
@@ -424,35 +467,106 @@
                         <div class="fields">
                             <div class="field">
                                 <span class="label">CEP: </span>
-                                <span class="value">{{ optional(optional($process->company)->address)->postcode }}</span>
+                                <span class="value">{{ optional($company->address)->postcode }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Logradouro: </span>
-                                <span class="value">{{ optional(optional($process->company)->address)->street }}</span>
+                                <span class="value">{{ optional($company->address)->street }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Número: </span>
-                                <span class="value">{{ optional(optional($process->company)->address)->number }}</span>
+                                <span class="value">{{ optional($company->address)->number }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Bairro: </span>
-                                <span class="value">{{ optional(optional($process->company)->address)->district }}</span>
+                                <span class="value">{{ optional($company->address)->district }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Cidade: </span>
-                                <span class="value">{{ optional(optional($process->company)->address)->city }}</span>
+                                <span class="value">{{ optional($company->address)->city }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">Estado: </span>
-                                <span class="value">{{ optional(optional($process->company)->address)->state }}</span>
+                                <span class="value">{{ optional($company->address)->state }}</span>
                             </div>
                             <div class="field">
                                 <span class="label">País: </span>
-                                <span class="value">{{ optional(optional($process->company)->address)->country }}</span>
+                                <span class="value">{{ optional($company->address)->country }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="step-card subsidiary">
+                <div class="step-header">
+                    <h1 class="title">Filiais</h1>
+                </div>
+                @foreach($company->subsidiaries as $subsidiary)
+                <div class="step-body">
+                    <div class="data">
+                        <h2>Dados da filial</h2>
+                        <div class="fields">
+                            <div class="field">
+                                <span class="label">Tipo de solicitação: </span>
+                                <span class="value">{{ $subsidiary->requestCode() }}</span>
+                            </div>
+                            <div class="field">
+                                <span class="label">NIRE: </span>
+                                <span class="value">{{ $subsidiary->nire }}</span>
+                            </div>
+                            <div class="field">
+                                <span class="label">CNPJ: </span>
+                                <span class="value">{{ $subsidiary->cnpj }}</span>
+                            </div>
+                            <div class="field">
+                                <span class="label">Capital Social: </span>
+                                <span class="value">{{ $subsidiary->share_capital }}</span>
+                            </div>
+                            <div class="field">
+                                <span class="label">Descrição da Atividade: </span>
+                                <span class="value">{{ $subsidiary->activity_description }}</span>
+                            </div>
+                            <div class="field">
+                                <span class="label">CNAES: </span>
+                                <span class="value">{{ $subsidiary->cnaesStringFormated() }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="address">
+                            <h2>Dados do endereço</h2>
+                            <div class="fields">
+                                <div class="field">
+                                    <span class="label">CEP: </span>
+                                    <span class="value">{{ optional($subsidiary->address)->postcode }}</span>
+                                </div>
+                                <div class="field">
+                                    <span class="label">Logradouro: </span>
+                                    <span class="value">{{ optional($subsidiary->address)->street }}</span>
+                                </div>
+                                <div class="field">
+                                    <span class="label">Número: </span>
+                                    <span class="value">{{ optional($subsidiary->address)->number }}</span>
+                                </div>
+                                <div class="field">
+                                    <span class="label">Bairro: </span>
+                                    <span class="value">{{ optional($subsidiary->address)->district }}</span>
+                                </div>
+                                <div class="field">
+                                    <span class="label">Cidade: </span>
+                                    <span class="value">{{ optional($subsidiary->address)->city }}</span>
+                                </div>
+                                <div class="field">
+                                    <span class="label">Estado: </span>
+                                    <span class="value">{{ optional($subsidiary->address)->state }}</span>
+                                </div>
+                                <div class="field">
+                                    <span class="label">País: </span>
+                                    <span class="value">{{ optional($subsidiary->address)->country }}</span>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                @endforeach
             </div>
             <div class="step-card viability">
                 <div class="step-header">
@@ -462,63 +576,79 @@
                     <div class="fields">
                         <div class="field">
                             <span class="label">Tipo do imóvel: </span>
-                            <span class="value">{{ optional($process->viability)->propertyTypeCode() }}</span>
+                            <span class="value">{{ $viability->propertyTypeCode() }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Numero de cadastro: </span>
-                            <span class="value">{{ optional($process->viability)->registration_number }}</span>
+                            <span class="value">{{ $viability->registration_number }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Área do imóvel: </span>
-                            <span class="value">{{ optional($process->viability)->property_area }}</span>
+                            <span class="value">{{ $viability->property_area }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Área do estabelecimento: </span>
-                            <span class="value">{{ optional($process->viability)->establishment_area }}</span>
+                            <span class="value">{{ $viability->establishment_area }}</span>
                         </div>
                         <div class="field">
+                            <span class="label">Estabelecimento possuí AVCB ou CLCB (licença do corpo de bombeiros): </span>
+                            <span class="value">{{ $viability->establishment_has_avcb_clcb_human }}</span>
+                        </div>
+                        @if($viability->avcb_clcb_number_type)
+                        <div class="field">
+                            <span class="label">É AVCB ou CLCB: </span>
+                            <span class="value">{{ $viability->avcbClcbNumberTypeCode() }}</span>
+                        </div>
+                        @endif
+                        @if($viability->avcb_clcb_number)
+                        <div class="field">
+                            <span class="label">Número AVCB/CLCB: </span>
+                            <span class="value">{{ $viability->avcb_clcb_number }}</span>
+                        </div>
+                        @endif
+                        <div class="field">
                             <span class="label">A atividade é exercida no mesmo local do endereço da empresa: </span>
-                            <span class="value">{{ optional($process->viability)->same_as_business_address_human }}</span>
+                            <span class="value">{{ $viability->same_as_business_address_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Administração central da empresa, presidencia, diretoria: </span>
-                            <span class="value">{{ optional($process->viability)->thirst_human }}</span>
+                            <span class="value">{{ $viability->thirst_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento onde são exercidas atividades meramente administratives: </span>
-                            <span class="value">{{ optional($process->viability)->administrative_office_human }}</span>
+                            <span class="value">{{ $viability->administrative_office_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento onde a empresa armazena mercadorias próprias destinadas à industrialização e/ou comercialização, no qual não se realizam vendas: </span>
-                            <span class="value">{{ optional($process->viability)->closed_deposit_human }}</span>
+                            <span class="value">{{ $viability->closed_deposit_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento onde a empresa armazena artigos de consumo para uso próprio: </span>
-                            <span class="value">{{ optional($process->viability)->warehouse_human }}</span>
+                            <span class="value">{{ $viability->warehouse_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento onde se efetua manutenção e reparação exclusivamente de bens do ativo fixo da própria empresa: </span>
-                            <span class="value">{{ optional($process->viability)->repair_workshop_human }}</span>
+                            <span class="value">{{ $viability->repair_workshop_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Para estabelecimento de veiculos próprios, uso exclusivo da empresa: </span>
-                            <span class="value">{{ optional($process->viability)->garage_human }}</span>
+                            <span class="value">{{ $viability->garage_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento de abastecimento de combustiveis para uso pela frota própria: </span>
-                            <span class="value">{{ optional($process->viability)->fuel_supply_unit_human }}</span>
+                            <span class="value">{{ $viability->fuel_supply_unit_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento para exposição e demonstração de produtos próprios, sem realização de transações comerciais, tipo showroom: </span>
-                            <span class="value">{{ optional($process->viability)->exposure_point_human }}</span>
+                            <span class="value">{{ $viability->exposure_point_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento destinado a treinamento, de uso exclusivo da empresa, para realização de atividades de capacitação e treinamentos de recursos humanos: </span>
-                            <span class="value">{{ optional($process->viability)->training_center_human }}</span>
+                            <span class="value">{{ $viability->training_center_human }}</span>
                         </div>
                         <div class="field">
                             <span class="label">Estabelecimento de processo de dados, de uso exclusivo da empresa, para realização de atividades na área de informática em geral: </span>
-                            <span class="value">{{ optional($process->viability)->data_processing_center_human }}</span>
+                            <span class="value">{{ $viability->data_processing_center_human }}</span>
                         </div>
                     </div>
                 </div>

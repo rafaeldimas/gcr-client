@@ -58,6 +58,28 @@ class Subsidiary extends Model
         return $this->hasMany(Cnae::class);
     }
 
+    public function requestCode()
+    {
+        return array_get(self::attributeOptions('request'), (string) $this->request, '');
+    }
+
+    public function cnaesStringFormated()
+    {
+        return $this->cnaes->implode('number', ', ');
+    }
+
+    public function fieldsChangedStringFormated()
+    {
+        $result = [];
+        if (is_array($this->fields_changed)) {
+            $labels = self::attributeOptions('fields_changed');
+            foreach ($this->fields_changed as $field) {
+                $result[$field] = array_get($labels, $field, '');
+            }
+        }
+        return implode(', ', $result);
+    }
+
     public function setShareCapitalAttribute($value)
     {
         $this->attributes['share_capital'] = ($value && is_string($value)) ? str_replace(['.', ','], ['', '.'], $value) : null;
