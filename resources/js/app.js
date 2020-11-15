@@ -137,7 +137,7 @@ window.jQuery(function ($) {
                     let $message = '';
 
                     if (error.response.status === 422) {
-
+                        $alert.toggleClass('alert-danger alert-warning');
                         $.map(error.response.data.errors, errors => {
                             $.map(errors, error => $message += '<li>'+error+'</li>');
                         });
