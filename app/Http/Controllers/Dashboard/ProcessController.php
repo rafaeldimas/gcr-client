@@ -760,6 +760,7 @@ class ProcessController extends Controller
 
             return true;
         } catch (ValidationException $e) {
+            logger()->error($e->getMessage(), [ 'exception' => $e ]);
             $this->validationErrors = $e->errors();
             return false;
         }
