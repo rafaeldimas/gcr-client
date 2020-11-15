@@ -134,7 +134,19 @@ window.jQuery(function ($) {
 
                     const $alert = $template.clone().find('.alert');
                     $alert.toggleClass('alert-danger');
-                    $alert.find('ul').html('<li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>');
+                    let $message = '';
+
+                    if (error.status === 422) {
+
+                        $.map(error.data.errors, errors => {
+                            $.map(errors, error => $message += '<li>'+error+'</li>');
+                        });
+                    } else {
+                        $message += '<li>Ocorreu um erro, recarregue a pagina e tente novamente. Caso persista entre em contato conosco.</li>';
+                    }
+
+                    $alert.find('ul').html($message);
+
                     $('.box-body .box-alerts').html('').prepend($alert);
 
                     window.scroll({
