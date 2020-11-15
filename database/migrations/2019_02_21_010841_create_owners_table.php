@@ -18,7 +18,7 @@ class CreateOwnersTable extends Migration
             $table->unsignedInteger('process_id');
             $table->unsignedInteger('address_id')->nullable();
             $table->string('name')->nullable();
-            $table->decimal('share_capital')->nullable();
+            $table->decimal('share_capital', 13, 2)->nullable();
             $table->string('job_roles')->nullable();
             $table->string('change_type')->nullable();
             $table->string('job_roles_other')->nullable();

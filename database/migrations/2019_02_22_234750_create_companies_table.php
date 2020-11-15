@@ -22,7 +22,7 @@ class CreateCompaniesTable extends Migration
             $table->string('nire')->nullable();
             $table->string('cnpj')->nullable();
             $table->date('activity_start')->nullable();
-            $table->decimal('share_capital')->nullable();
+            $table->decimal('share_capital', 13, 2)->nullable();
             $table->string('activity_description')->nullable();
             $table->integer('size')->nullable();
             $table->date('signed')->nullable();

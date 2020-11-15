@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2b3b1c54-058c-47a0-9a7d-84f4ba94314c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/ProcessController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_02_21_010841_create_owners_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_02_21_010841_create_owners_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_02_22_234750_create_companies_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_02_22_234750_create_companies_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_02_23_152110_create_subsidiaries_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_02_23_152110_create_subsidiaries_table.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -289,7 +291,7 @@
       <workItem from="1602250048106" duration="301000" />
       <workItem from="1602818815730" duration="678000" />
       <workItem from="1602849628295" duration="36000" />
-      <workItem from="1605454049364" duration="1113000" />
+      <workItem from="1605454049364" duration="1605000" />
     </task>
     <servers />
   </component>

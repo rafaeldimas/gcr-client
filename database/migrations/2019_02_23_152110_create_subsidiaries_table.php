@@ -21,7 +21,7 @@ class CreateSubsidiariesTable extends Migration
             $table->text('fields_changed')->nullable();
             $table->string('nire')->nullable();
             $table->string('cnpj')->nullable();
-            $table->decimal('share_capital')->nullable();
+            $table->decimal('share_capital', 13, 2)->nullable();
             $table->string('activity_description')->nullable();
             $table->timestamps();
 
