@@ -306,7 +306,7 @@ class ProcessController extends Controller
             'owners.*.change_type' => 'nullable|string',
             'owners.*.job_roles_other' => 'nullable|string',
             'owners.*.name' => $required,
-            'owners.*.share_capital' => 'nullable',
+            'owners.*.share_capital' => 'nullable|max:17',
             'owners.*.marital_status' => $required,
             'owners.*.wedding_regime' => 'nullable',
             'owners.*.rg' => $required,
@@ -318,6 +318,7 @@ class ProcessController extends Controller
             'owners.required_if' => 'É obrigatório informar ao menos um Empresário|Sócio|Integrante.',
             'owners.*.id.required' => '',
             'owners.*.name.required' => 'O campo Nome de Empresário|Sócio|Integrante é obrigatório.',
+            'owners.*.share_capital.max' => 'O campo Capital Social de Empresário|Sócio|Integrante esta acima do permitido.',
             'owners.*.marital_status.required' => 'O campo Estado Civil de Empresário|Sócio|Integrante é obrigatório.',
             'owners.*.rg.required' => 'O campo RG de Empresário|Sócio|Integrante é obrigatório.',
             'owners.*.rg_expedition.required' => 'O campo Data de Expedição de Empresário|Sócio|Integrante é obrigatório.',
@@ -385,9 +386,12 @@ class ProcessController extends Controller
             'company.activity_start' => Rule::requiredIf(function () use($finish, $process) {
                 return $finish && $process->isCreating();
             }),
-            'company.share_capital' => Rule::requiredIf(function () use($finish, $process) {
-                return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital()));
-            }),
+            'company.share_capital' => [
+                Rule::requiredIf(function () use($finish, $process) {
+                    return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompany() || $process->isEditingCapital()));
+                }),
+                'max:17',
+            ],
             'company.activity_description' => Rule::requiredIf(function () use($finish, $process) {
                 return $finish && (!$process->isDeleting() && (!$process->isUpdating() || $process->isEditingCompanyCnaes()));
             }),
@@ -414,6 +418,7 @@ class ProcessController extends Controller
             'company.cnpj.required_if' => 'O campo CNPJ de Empresa é obrigatório',
             'company.activity_start.required_if' => 'O campo Data de início da atividade de Empresa é obrigatório',
             'company.share_capital.required_if' => 'O campo Capital Social de Empresa é obrigatório',
+            'company.share_capital.max' => 'O campo Capital Social de Empresa esta acima do permitido.',
             'company.activity_description.required_if' => 'O campo Descrição da Atividade de Empresa é obrigatório',
             'company.size.required_if' => 'O campo Porte da Empresa de Empresa é obrigatório',
             'company.signed.required' => 'O campo Data de Assinatura de Empresa é obrigatório',
@@ -493,7 +498,7 @@ class ProcessController extends Controller
             'subsidiaries.*.fields_changed' => !$finish ? 'nullable' : "required_if:subsidiaries.*.request,3|array",
             'subsidiaries.*.nire' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,2|required_if:subsidiaries.*.fields_changed,1,2,3|string',
             'subsidiaries.*.cnpj' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,2|required_if:subsidiaries.*.fields_changed,1,2,3|string',
-            'subsidiaries.*.share_capital' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,3|string',
+            'subsidiaries.*.share_capital' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,3|string|max:17',
             'subsidiaries.*.activity_description' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,1|string',
             'subsidiaries.*.address' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,2|array',
             'subsidiaries.*.cnaes' => !$finish ? 'nullable' : 'required_if:subsidiaries.*.request,1|required_if:subsidiaries.*.fields_changed,1|array',
@@ -504,6 +509,7 @@ class ProcessController extends Controller
             'subsidiaries.*.nire.required_if' => 'O campo NIRE das Filiais é obrigatório quando o campo Tipo de Solicitação for Cancelamento, Alteração Atividade, Alteração Endereço, Alteração Capital.',
             'subsidiaries.*.cnpj.required_if' => 'O campo CNPJ das Filiais é obrigatório quando o campo Tipo de Solicitação for Cancelamento, Alteração Atividade, Alteração Endereço, Alteração Capital.',
             'subsidiaries.*.share_capital.required_if' => 'O campo Capital Social das Filiais é obrigatório quando o campo Tipo de Solicitação for Abertura ou  Alteração Capital.',
+            'subsidiaries.*.share_capital.max' => 'O campo Capital Social das Filiais esta acima do permitido.',
             'subsidiaries.*.activity_description.required_if' => 'O campo Descrição da Atividade das Filiais é obrigatório quando o campo Tipo de Solicitação for Abertura ou Alteração Atividade.',
             'subsidiaries.*.address.required_if' => 'É obrigatório informar os dados de endereço das Filiais quando o campo Tipo de Solicitação for Abertura ou Alteração Endereço',
             'subsidiaries.*.cnaes.required_if' => 'É obrigatório informar os dados de cnaes das Filiais quando o campo Tipo de Solicitação for Abertura ou Alteração Atividade',
