@@ -659,7 +659,7 @@ class ProcessController extends Controller
         return request()->validate([
             'documents' => 'nullable|array',
             'documents.*.id' => 'nullable',
-            'documents.*.file.*' => 'nullable|mimes:jpg,png',
+            'documents.*.file.*' => 'nullable|mimes:jpeg,jpg,png,pdf',
         ]);
     }
 

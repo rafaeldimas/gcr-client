@@ -31,7 +31,8 @@ class FinishProcess extends Mailable implements ShouldQueue
     public function __construct(Process $process)
     {
         $this->process = $process;
-        $this->title = "Processo Finalizado: {{$process->protocol}}";
+        $companyName = optional($process->company)->name;
+        $this->title = "Processo Finalizado: {$companyName}";
     }
 
     /**
